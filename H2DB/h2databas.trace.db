@@ -1,0 +1,56 @@
+2025-03-23 12:32:56.793179+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]if not exist NEIGHBOUR(\000d\000aid bigint identity primary key,\000d\000aname varchar(255),\000d\000aage int\000d\000a)"; expected "identifier"; SQL statement:
+create table if not exist NEIGHBOUR(
+id bigint identity primary key,
+name varchar(255),
+age int
+) [42001-232]
+2025-03-23 12:33:22.529441+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]if not exist NEIGHBOUR(\000d\000aid bigint identity primary key,\000d\000aname varchar(255),\000d\000aage int,\000d\000a)"; expected "identifier"; SQL statement:
+create table if not exist NEIGHBOUR(
+id bigint identity primary key,
+name varchar(255),
+age int,
+) [42001-232]
+2025-03-23 12:33:52.833984+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]if not exist NEIGHBOUR(\000d\000aid bigint identity primary key,\000d\000aname varchar(255),\000d\000aage integer,\000d\000a)"; expected "identifier"; SQL statement:
+create table if not exist NEIGHBOUR(
+id bigint identity primary key,
+name varchar(255),
+age integer,
+) [42001-232]
+2025-03-23 12:34:00.313134+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]if not exist NEIGHBOUR(\000d\000aid bigint identity primary key,\000d\000aname varchar(255),\000d\000aage number,\000d\000a)"; expected "identifier"; SQL statement:
+create table if not exist NEIGHBOUR(
+id bigint identity primary key,
+name varchar(255),
+age number,
+) [42001-232]
+2025-03-23 12:35:01.805095+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table if not exists NEIGHBOUR(\000d\000aid bigint [*]identity primary key,\000d\000aname varchar(255),\000d\000aage number,\000d\000a)"; expected "ARRAY, INVISIBLE, VISIBLE, NOT NULL, DEFAULT, GENERATED, ON UPDATE, NOT NULL, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+create table if not exists NEIGHBOUR(
+id bigint identity primary key,
+name varchar(255),
+age number,
+) [42001-232]
+2025-03-23 12:36:27.876069+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table if not exists NEIGHBOUR(\000d\000aid bigint [*]identity primary key,\000d\000aname varchar(255),\000d\000aage number,\000d\000a)"; expected "ARRAY, INVISIBLE, VISIBLE, NOT NULL, DEFAULT, GENERATED, ON UPDATE, NOT NULL, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+create table if not exists NEIGHBOUR(
+id bigint identity primary key,
+name varchar(255),
+age number,
+) [42001-232]
+2025-03-23 12:36:41.931287+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS NEIGHBOUR (\000d\000a    id bigint [*]identity primary key,\000d\000a    name varchar(255),\000d\000a    age number\000d\000a)"; expected "ARRAY, INVISIBLE, VISIBLE, NOT NULL, DEFAULT, GENERATED, ON UPDATE, NOT NULL, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+CREATE TABLE IF NOT EXISTS NEIGHBOUR (
+    id bigint identity primary key,
+    name varchar(255),
+    age number
+) [42001-232]
+2025-03-23 12:37:25.542207+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS NEIGHBOUR (\000d\000a    id bigint [*]identity primary key,\000d\000a    name varchar(255),\000d\000a    age number\000d\000a)"; expected "ARRAY, INVISIBLE, VISIBLE, NOT NULL, DEFAULT, GENERATED, ON UPDATE, NOT NULL, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+CREATE TABLE IF NOT EXISTS NEIGHBOUR (
+    id bigint identity primary key,
+    name varchar(255),
+    age number
+) [42001-232]
