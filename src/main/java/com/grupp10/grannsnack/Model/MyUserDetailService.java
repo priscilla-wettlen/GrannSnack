@@ -33,11 +33,10 @@ public class MyUserDetailService implements UserDetailsService {
 
     private String[] getRoles(MyUser user) {
         String role = user.getRole();
-
         if(role == null || role.isBlank()) {
-            System.out.println("No roles found, assigning default USER role");
             return new String[] {"USER"};
         }
+
         return role.split(",");
     }
 }

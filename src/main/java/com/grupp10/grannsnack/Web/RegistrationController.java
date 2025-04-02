@@ -20,6 +20,9 @@ public class RegistrationController {
     @PostMapping("/register/user")
     public MyUser createUser(@RequestBody MyUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(user.getRole() == null) {
+            user.setRole("USER");
+        }
         return dbs.saveUser(user);
     }
 }
