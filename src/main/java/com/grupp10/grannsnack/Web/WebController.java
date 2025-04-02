@@ -9,6 +9,7 @@ import com.grupp10.grannsnack.Model.NeighbourOTD;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.MethodNotAllowedException;
@@ -16,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
-@RestController
+@Controller
 public class WebController {
 
     private final NeighbourService neighbourService;
@@ -27,7 +28,17 @@ public class WebController {
 
     @GetMapping("/home")
     public String helloWorld() {
-        return "HomePage";
+        return "home";
+    }
+
+    @GetMapping("/user/home")
+    public String handleUserHome() {
+        return "home_user";
+    }
+
+    @GetMapping("/admin/home")
+    public String handleAdminHome() {
+        return "home_admin";
     }
 
     @GetMapping("user/neighbours")

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrannSnack - Prata med dina grannar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        header {
+            background-color: #3b5998;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: bold;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 2rem 0;
+        }
+
+        .feature {
+            flex-basis: 30%;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: #e9ebee;
+            border-radius: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background-color: #3b5998;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .features {
+                flex-direction: column;
+            }
+
+            .feature {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">GrannSnack</div>
+    <div class="tagline">Enkel kommunikation för grannar</div>
+</header>
+
+<div class="container">
+    <section class="hero">
+        <h1>GrannSnack</h1>
+        <p>
+            En app för att prata och samarbeta med dina grannar.
+        </p>
+        <img src="/api/placeholder/500/250" alt="GrannSnack app">
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <div class="feature-icon">💬</div>
+            <h2>Chatta</h2>
+            <p>Kommunicera enkelt med hela grannskapet.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🤝</div>
+            <h2>Samarbeta</h2>
+            <p>Organisera aktiviteter och hjälp varandra.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">📢</div>
+            <h2>Notiser</h2>
+            <p>Få viktiga meddelanden om ditt område.</p>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Kom igång med GrannSnack</h2>
+        <a href="#" class="btn">Ladda ner appen</a>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; 2025 GrannSnack | info@grannsnack.se</p>
+</footer>
+</body>
+</html>

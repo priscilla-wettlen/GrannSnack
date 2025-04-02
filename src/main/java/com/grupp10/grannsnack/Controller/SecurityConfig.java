@@ -30,6 +30,10 @@ public class SecurityConfig {
                     registry.anyRequest().authenticated();
                 })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .formLogin(httpSecurityFormLoginConfigurer -> {
+                    httpSecurityFormLoginConfigurer.defaultSuccessUrl("/home");
+                    httpSecurityFormLoginConfigurer.failureUrl("/login?error");
+                })
                 .build();
     }
 

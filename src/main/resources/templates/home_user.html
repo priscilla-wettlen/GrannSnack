@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrannSnack - Min sida</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #4267B2;
+            color: white;
+            padding: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-actions a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .welcome-card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .neighborhood-selector {
+            background-color: white;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .message-feed {
+            background-color: white;
+            border-radius: 5px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .compose-message {
+            display: flex;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .compose-message input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+        }
+
+        .compose-message button {
+            background-color: #4267B2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+
+        .message {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .message:last-child {
+            border-bottom: none;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+        }
+
+        .sender {
+            font-weight: bold;
+        }
+
+        .time {
+            color: #777;
+            font-size: 0.8rem;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            color: #777;
+        }
+
+        .message-action {
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 0;
+            box-shadow: 0 -1px 3px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">GrannSnack</div>
+    <div class="user-actions">
+        <a href="#">Notiser</a>
+        <a href="#">Min profil</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="welcome-card">
+        <h2>Hej, Lisa!</h2>
+        <p>Välkommen tillbaka till GrannSnack.</p>
+    </div>
+
+    <div class="neighborhood-selector">
+        <div>Ditt grannskap:</div>
+        <select>
+            <option>Parkvägen 12</option>
+            <option>Storgatan Samfällighet</option>
+        </select>
+    </div>
+
+    <div class="message-feed">
+        <div class="compose-message">
+            <input type="text" placeholder="Skriv ett meddelande till dina grannar...">
+            <button>Skicka</button>
+        </div>
+
+        <div class="message">
+            <div class="message-header">
+                <div class="sender">Johan Svensson</div>
+                <div class="time">10:45</div>
+            </div>
+            <div class="message-content">
+                Hej alla! Någon som vill vara med på grillkväll på lördag i trädgården?
+            </div>
+            <div class="message-actions">
+                <div class="message-action">Gilla</div>
+                <div class="message-action">Kommentera</div>
+                <div class="message-action">Dela</div>
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="message-header">
+                <div class="sender">Annika Larsson</div>
+                <div class="time">09:15</div>
+            </div>
+            <div class="message-content">
+                Påminnelse: Städdag i området på söndag. Vi börjar kl 10:00!
+            </div>
+            <div class="message-actions">
+                <div class="message-action">Gilla</div>
+                <div class="message-action">Kommentera</div>
+                <div class="message-action">Dela</div>
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="message-header">
+                <div class="sender">Mikael Bergman</div>
+                <div class="time">Igår</div>
+            </div>
+            <div class="message-content">
+                Har någon sett en svart katt i området? Min Findus har varit borta sedan i morse.
+            </div>
+            <div class="message-actions">
+                <div class="message-action">Gilla</div>
+                <div class="message-action">Kommentera</div>
+                <div class="message-action">Dela</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <div class="nav-item">
+        <div class="nav-icon">🏠</div>
+        <div>Hem</div>
+    </div>
+    <div class="nav-item">
+        <div class="nav-icon">👥</div>
+        <div>Grannar</div>
+    </div>
+    <div class="nav-item">
+        <div class="nav-icon">📣</div>
+        <div>Meddelanden</div>
+    </div>
+    <div class="nav-item">
+        <div class="nav-icon">🧺</div>
+        <div>Tvättidsbokning</div>
+    </div>
+</div>
+</body>
+</html>
