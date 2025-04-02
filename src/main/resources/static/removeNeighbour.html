@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-<form>
+<form id="remove-neighbour-form">
     <div class="form-group">
         <label for="id">Id:</label>
         <input type="number" id="id" name="Id" required min="0">
@@ -43,7 +43,24 @@
 </form>
 
 <div id="response"></div>
-
+<script>
+    document.getElementById("remove-neighbour-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const id = document.getElementById("id").value;
+        fetch("http://localhost:8080/neighbours/" + id, {
+            method: "DELETE"
+        })
+        .then(function(response) {
+            return response.text();
+        })
+        .then(function(data) {
+            document.getElementById("response").innerHTML = data;
+        })
+        .catch(function(error) {
+            document.getElementById("response").innerHTML = error;
+        });
+    });
+</script>
 
 </body>
 </html>

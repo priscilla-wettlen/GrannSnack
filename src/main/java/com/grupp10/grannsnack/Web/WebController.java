@@ -25,33 +25,36 @@ public class WebController {
         this.neighbourService = neighbourService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String helloWorld() {
-        return "Hello World";
+        return "HomePage";
     }
 
-    @GetMapping("/neighbours")
+    @GetMapping("user/neighbours")
     public Iterable<Neighbour> listNB() {
         return neighbourService.getNeighbours();
     }
 
-    @DeleteMapping("/neighbours/remove/{id}")
-    public void removeNeighbour(@PathVariable Integer id) {
+    @DeleteMapping("admin/neighbours/{id}")
+    public ResponseEntity<String> removeNeighbour(@PathVariable Integer id) {
+        ResponseEntity<String> response;
+        System.out.println("Debugging 1");
         Neighbour neighbour = neighbourService.removeNeighbour(id);
+        response = ResponseEntity.ok("Neighbour removed successfully");
         if(neighbour == null) {
+            response = ResponseEntity.notFound().build();
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+        return response;
     }
 
-    @PostMapping("/neighbours")
+    @PostMapping("admin/neighbours")
     public ResponseEntity<String> addNeighbour(@RequestBody NeighbourOTD neighbour) {
         try {
-            // Validate input
             if (neighbour == null || neighbour.getName() == null || neighbour.getName().isEmpty()) {
                 return ResponseEntity.badRequest().body("Invalid neighbour data");
             }
 
-            // Save neighbour
             neighbourService.saveNeighbour(new Neighbour(neighbour.getName(), neighbour.getAge()));
 
             return ResponseEntity.ok("Neighbour added successfully");
