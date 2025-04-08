@@ -14,7 +14,7 @@ import java.io.InputStream;
 public class FireBaseConfig {
     @Bean
     FirebaseApp firebaseApp() throws IOException {
-        ClassPathResource resource = new ClassPathResource("grannsnack-firebase-adminsdk-fbsvc-b7ba9ab0a3.json");
+        ClassPathResource resource = new ClassPathResource("grannsnack-firebase-adminsdk-fbsvc-ed0d3ba361.json");
         InputStream serviceAccount = resource.getInputStream();
 
         FirebaseOptions options = FirebaseOptions.builder()

@@ -11,6 +11,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/misc.xml
+
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -221,5 +223,6 @@ $RECYCLE.BIN/
 #För databas login
 *.env
 *.json
-grannsnack-firebase-adminsdk-fbsvc-b7ba9ab0a3.json
+grannsnack-firebase-adminsdk-fbsvc-ed0d3ba361.json
+
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,windows,macos,intellij
