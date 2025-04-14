@@ -1,13 +1,15 @@
 package com.grannsnack.GrannSnack.Web;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class HomeController {
 
     @GetMapping("/home")
     public String handleHome() {
-        return "Welcome to Grann Snack Home page!";
+        return "testprototyp";
     }
+
 }

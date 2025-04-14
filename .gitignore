@@ -221,5 +221,5 @@ $RECYCLE.BIN/
 #För databas login
 *.env
 *.json
-grannsnack-firebase-adminsdk-fbsvc-b7ba9ab0a3.json
+application.properties
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,windows,macos,intellij
