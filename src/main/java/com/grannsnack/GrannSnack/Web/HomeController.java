@@ -12,4 +12,14 @@ public class HomeController {
         return "testprototyp";
     }
 
+    @GetMapping("/a/home")
+    public String handleAdminHome() {
+        return "adminhome";
+    }
+
+    @GetMapping("/u/home")
+    public String handleUserHome() {
+        return "userhome";
+    }
+
 }

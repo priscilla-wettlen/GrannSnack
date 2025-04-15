@@ -26,14 +26,14 @@ public class HTTPSecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/home", "/register/user").permitAll();
+                    registry.requestMatchers("/u/**").hasRole("USER");
+                    registry.requestMatchers(("/a/**")).hasRole("ADMIN");
                     registry.anyRequest().authenticated();
                 })
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
-                .formLogin(httpSecurityFormLoginConfigurer -> {
-                    httpSecurityFormLoginConfigurer.defaultSuccessUrl("/home");
-                    httpSecurityFormLoginConfigurer.failureUrl("/login?error");
-                })
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .permitAll()
+                        .defaultSuccessUrl("/default", true))
                 .build();
     }
 
