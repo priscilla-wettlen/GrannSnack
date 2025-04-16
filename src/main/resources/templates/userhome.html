@@ -5,9 +5,10 @@
     <title>User</title>
 </head>
 <body>
-<h1 th:text="${user.userName} Homepage"/><hr>
-<p th:text="Welcome ${user.userName} to your homepage"/>
-<p th:text="${user}"/>
+<h1>Welcome <span th:text="${user.userName}">userName</span>!</h1><hr>
+<h2 title="Information">
+    <p> Username: <span th:text="${user.userName}"></span></p>
+</h2>
 <form th:action="@{/u/home/redirectToLaundry}" th:method="post">
     <button type="submit">Laundry Booking</button>
 </form>
