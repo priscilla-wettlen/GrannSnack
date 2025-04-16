@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class DBService {
+public class DBUserService {
 
     @Autowired
     private DBInterface dbInterface;
 
-    public DBService(DBInterface dbInterface) {
+    public DBUserService(DBInterface dbInterface) {
         this.dbInterface = dbInterface;
     }
 

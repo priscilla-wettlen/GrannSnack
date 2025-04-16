@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>User</title>
 </head>
 <body>
-<h1>User Homepage</h1><hr>
-<p>Welcome to the User Home Page</p>
+<h1 th:text="${user.userName} Homepage"/><hr>
+<p th:text="Welcome ${user.userName} to your homepage"/>
+<p th:text="${user}"/>
+<form th:action="@{/u/home/redirectToLaundry}" th:method="post">
+    <button type="submit">Laundry Booking</button>
+</form>
+<form th:action="@{/u/home/redirectToForum}" th:method="post">
+    <button type="submit">Forum</button>
+</form>
 </body>
 </html>

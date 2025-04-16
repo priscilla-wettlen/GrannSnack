@@ -24,7 +24,6 @@ public class HTTPSecurityConfig {
     @Bean
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers("/u/**").hasRole("USER");
                     registry.requestMatchers(("/a/**")).hasRole("ADMIN");
@@ -34,6 +33,8 @@ public class HTTPSecurityConfig {
                         .loginPage("/login")
                         .permitAll()
                         .defaultSuccessUrl("/default", true))
+                .cors(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 

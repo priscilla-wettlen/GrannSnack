@@ -1,7 +1,6 @@
 package com.grannsnack.GrannSnack.Web;
 
-import com.grannsnack.GrannSnack.Controller.DBInterface;
-import com.grannsnack.GrannSnack.Controller.DBService;
+import com.grannsnack.GrannSnack.Controller.DBUserService;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +16,7 @@ public class RegistrationController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private DBService dbService;
+    private DBUserService dbUserService;
 
     @PostMapping("/register/user")
     public MyUser createUser(@RequestBody MyUser user) {
@@ -25,7 +24,7 @@ public class RegistrationController {
         if(user.getRole() == null) {
             user.setRole("USER");
         }
-        return dbService.saveUser(user);
+        return dbUserService.saveUser(user);
     }
     @GetMapping("/register/user")
     public String register() {
