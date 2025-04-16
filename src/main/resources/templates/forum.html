@@ -7,11 +7,78 @@
 <body>
 <h1>Forum</h1><hr>
 <p>Welcome to the Forum Page</p>
+<button id="newPost">New Post</button>
 <button id="backButton">Go back</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <textarea id="postContent" placeholder="Write something here" rows="4" cols="50"></textarea><br>
+        <button id="cancelPost">Cancel</button>
+        <button id="savePost">Post</button>
+    </div>
+</div>
+
+<!-- POST LIST -->
+<div id="postList"></div>
+
 <script>
+    // Show modal
+    document.getElementById("newPost").addEventListener("click", function() {
+        document.getElementById("myModal").style.display = "block";
+    });
+
+    // Cancel button
+    document.getElementById("cancelPost").addEventListener("click", function() {
+        document.getElementById("postContent").value = ""; // optional: clear text
+        document.getElementById("myModal").style.display = "none";
+    });
+
+    // Save post
+    document.getElementById("savePost").addEventListener("click", function () {
+        const post = document.getElementById("postContent").value;
+        if (post.trim() !== "") {
+            let posts = JSON.parse(localStorage.getItem("posts")) || [];
+            posts.push(post);
+            localStorage.setItem("posts", JSON.stringify(posts));
+            alert("Post saved!");
+
+            document.getElementById("postContent").value = "";
+            document.getElementById("myModal").style.display = "none";
+
+            loadPosts(); // refresh the list
+        } else {
+            alert("Post cannot be empty.");
+        }
+    });
+
+    // Load saved posts
+    function loadPosts() {
+        let posts = JSON.parse(localStorage.getItem("posts")) || [];
+        let postListDiv = document.getElementById("postList");
+        postListDiv.innerHTML = "";
+        posts.forEach((post, index) => {
+            const p = document.createElement("p");
+            p.textContent = `Post ${index + 1}: ${post}`;
+            postListDiv.appendChild(p);
+        });
+    }
+
+    window.onload = loadPosts;
+
+    // Optional: click outside to close modal
+    window.addEventListener("click", function(event) {
+        let modal = document.getElementById("myModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    // Go back
     document.getElementById("backButton").addEventListener("click", function() {
         window.history.back();
     });
 </script>
+
 </body>
 </html>
