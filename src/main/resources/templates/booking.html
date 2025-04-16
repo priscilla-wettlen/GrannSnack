@@ -1,17 +1,400 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Laundry Booking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laundry Room Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .calendar {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .calendar th {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .calendar td {
+            border: 1px solid #ddd;
+            height: 100px;
+            vertical-align: top;
+            width: 14.28%;
+        }
+        .date-header {
+            background-color: #f9f9f9;
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+        }
+        .time-slots {
+            padding: 0;
+        }
+        .time-slot {
+            padding: 6px 4px;
+            margin: 3px;
+            border-radius: 3px;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .time-slot:hover:not(.taken) {
+            background-color: #d4edda;
+        }
+        .taken {
+            background-color: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+        }
+        .available {
+            background-color: #f2f9ff;
+            border: 1px solid #cce5ff;
+        }
+        .booking-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            z-index: 100;
+            max-width: 400px;
+            width: 90%;
+        }
+        .form-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+        .booking-form.show, .form-overlay.show {
+            display: block;
+        }
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, button, select {
+            padding: 8px;
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .month-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .month-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .nav-btn {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 5px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .nav-btn:hover {
+            background-color: #e9e9e9;
+        }
+        .today {
+            background-color: #fffde7;
+        }
+        .other-month {
+            background-color: #f9f9f9;
+            color: #aaa;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+            gap: 20px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        .available-color {
+            background-color: #f2f9ff;
+            border: 1px solid #cce5ff;
+        }
+        .taken-color {
+            background-color: #e0e0e0;
+        }
+        .room-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .room-btn {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 8px 20px;
+            margin: 0 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .room-btn:hover {
+            background-color: #e9e9e9;
+        }
+        .room-btn.active {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<h1>Laundry Booking</h1><hr>
-<p>Welcome to the Laundry Booking page</p>
-<button id="backButton">Go back</button>
+<h1>Laundry Room Booking Calendar</h1>
+
+<!-- Room selector -->
+<div class="room-selector">
+    <form id="roomForm" th:action="@{/calendar}" method="get">
+        <input type="hidden" id="weekOffsetInput" name="weekOffset" th:value="${weekOffset ?: 0}">
+        <select id="roomSelect" name="roomId" onchange="document.getElementById('roomForm').submit()">
+            <option value="1" th:selected="${roomId == 1}">Laundry Room 1</option>
+            <option value="2" th:selected="${roomId == 2}">Laundry Room 2</option>
+            <option value="3" th:selected="${roomId == 3}">Laundry Room 3</option>
+        </select>
+    </form>
+</div>
+
+<div class="legend">
+    <div class="legend-item">
+        <div class="legend-color available-color"></div>
+        <span>Available</span>
+    </div>
+    <div class="legend-item">
+        <div class="legend-color taken-color"></div>
+        <span>Booked</span>
+    </div>
+</div>
+
+<div class="month-nav">
+    <button class="nav-btn" id="prevWeek">Previous Week</button>
+    <div class="month-title" th:text="${#temporals.format(#temporals.createNow().plusDays(weekOffset * 7), 'MMMM yyyy')}">April 2025</div>
+    <button class="nav-btn" id="nextWeek">Next Week</button>
+</div>
+
+<table class="calendar">
+    <thead>
+    <tr>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <!-- Loop through days of the week -->
+        <td th:each="dayOffset : ${#numbers.sequence(0, 6)}"
+            th:with="currentDate=${#temporals.createNow().plusDays(weekOffset * 7 + dayOffset)}"
+            th:class="${weekOffset == 0 && dayOffset == 0} ? 'today' : ''">
+
+            <div class="date-header" th:text="${#temporals.format(currentDate, 'd MMM')}">16 Apr</div>
+
+            <div class="time-slots">
+                <!-- Time slot 1: 07:00 - 10:00 -->
+                <div
+                        th:with="currentSlot=${roomId + '_' + #temporals.format(currentDate, 'yyyy-MM-dd') + '_1'}"
+                        th:class="${takenTimes != null && takenTimes.contains(currentSlot)} ? 'time-slot taken' : 'time-slot available'"
+                        th:attr="data-slot=${currentSlot}, onclick=${takenTimes != null && takenTimes.contains(currentSlot)} ? '' : 'showBookingForm(\'' + ${currentSlot} + '\', \'' + ${roomId} + '\')'">
+                    07:00 - 10:00
+                </div>
+
+                <!-- Time slot 2: 10:00 - 13:00 -->
+                <div
+                        th:with="currentSlot=${roomId + '_' + #temporals.format(currentDate, 'yyyy-MM-dd') + '_2'}"
+                        th:class="${takenTimes != null && takenTimes.contains(currentSlot)} ? 'time-slot taken' : 'time-slot available'"
+                        th:attr="data-slot=${currentSlot}, onclick=${takenTimes != null && takenTimes.contains(currentSlot)} ? '' : 'showBookingForm(\'' + ${currentSlot} + '\', \'' + ${roomId} + '\')'">
+                    10:00 - 13:00
+                </div>
+
+                <!-- Time slot 3: 13:00 - 16:00 -->
+                <div
+                        th:with="currentSlot=${roomId + '_' + #temporals.format(currentDate, 'yyyy-MM-dd') + '_3'}"
+                        th:class="${takenTimes != null && takenTimes.contains(currentSlot)} ? 'time-slot taken' : 'time-slot available'"
+                        th:attr="data-slot=${currentSlot}, onclick=${takenTimes != null && takenTimes.contains(currentSlot)} ? '' : 'showBookingForm(\'' + ${currentSlot} + '\', \'' + ${roomId} + '\')'">
+                    13:00 - 16:00
+                </div>
+
+                <!-- Time slot 4: 16:00 - 19:00 -->
+                <div
+                        th:with="currentSlot=${roomId + '_' + #temporals.format(currentDate, 'yyyy-MM-dd') + '_4'}"
+                        th:class="${takenTimes != null && takenTimes.contains(currentSlot)} ? 'time-slot taken' : 'time-slot available'"
+                        th:attr="data-slot=${currentSlot}, onclick=${takenTimes != null && takenTimes.contains(currentSlot)} ? '' : 'showBookingForm(\'' + ${currentSlot} + '\', \'' + ${roomId} + '\')'">
+                    16:00 - 19:00
+                </div>
+
+                <!-- Time slot 5: 19:00 - 21:00 -->
+                <div
+                        th:with="currentSlot=${roomId + '_' + #temporals.format(currentDate, 'yyyy-MM-dd') + '_5'}"
+                        th:class="${takenTimes != null && takenTimes.contains(currentSlot)} ? 'time-slot taken' : 'time-slot available'"
+                        th:attr="data-slot=${currentSlot}, onclick=${takenTimes != null && takenTimes.contains(currentSlot)} ? '' : 'showBookingForm(\'' + ${currentSlot} + '\', \'' + ${roomId} + '\')'">
+                    19:00 - 21:00
+                </div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Overlay for the booking form -->
+<div id="formOverlay" class="form-overlay"></div>
+
+<!-- Booking form that appears when available slot is clicked -->
+<div id="bookingForm" class="booking-form">
+    <div class="form-header">
+        <h2>Book Laundry Room</h2>
+        <button class="close-btn" onclick="closeBookingForm()">×</button>
+    </div>
+
+    <form th:action="@{/book}" method="post">
+        <input type="hidden" id="selectedSlot" name="timeSlot">
+        <input type="hidden" id="selectedRoom" name="roomId">
+
+        <div class="form-group">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="apartment">Apartment Number:</label>
+            <input type="text" id="apartment" name="apartment" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Confirm Booking</button>
+    </form>
+</div>
+
 <script>
-    document.getElementById("backButton").addEventListener("click", function() {
-        window.history.back();
+    // Initialize variables for week navigation
+    let currentWeekOffset = [[${weekOffset ?: 0}]];
+    let currentRoomId = [[${roomId ?: 1}]];
+
+    document.getElementById('prevWeek').addEventListener('click', function() {
+        navigateWeek(-1);
     });
+
+    document.getElementById('nextWeek').addEventListener('click', function() {
+        navigateWeek(1);
+    });
+
+    function navigateWeek(direction) {
+        currentWeekOffset += direction;
+        document.getElementById('weekOffsetInput').value = currentWeekOffset;
+        document.getElementById('roomForm').submit();
+    }
+
+    function showBookingForm(slotId, roomId) {
+        const form = document.getElementById('bookingForm');
+        const overlay = document.getElementById('formOverlay');
+        document.getElementById('selectedSlot').value = slotId;
+        document.getElementById('selectedRoom').value = roomId;
+
+        // Extract date and time slot info to show in form
+        const parts = slotId.split('_');
+        const roomNumber = parts[0];
+        const dateStr = parts[1] + '-' + parts[2] + '-' + parts[3];
+        const slotNum = parts[4];
+
+        const timeRanges = {
+            '1': '07:00 - 10:00',
+            '2': '10:00 - 13:00',
+            '3': '13:00 - 16:00',
+            '4': '16:00 - 19:00',
+            '5': '19:00 - 21:00'
+        };
+
+        // Format date for display
+        const dateParts = dateStr.split('-');
+        const formattedDate = new Date(dateParts[0], dateParts[1]-1, dateParts[2]).toLocaleDateString(undefined, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Update form heading
+        const formHeading = document.querySelector('#bookingForm h2');
+        formHeading.textContent = `Book Laundry Room ${roomNumber} - ${formattedDate}, ${timeRanges[slotNum]}`;
+
+        // Show the form and overlay
+        form.classList.add('show');
+        overlay.classList.add('show');
+    }
+
+    function closeBookingForm() {
+        const form = document.getElementById('bookingForm');
+        const overlay = document.getElementById('formOverlay');
+        form.classList.remove('show');
+        overlay.classList.remove('show');
+    }
+
+    // Close form when clicking on overlay
+    document.getElementById('formOverlay').addEventListener('click', closeBookingForm);
 </script>
 </body>
 </html>
