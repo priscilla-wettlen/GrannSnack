@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laundry Room Booking</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .day-header {
+      background-color: #3498db;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .time-slots {
+      background-color: white;
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 10px;
+    }
+
+    .time-slot {
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .time-slot-available {
+      background-color: #e8f5e9;
+      border: 1px solid #c8e6c9;
+      color: #2e7d32;
+      transition: background-color 0.3s;
+    }
+
+    .time-slot-available:hover {
+      background-color: #c8e6c9;
+    }
+
+    .time-slot-taken {
+      background-color: #ffebee;
+      border: 1px solid #ffcdd2;
+      color: #c62828;
+      cursor: not-allowed;
+    }
+
+    .time-slot-taken::after {
+      content: "Booked";
+      position: absolute;
+      right: 10px;
+      font-size: 0.8em;
+    }
+
+    .time-slot-user {
+      background-color: #e3f2fd;
+      border: 1px solid #bbdefb;
+      color: #1565c0;
+    }
+
+    .booking-form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+    }
+
+    .color-available {
+      background-color: #e8f5e9;
+      border: 1px solid #c8e6c9;
+    }
+
+    .color-taken {
+      background-color: #ffebee;
+      border: 1px solid #ffcdd2;
+    }
+
+    .color-user {
+      background-color: #e3f2fd;
+      border: 1px solid #bbdefb;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Laundry Room Booking</h1>
+    <p th:text="${'Week ' + weekNumber + ', ' + year}">Week 16, 2025</p>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-color color-available"></div>
+      <span>Available</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color color-taken"></div>
+      <span>Booked</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color color-user"></div>
+      <span>Your booking</span>
+    </div>
+  </div>
+
+  <div class="calendar">
+    <!-- Day headers -->
+    <div class="day-header">Monday</div>
+    <div class="day-header">Tuesday</div>
+    <div class="day-header">Wednesday</div>
+    <div class="day-header">Thursday</div>
+    <div class="day-header">Friday</div>
+    <div class="day-header">Saturday</div>
+    <div class="day-header">Sunday</div>
+
+    <!-- Time slots for each day -->
+    <div class="time-slots" th:each="day : ${#numbers.sequence(1, 7)}">
+      <!-- For each time slot of the day -->
+      <div th:each="timeSlot : ${#numbers.sequence(1, 5)}"
+           th:with="slotKey=${day + '_' + timeSlot},
+                             isTaken=${takenSlots.contains(slotKey)},
+                             isUserBooking=${userBookings.contains(slotKey)}"
+           th:class="${isUserBooking ? 'time-slot time-slot-user' : (isTaken ? 'time-slot time-slot-taken' : 'time-slot time-slot-available')}"
+           th:attr="data-day=${day}, data-slot=${timeSlot}"
+           th:onclick="${!isTaken && !isUserBooking} ? 'bookTimeSlot(this)' : ''">
+        <span th:text="${'Slot ' + timeSlot}">Slot</span>:
+        <span th:switch="${timeSlot}">
+                        <span th:case="1">07:00 - 10:00</span>
+                        <span th:case="2">10:00 - 13:00</span>
+                        <span th:case="3">13:00 - 16:00</span>
+                        <span th:case="4">16:00 - 19:00</span>
+                        <span th:case="5">19:00 - 21:00</span>
+                    </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="booking-form" id="bookingForm" style="display: none;">
+    <h2>Book Laundry Room</h2>
+    <form th:action="@{/u/laundry-booking/create}" method="post">
+      <input type="hidden" id="bookingDay" name="day" value="">
+      <input type="hidden" id="bookingSlot" name="slot" value="">
+
+      <div class="form-group">
+        <label for="bookingDetails">Selected Time:</label>
+        <div id="bookingDetails"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Notes (optional):</label>
+        <textarea id="notes" name="notes" rows="3" style="width: 100%;"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button type="submit">Confirm Booking</button>
+        <button type="button" onclick="cancelBooking()" style="background-color: #e74c3c;">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div style="margin-top: 20px; text-align: center;">
+    <button onclick="navigateWeek(-1)" style="margin-right: 10px;">Previous Week</button>
+    <button onclick="navigateWeek(1)">Next Week</button>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  // Get the current week and year from Thymeleaf
+  const currentWeek = /*[[${weekNumber}]]*/ 16;
+  const currentYear = /*[[${year}]]*/ 2025;
+
+  function bookTimeSlot(element) {
+    const day = element.getAttribute('data-day');
+    const slot = element.getAttribute('data-slot');
+    const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const timeSlots = {
+      1: '07:00 - 10:00',
+      2: '10:00 - 13:00',
+      3: '13:00 - 16:00',
+      4: '16:00 - 19:00',
+      5: '19:00 - 21:00'
+    };
+
+    document.getElementById('bookingDay').value = day;
+    document.getElementById('bookingSlot').value = slot;
+    document.getElementById('bookingDetails').textContent = `${dayNames[day-1]}, ${timeSlots[slot]}`;
+
+    document.getElementById('bookingForm').style.display = 'block';
+
+    // Scroll to booking form
+    document.getElementById('bookingForm').scrollIntoView({
+      behavior: 'smooth'
+    });
+  }
+
+  function cancelBooking() {
+    document.getElementById('bookingForm').style.display = 'none';
+  }
+
+  function navigateWeek(offset) {
+    // In a real application, this would navigate to a different week
+    // For now, we'll just redirect with a dummy parameter
+    window.location.href = `/u/laundry-booking?week=${currentWeek + offset}&year=${currentYear}`;
+  }
+</script>
+</body>
+</html>
