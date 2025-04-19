@@ -5,11 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/posts")
+//@RequestMapping("/api/posts")
+@RequestMapping({"/u/forum", "/a/forum"})
 public class ForumController {
 
-    @GetMapping("/u/forum")
+    @GetMapping
     public String forum() {
         return "forum";
     }
+
 }
