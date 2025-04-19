@@ -7,7 +7,9 @@
 <body>
 <h1>Welcome <span th:text="${user.userName}">userName</span>!</h1><hr>
 <h2 title="Information">
-    <p> Username: <span th:text="${user.userName}"></span></p>
+    <span>Username: <span th:text="${user.userName}"></span></span>
+    <br>
+    <span>Role: <span th:text="${user.role}"></span></span>
 </h2>
 <form th:action="@{/u/home/redirectToLaundry}" th:method="post">
     <button type="submit">Laundry Booking</button>

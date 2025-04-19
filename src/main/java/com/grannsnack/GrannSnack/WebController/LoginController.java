@@ -1,4 +1,4 @@
-package com.grannsnack.GrannSnack.Web;
+package com.grannsnack.GrannSnack.WebController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;

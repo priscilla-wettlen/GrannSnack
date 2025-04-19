@@ -1,6 +1,6 @@
-package com.grannsnack.GrannSnack.Web;
+package com.grannsnack.GrannSnack.WebController;
 
-import com.grannsnack.GrannSnack.Controller.DBUserService;
+import com.grannsnack.GrannSnack.Service.DBUserService;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

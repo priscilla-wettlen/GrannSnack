@@ -9,10 +9,13 @@ import org.antlr.v4.runtime.misc.NotNull;
 public class MyUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Nonnull
     private String userName;
+    @Nonnull
     private String password;
+    @Nonnull
+    private String apartmentCode;
     @Nonnull
     private String role;
 
@@ -38,6 +41,15 @@ public class MyUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Nonnull
+    public String getApartmentCode() {
+        return apartmentCode;
+    }
+
+    public void setApartmentCode(@Nonnull String apartmentCode) {
+        this.apartmentCode = apartmentCode;
     }
 
     @Nonnull
