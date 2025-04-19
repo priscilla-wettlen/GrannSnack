@@ -1,4 +1,4 @@
-package com.grannsnack.GrannSnack.Controller;
+package com.grannsnack.GrannSnack.Service;
 
 import com.grannsnack.GrannSnack.Model.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,22 +10,22 @@ import java.util.Optional;
 public class DBUserService {
 
     @Autowired
-    private DBInterface dbInterface;
+    private DBUserInterface dbUserInterface;
 
-    public DBUserService(DBInterface dbInterface) {
-        this.dbInterface = dbInterface;
+    public DBUserService(DBUserInterface dbUserInterface) {
+        this.dbUserInterface = dbUserInterface;
     }
 
     public Iterable<MyUser> getUsers() {
-        return dbInterface.findAll();
+        return dbUserInterface.findAll();
     }
 
     public MyUser getUserById(Integer id) {
-        return dbInterface.findById(id).get();
+        return dbUserInterface.findById(id).get();
     }
 
     public MyUser saveUser(MyUser myUser) {
-        return dbInterface.save(myUser);
+        return dbUserInterface.save(myUser);
     }
 
     public MyUser getUserByName(String name) {
@@ -33,17 +33,17 @@ public class DBUserService {
         if(name == null) {
             user = Optional.empty();
         } else {
-            user = dbInterface.findByUserName(name);
+            user = dbUserInterface.findByUserName(name);
         }
         return user.orElse(null);
     }
 
     public MyUser removeUser(Integer id) {
-        if(!dbInterface.existsById(id)) {
+        if(!dbUserInterface.existsById(id)) {
             return null;
         }
-        MyUser user = dbInterface.findById(id).get();
-        dbInterface.deleteById(id);
+        MyUser user = dbUserInterface.findById(id).get();
+        dbUserInterface.deleteById(id);
         return user;
     }
 }

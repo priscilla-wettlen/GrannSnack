@@ -1,6 +1,6 @@
-package com.grannsnack.GrannSnack.Model;
+package com.grannsnack.GrannSnack.Service;
 
-import com.grannsnack.GrannSnack.Controller.DBInterface;
+import com.grannsnack.GrannSnack.Model.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,11 +14,11 @@ import java.util.Optional;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private DBInterface dbInterface;
+    private DBUserInterface dbUserInterface;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<MyUser> user = dbInterface.findByUserName(username);
+        Optional<MyUser> user = dbUserInterface.findByUserName(username);
         if (user.isPresent()) {
             var userObj = user.get();
             return User.builder()
@@ -38,5 +38,14 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         return role.split(",");
+    }
+
+    public Integer getUserIdByUsername(String name) {
+        Optional<MyUser> user = dbUserInterface.findByUserName(name);
+        if(user.isPresent()) {
+            var userObj = user.get();
+            return userObj.getId();
+        }
+        return null;
     }
 }

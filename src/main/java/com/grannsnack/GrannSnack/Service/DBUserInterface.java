@@ -1,11 +1,10 @@
-package com.grannsnack.GrannSnack.Controller;
+package com.grannsnack.GrannSnack.Service;
 
 import com.grannsnack.GrannSnack.Model.MyUser;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface DBInterface extends JpaRepository<MyUser, Integer> {
+public interface DBUserInterface extends JpaRepository<MyUser, Integer> {
     Optional<MyUser> findByUserName(String userName);
 }

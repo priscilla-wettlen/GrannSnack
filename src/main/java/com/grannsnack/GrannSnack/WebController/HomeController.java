@@ -1,15 +1,13 @@
-package com.grannsnack.GrannSnack.Web;
+package com.grannsnack.GrannSnack.WebController;
 
-import com.grannsnack.GrannSnack.Controller.DBUserService;
+import com.grannsnack.GrannSnack.Service.DBUserService;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class HomeController {
@@ -38,7 +36,7 @@ public class HomeController {
 
     @PostMapping("/u/home/redirectToLaundry")
     public String redirectToLaundryBooking() {
-        return "redirect:/u/booking";
+        return "redirect:/u/laundry-booking";
     }
 
     @PostMapping("/u/home/redirectToForum")
