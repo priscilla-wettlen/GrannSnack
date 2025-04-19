@@ -30,4 +30,5 @@ public class RegistrationController {
     public String register() {
         return "User registry";
     }
+
 }
