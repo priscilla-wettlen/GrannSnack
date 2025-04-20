@@ -1,13 +1,15 @@
 package com.grannsnack.GrannSnack.Model;
 
+import java.util.Date;
+
 public class Post {
     private int postId;
-    private String postDate;
+    private Date postDate;
     private MyUser postAuthor;
     private String postContent;
     private String postImage;
 
-    public Post(int postId, String postDate, MyUser postAuthor, String postContent) {
+    public Post(int postId, Date postDate, MyUser postAuthor, String postContent) {
         this.postId = postId;
         this.postDate = postDate;
         this.postAuthor = postAuthor;
@@ -22,11 +24,11 @@ public class Post {
         this.postId = postId;
     }
 
-    public String getPostDate() {
+    public Date getPostDate() {
         return postDate;
     }
 
-    public void setPostDate(String postDate) {
+    public void setPostDate(Date postDate) {
         this.postDate = postDate;
     }
 
