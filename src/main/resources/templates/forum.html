@@ -8,6 +8,7 @@
 <h1>Forum</h1><hr>
 <p>Welcome to the Forum Page</p>
 <button id="newPost">New Post</button>
+<!--<button id="delete">Delete Post</button>-->
 <button id="backButton">Go back</button>
 
 <!-- The Modal -->
@@ -46,7 +47,7 @@
             document.getElementById("postContent").value = "";
             document.getElementById("myModal").style.display = "none";
 
-            loadPosts(); // refresh the list
+            loadPosts();
         } else {
             alert("Post cannot be empty.");
         }
@@ -60,13 +61,25 @@
         posts.forEach((post, index) => {
             const p = document.createElement("p");
             p.textContent = `Post ${index + 1}: ${post}`;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.style.marginLeft = "10px";
+
+            deleteBtn.addEventListener("click", () => {
+                posts.splice(index, 1);
+                localStorage.setItem("posts", JSON.stringify(posts));
+                loadPosts();
+            });
+
+
             postListDiv.appendChild(p);
+            p.appendChild(deleteBtn);
         });
     }
 
     window.onload = loadPosts;
 
-    // Optional: click outside to close modal
     window.addEventListener("click", function(event) {
         let modal = document.getElementById("myModal");
         if (event.target == modal) {
@@ -74,7 +87,6 @@
         }
     });
 
-    // Go back
     document.getElementById("backButton").addEventListener("click", function() {
         window.history.back();
     });
