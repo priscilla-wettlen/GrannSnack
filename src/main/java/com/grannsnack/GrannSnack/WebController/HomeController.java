@@ -12,6 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class HomeController {
 
+    //TODO Temporary fix so that we get redirecting to login when application starts. For testing purposes only.
+
+        @GetMapping("/")
+        public String home() {
+            return "redirect:/login"; // or return a view like "home"
+        }
+
+    //TODO End of TODO
+
     @Autowired
     private DBUserService userDB;
 
@@ -43,4 +52,6 @@ public class HomeController {
     public String redirectToForum() {
         return "redirect:/u/forum";
     }
+
+
 }
