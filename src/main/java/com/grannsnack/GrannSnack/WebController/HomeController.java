@@ -43,12 +43,12 @@ public class HomeController {
         return "userhome";
     }
 
-    @PostMapping("/u/home/redirectToLaundry")
+    @GetMapping("/u/home/redirectToLaundry")
     public String redirectToLaundryBooking() {
         return "redirect:/u/laundry-booking";
     }
 
-    @PostMapping("/u/home/redirectToForum")
+    @GetMapping("/u/home/redirectToForum")
     public String redirectToForum() {
         return "redirect:/u/forum";
     }
