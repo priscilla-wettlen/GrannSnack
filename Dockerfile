@@ -1,16 +1,27 @@
-FROM ubuntu:latest
-LABEL authors="jabonfoca"
+# ------------ Stage 1: Build the JAR ------------
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
-ENTRYPOINT ["top", "-b"]
-
-# Use an official JDK runtime as a parent image
-FROM eclipse-temurin:21-jdk
-
-# Set the working directory in the container
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy the jar file into the container
-COPY target/GrannSnack-0.0.1-SNAPSHOT.jar app.jar
+# Copy pom.xml and download dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-# Run the jar file
+# Copy the rest of the project
+COPY . .
+
+# Package the application
+RUN mvn clean package -DskipTests
+
+# ------------ Stage 2: Run the JAR ------------
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+# Copy the jar from the previous build stage
+COPY --from=build /app/target/GrannSnack-0.0.1-SNAPSHOT.jar app.jar
+
+# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
