@@ -124,19 +124,27 @@
     .bottom a:hover {
       text-decoration: underline;
     }
-
-    /* New styles for logout message */
     .logout-message {
-      background-color: #f8f9fa;
-      border: 1px solid #e9ecef;
+      background-color: #e1fae1;
+      border: 1px solid #c7f7c7;
       border-radius: 6px;
       padding: 12px;
-      margin-bottom: 20px;
+      margin-top: 20px;
       text-align: center;
-      color: #495057;
+      color: #61d26c;
       font-size: 14px;
     }
-
+    .error-message {
+      background-color: #ffeaea;
+      border: 1px solid #ffb3b3;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 20px;
+      text-align: center;
+      color: #c0392b;
+      font-size: 14px;
+      font-weight: 600;
+    }
     @media (max-width: 600px) {
       *{
         padding:5px;
@@ -159,11 +167,6 @@
 
     <div class="login-container">
       <form th:action="@{/login}" method="post">
-        <!-- Add the logout message before the form fields -->
-        <div th:if="${param.logout}" class="logout-message">
-          Du har loggat ut från ditt konto
-        </div>
-
         <div class="form-group">
           <label for="email">E-postadress</label>
           <input type="text" id="email" name="username" placeholder="User">
@@ -175,6 +178,14 @@
         </div>
 
         <button type="submit" class="btn">Logga in</button>
+
+        <div th:if="${param.logout}" class="logout-message">
+          Du har loggat ut från ditt konto
+        </div>
+
+        <div th:if="${param.error}" class="error-message">
+          Invalid username and password.
+        </div>
       </form>
     </div>
 
