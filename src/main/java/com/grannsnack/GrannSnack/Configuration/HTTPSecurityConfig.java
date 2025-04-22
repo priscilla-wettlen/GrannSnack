@@ -21,21 +21,25 @@ public class HTTPSecurityConfig {
     UserDetailsService userDetailService;
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/u/**").hasRole("USER");
-                    registry.requestMatchers(("/a/**")).hasRole("ADMIN");
-                    registry.anyRequest().authenticated();
-                })
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .permitAll()
-                        .defaultSuccessUrl("/default", true))
-                .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .build();
-    }
+public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity
+            .authorizeHttpRequests(registry -> {
+                registry.requestMatchers("/u/**").hasRole("USER");
+                registry.requestMatchers(("/a/**")).hasRole("ADMIN");
+                registry.anyRequest().authenticated();
+            })
+            .formLogin(formLogin -> formLogin
+                    .loginPage("/login")
+                    .permitAll()
+                    .defaultSuccessUrl("/default", true))
+            .logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login?logout") // <-- This is the key line!
+                    .permitAll())
+            .cors(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
+            .build();
+}
 
     @Bean
     public UserDetailsService userDetailsService() {

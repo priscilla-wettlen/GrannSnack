@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -124,6 +125,18 @@
       text-decoration: underline;
     }
 
+    /* New styles for logout message */
+    .logout-message {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #495057;
+      font-size: 14px;
+    }
+
     @media (max-width: 600px) {
       *{
         padding:5px;
@@ -146,6 +159,11 @@
 
     <div class="login-container">
       <form th:action="@{/login}" method="post">
+        <!-- Add the logout message before the form fields -->
+        <div th:if="${param.logout}" class="logout-message">
+          Du har loggat ut från ditt konto
+        </div>
+
         <div class="form-group">
           <label for="email">E-postadress</label>
           <input type="text" id="email" name="username" placeholder="User">

@@ -148,10 +148,10 @@
 </head>
 <body>
   <header>
-    <a href="index.html" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
     <nav class="nav">
       <a href="#" class="nav-link">Profil</a>
-      <a href="#" class="nav-link logout">Logga ut</a>
+      <a th:href="@{/logout}" class="nav-link logout">Logga ut</a>
     </nav>
   </header>
 
@@ -160,12 +160,12 @@
     <div class="subtitle">Allt för din bostad på ett ställe</div>
 
     <div class="grid">
-      <div class="card" onclick="location.href='forum.html'">
+      <div class="card" onclick="location.href='/u/forum'">
         <div class="icon-bg">💬</div>
         <div class="card-title">Chatforum</div>
         <div class="card-desc">Diskutera med grannar</div>
       </div>
-      <div class="card" onclick="location.href='booking-calender.html'">
+      <div class="card" onclick="location.href='/u/laundry-booking'">
         <div class="icon-bg">📅</div>
         <div class="card-title">Tvättbokning</div>
         <div class="card-desc">Boka tvättid enkelt</div>
