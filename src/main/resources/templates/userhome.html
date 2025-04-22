@@ -1,116 +1,186 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <title>GrannSnack</title>
-</head>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GrannSnack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
     * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-        background-color: #f2f2f2;
-        color: white;
-        padding: 20px;
-        max-width: 900px;
-        margin: 0 auto;
-    }
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        padding: 10px 0;
+      background: #f4f6f8;
+      font-family: 'Inter', sans-serif;
+      color: #1a202c;
     }
 
-    .logo {
-        font-size: 28px;
-        font-weight: 600;
-        color: #5a5a4a;
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 20px 0;
     }
-    .welcome {
-        margin-bottom: 10px;
-        color: #5a5a4a;
-        font-size: 18px;
+  .logo {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+  }
+  .logo-link {
+    text-decoration: none;
+    color: black;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #1a202c;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .nav-link.logout {
+    color: #ff4d4f;
+    font-weight: 500;
+    gap: 7px;
+  }
+  .nav-link.logout:hover {
+    color: #d9363e;
+  }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
     }
+
     h1 {
-        font-size: 32px;
-        margin-bottom: 30px;
-        color: #5a5a4a;
-        font-weight: 600;
-        line-height: 1.2;
+      font-size: 24px;
+      margin-bottom: 8px;
+      font-weight: 600;
     }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b6b6b;
+      margin-bottom: 30px;
+    }
+
     .grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
+       display: grid;
+       grid-template-columns: repeat(2, 1fr); 
+       gap: 24px;
+       padding: 0 20px;
+       max-width: 700px; 
+}
 
     .card {
-        background-color: white;
-        border-radius: 15px;
-        padding: 25px;
-        display: flex;
-        flex-direction: column;
-        min-height: 150px;
-        box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.05);
-        transition: box-shadow 0.3s ease;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
     }
+
     .card:hover {
-        box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.1);
-        /*transform: scale(1.02);*/
-        cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
+
+    .icon-bg {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
     .card-title {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 5px;
-        color: #5a5a4a;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 4px;
     }
 
-    .card-description {
-        font-size: 14px;
-        color: #777;
+    .card-desc {
+      font-size: 12px;
+      color: #888;
+      text-align: center;
     }
-</style>
+    .btn {
+      background-color: #1a202c;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #333;
+    }
+
+    @media (max-width: 600px) {
+      *{
+        padding:5px;
+      }
+      .card {
+        padding: 16px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+    }
+    }
+  </style>
+</head>
 <body>
-<header>
-    <div class="logo">GrannSnack</div>
-</header>
-<div class="welcome">Välkommen <span th:text="${user.userName}">userName</span>!</div>
-<h1>Allt för din bostad på ett ställe</h1>
+  <header>
+    <a href="index.html" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <nav class="nav">
+      <a href="#" class="nav-link">Profil</a>
+      <a href="#" class="nav-link logout">Logga ut</a>
+    </nav>
+  </header>
 
+  <main>
+    <h1>Välkommen!</h1>
+    <div class="subtitle">Allt för din bostad på ett ställe</div>
 
-<div class="grid">
-
-    <a th:href="@{/u/home/redirectToForum}" style="text-decoration: none; color: inherit;">
-        <div class="card">
-            <div class="card-title">Chattforum</div>
-            <div class="card-description">Lära känna dina grannar</div>
-        </div>
-    </a>
-
-    <a th:href="@{/u/home/redirectToLaundry}" style="text-decoration: none; color: inherit;">
-        <div class="card">
-            <div class="card-title">Tvättbokning</div>
-            <div class="card-description">Boka tid på tvättstugan</div>
-        </div>
-    </a>
-
-    <div class="card">
-        <div class="card-title">Parkering</div>
-        <div class="card-description">Anmäl dig till parkeringskön</div>
+    <div class="grid">
+      <div class="card" onclick="location.href='chat.html'">
+        <div class="icon-bg">💬</div>
+        <div class="card-title">Chatforum</div>
+        <div class="card-desc">Diskutera med grannar</div>
+      </div>
+      <div class="card" onclick="location.href='tvattbokning.html'">
+        <div class="icon-bg">📅</div>
+        <div class="card-title">Tvättbokning</div>
+        <div class="card-desc">Boka tvättid enkelt</div>
+      </div>
+      <div class="card" onclick="location.href='parkering.html'">
+        <div class="icon-bg">..</div>
+        <div class="card-title">Kommer snart</div>
+        <div class="card-desc">Kommer snart</div>
+      </div>
+      <div class="card" onclick="location.href='felanmal.html'">
+        <div class="icon-bg">..</div>
+        <div class="card-title">Kommer snart</div>
+        <div class="card-desc">Kommer snart</div>
+      </div>
     </div>
-
-    <div class="card">
-        <div class="card-title">Betalningar</div>
-        <div class="card-description">Hantera fakturorna</div>
-    </div>
-</div>
+  </main>
 </body>
 </html>
-
