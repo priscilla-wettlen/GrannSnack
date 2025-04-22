@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GrannSnack - Chatforum</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #f4f6f8;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #1a202c;
+      min-height: 100vh;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 20px 0;
+    }
+    .logo {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+    }
+    .logo-link {
+      text-decoration: none;
+      color: black;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #1a202c;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .nav-link.logout {
+      color: #ff4d4f;
+      font-weight: 500;
+      gap: 7px;
+    }
+    .nav-link.logout:hover {
+      color: #d9363e;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+      padding: 0 20px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .card {
+      background: #fff;
+      border: 1.5px solid #e5eaf1;
+      border-radius: 12px;
+      box-shadow: 0 1px 2px rgba(60,60,60,0.01);
+      padding: 32px;
+      max-width: 800px;
+      width: 100%;
+      margin: 20px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .card form {
+      width: 100%;
+    }
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .form-group {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .form-group input,
+    .form-group textarea{
+      width: 100%;
+      padding: 10px;
+      border: 1.5px solid #e5eaf1;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 14px;
+      color: #1a202c;
+      font-family: inherit;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #b4c6e7;
+    }
+    .form-group textarea {
+      min-height: 100px;
+      max-height: 300px;
+      resize: vertical;
+    }
+    .btn {
+      background: #1a202c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .btn:hover {
+      background: #333;
+    }
+    @media (max-width: 600px) {
+      *{
+        padding:10px;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 0 10px 0;
+      }
+      .logo {
+        margin-left: 0;
+      }
+      .nav {
+        margin-right: 0;
+        gap: 18px;
+      }
+      main {
+        padding: 0 4px;
+      }
+      .card {
+        padding: 18px 2vw 18px 2vw;
+        max-width: 100%;
+      }
+      h1 {
+        font-size: 20px;
+        margin-bottom: 18px;
+      }
+      .card h2 {
+        font-size: 15px;
+        margin-bottom: 18px;
+      }
+    }
+    /* All post styling is now removed */
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <nav class="nav">
+      <a href="#" class="nav-link">Profil</a>
+      <a href="#" class="nav-link logout">Logga ut</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Chatforum</h1>
+    <div class="card">
+      <h2>Skapa nytt inlägg</h2>
+      <form id="postForm">
+        <div class="form-group">
+          <input type="text" id="postTitle" placeholder="Titel på inlägg" required>
+        </div>
+        <div class="form-group">
+          <textarea id="postContent" placeholder="Skriv ditt inlägg här..." required></textarea>
+        </div>
+        <button type="submit" class="btn">Publicera inlägg</button>
+      </form>
+    </div>
+
+    <div id="posts">
+
+
+    </div>
+  </main>
+  <script>
+    var form = document.getElementById('postForm');
+    form.onsubmit = function(event) {
+      event.preventDefault();
+
+      var title = document.getElementById('postTitle').value;
+      var content = document.getElementById('postContent').value;
+
+      var postDiv = document.createElement('div');
+      postDiv.innerHTML = "<b>" + title + "</b><br>" + content + "<hr>";
+
+      var posts = document.getElementById('posts');
+      posts.insertBefore(postDiv, posts.firstChild);
+
+      form.reset();
+    };
+  </script>
+</body>
+</html>

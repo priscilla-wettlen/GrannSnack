@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Logga in - GrannSnack</title>
+  <title>Registrera - GrannSnack</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -43,7 +43,7 @@
       margin-top: 50px;
     }
 
-    .login-container {
+    .register-container {
       background: white;
       padding: 32px;
       border-radius: 12px;
@@ -128,7 +128,7 @@
       *{
         padding:5px;
       }
-      .login-container {
+      .register-container {
         margin: 20px;
         padding: 24px;
       }
@@ -141,27 +141,37 @@
   </header>
 
   <main>
-    <h1>Välkommen tillbaka!</h1>
-    <div class="subtitle">Logga in på ditt GrannSnack-konto</div>
+    <h1>Skapa konto</h1>
+    <div class="subtitle">Bli medlem på GrannSnack</div>
 
-    <div class="login-container">
-      <form action="/login" method="POST">
+    <div class="register-container">
+      <form action="/register" method="POST">
+        <div class="form-group">
+          <label for="name">Namn</label>
+          <input type="text" id="name" name="name" placeholder="Ditt namn" required>
+        </div>
+
         <div class="form-group">
           <label for="email">E-postadress</label>
-          <input type="email" id="email" name="email" placeholder="din.email@gmail.com" required>
+          <input type="email" id="email" name="email" placeholder="din.emai@gmail.com" required>
         </div>
 
         <div class="form-group">
           <label for="password">Lösenord</label>
-          <input type="password" id="password" name="password" placeholder="*******" required>
+          <input type="password" id="password" name="password" placeholder="******" required>
         </div>
 
-        <button type="submit" class="btn">Logga in</button>
+        <div class="form-group">
+          <label for="confirm-password">Bekräfta lösenord</label>
+          <input type="password" id="confirm-password" name="confirm-password" placeholder="******" required>
+        </div>
+
+        <button type="submit" class="btn">Registrera</button>
       </form>
     </div>
 
     <div class="bottom">
-      Har du inget konto? <a href="register.html">Skapa konto</a>
+      Har du redan ett konto? <a href="login.html">Logga in</a>
     </div>
   </main>
 </body>
