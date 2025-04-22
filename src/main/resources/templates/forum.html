@@ -1,136 +1,212 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <title>Forum</title>
-</head>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GrannSnack - Chatforum</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
     * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-
     body {
-        background-color: #f2f2f2;
-        color: white;
-        padding: 20px;
-        max-width: 900px;
-        margin: 0 auto;
+      background: #f4f6f8;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #1a202c;
+      min-height: 100vh;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 20px 0;
+    }
+    .logo {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+    }
+    .logo-link {
+      text-decoration: none;
+      color: black;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #1a202c;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .nav-link.logout {
+      color: #ff4d4f;
+      font-weight: 500;
+      gap: 7px;
+    }
+    .nav-link.logout:hover {
+      color: #d9363e;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+      padding: 0 20px;
     }
     h1 {
-        font-size: 32px;
-        margin-bottom: 30px;
-        color: #5a5a4a;
-        font-weight: 600;
-        line-height: 1.2;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
-    #postList{
-        padding: 2rem 0 2rem 0;
-        max-width: 100vw;
+    .card {
+      background: #fff;
+      border: 1.5px solid #e5eaf1;
+      border-radius: 12px;
+      box-shadow: 0 1px 2px rgba(60,60,60,0.01);
+      padding: 32px;
+      max-width: 800px;
+      width: 100%;
+      margin: 20px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
-    p{
-        background-color: ghostwhite;
-        padding: 10px;
-        border-radius: 10px;
-        font-size: 16px;
-        color: #777;
-        margin: 10px 0 20px 0;
+    .card form {
+      width: 100%;
     }
-    #newPost,
-    #backButton{
-        font-size: 18px;
-        padding: 5px;
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 24px;
     }
-</style>
+    .form-group {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .form-group input,
+    .form-group textarea{
+      width: 100%;
+      padding: 10px;
+      border: 1.5px solid #e5eaf1;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 14px;
+      color: #1a202c;
+      font-family: inherit;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #b4c6e7;
+    }
+    .form-group textarea {
+      min-height: 100px;
+      max-height: 300px;
+      resize: vertical;
+    }
+    .btn {
+      background: #1a202c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .btn:hover {
+      background: #333;
+    }
+    @media (max-width: 600px) {
+      *{
+        padding:10px;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 0 10px 0;
+      }
+      .logo {
+        margin-left: 0;
+      }
+      .nav {
+        margin-right: 0;
+        gap: 18px;
+      }
+      main {
+        padding: 0 4px;
+      }
+      .card {
+        padding: 18px 2vw 18px 2vw;
+        max-width: 100%;
+      }
+      h1 {
+        font-size: 20px;
+        margin-bottom: 18px;
+      }
+      .card h2 {
+        font-size: 15px;
+        margin-bottom: 18px;
+      }
+    }
+    /* All post styling is now removed */
+  </style>
+</head>
 <body>
-<h1>Forum</h1><hr>
-<button id="newPost">New Post</button>
-<!--<button id="delete">Delete Post</button>-->
-<button id="backButton">Go back</button>
-
-<!-- The Modal -->
-<div id="myModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <textarea id="postContent" placeholder="Write something here" rows="4" cols="50"></textarea><br>
-        <button id="cancelPost">Cancel</button>
-        <button id="savePost">Post</button>
+  <header>
+    <a href="index.html" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <nav class="nav">
+      <a href="#" class="nav-link">Profil</a>
+      <a href="#" class="nav-link logout">Logga ut</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Chatforum</h1>
+    <div class="card">
+      <h2>Skapa nytt inlägg</h2>
+      <form id="postForm">
+        <div class="form-group">
+          <input type="text" id="postTitle" placeholder="Titel på inlägg" required>
+        </div>
+        <div class="form-group">
+          <textarea id="postContent" placeholder="Skriv ditt inlägg här..." required></textarea>
+        </div>
+        <button type="submit" class="btn">Publicera inlägg</button>
+      </form>
     </div>
-</div>
 
-<!-- POST LIST -->
-<div id="postList"></div>
-
-<script>
-    // Show modal
-    document.getElementById("newPost").addEventListener("click", function() {
-        document.getElementById("myModal").style.display = "block";
-    });
-
-    // Cancel button
-    document.getElementById("cancelPost").addEventListener("click", function() {
-        document.getElementById("postContent").value = "";
-        document.getElementById("myModal").style.display = "none";
-    });
-
-    // Save post
-    document.getElementById("savePost").addEventListener("click", function () {
-        const post = document.getElementById("postContent").value;
-        if (post.trim() !== "") {
-            let posts = JSON.parse(localStorage.getItem("posts")) || [];
-            posts.push(post);
-            localStorage.setItem("posts", JSON.stringify(posts));
-            alert("Post saved!");
-
-            document.getElementById("postContent").value = "";
-            document.getElementById("myModal").style.display = "none";
-
-            loadPosts();
-        } else {
-            alert("Post cannot be empty.");
-        }
-    });
-
-    // Load saved posts
-    function loadPosts() {
-        let posts = JSON.parse(localStorage.getItem("posts")) || [];
-        let postListDiv = document.getElementById("postList");
-        postListDiv.innerHTML = "";
-        posts.forEach((post, index) => {
-            const p = document.createElement("p");
-
-            p.textContent = `Post ${index + 1}: ${post}`;
-
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "Delete";
-            deleteBtn.style.marginLeft = "10px";
-
-            deleteBtn.addEventListener("click", () => {
-                posts.splice(index, 1);
-                localStorage.setItem("posts", JSON.stringify(posts));
-                loadPosts();
-            });
+    <div id="posts">
 
 
-            postListDiv.appendChild(p);
-            p.appendChild(deleteBtn);
-        });
-    }
+    </div>
+  </main>
+  <script>
+    var form = document.getElementById('postForm');
+    form.onsubmit = function(event) {
+      event.preventDefault();
 
-    window.onload = loadPosts;
+      var title = document.getElementById('postTitle').value;
+      var content = document.getElementById('postContent').value;
 
-    window.addEventListener("click", function(event) {
-        let modal = document.getElementById("myModal");
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    });
+      var postDiv = document.createElement('div');
+      postDiv.innerHTML = "<b>" + title + "</b><br>" + content + "<hr>";
 
-    document.getElementById("backButton").addEventListener("click", function() {
-        window.history.back();
-    });
-</script>
+      var posts = document.getElementById('posts');
+      posts.insertBefore(postDiv, posts.firstChild);
 
+      form.reset();
+    };
+  </script>
 </body>
 </html>
