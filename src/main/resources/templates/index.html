@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GrannSnack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f4f6f8;
+      font-family: 'Inter', sans-serif;
+      color: #1a202c;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 20px 0;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+    }
+    .logo-link{
+      text-decoration: none;
+      color:black;
+    }
+
+    .login-link {
+      font-size: 12px;
+      color: #333;
+      text-decoration: none;
+      margin-right: 20px;
+      display: flex;
+      align-items: center;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b6b6b;
+      margin-bottom: 30px;
+    }
+
+    .grid {
+       display: grid;
+       grid-template-columns: repeat(2, 1fr); 
+       gap: 24px;
+       padding: 0 20px;
+       max-width: 700px; 
+}
+
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .icon-bg {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+    }
+
+    .bottom {
+      margin-top: 40px;
+      text-align: center;
+      gap:10px;
+    }
+    .bottom .btn {
+      margin-top: 12px;
+    }
+
+    .btn {
+      background-color: #1a202c;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #333;
+    }
+
+    @media (max-width: 600px) {
+      *{
+        padding:5px;
+      }
+      .card {
+        padding: 16px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+    }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <a class="login-link" href="login.html">
+      Logga in
+    </a>
+  </header>
+
+  <main>
+    <h1>Välkommen!</h1>
+    <div class="subtitle">Allt för din bostad på ett ställe</div>
+
+    <div class="grid">
+      <div class="card" onclick="location.href='chat.html'">
+        <div class="icon-bg">💬</div>
+        <div class="card-title">Chatforum</div>
+        <div class="card-desc">Diskutera med grannar</div>
+      </div>
+      <div class="card" onclick="location.href='tvattbokning.html'">
+        <div class="icon-bg">📅</div>
+        <div class="card-title">Tvättbokning</div>
+        <div class="card-desc">Boka tvättid enkelt</div>
+      </div>
+      <div class="card" onclick="location.href='parkering.html'">
+        <div class="icon-bg">..</div>
+        <div class="card-title">Kommer snart</div>
+        <div class="card-desc">Kommer snart</div>
+      </div>
+      <div class="card" onclick="location.href='felanmal.html'">
+        <div class="icon-bg">..</div>
+        <div class="card-title">Kommer snart</div>
+        <div class="card-desc">Kommer snart</div>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <p>Ny på GrannSnack?</p>
+      <button class="btn" onclick="location.href='register.html'">Skapa konto</button>
+    </div>
+  </main>
+</body>
+</html>
