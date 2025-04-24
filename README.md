@@ -9,8 +9,8 @@ Men för att få det att fungera måste båda ladda ner JDK 24 och senaste versi
 VS Code tror jag man måste gå till Oracles hemsida och ladda ner den. 
 Efter det kan Intellij och VS Code ladda ner MAVEN genom Plugins repsektive Extensions.
 
-När man gjort det kan vi börja. 
-Hämta hem kodfilerna från github.
+När man gjort det kan vi börja.  
+Hämta hem kodfilerna från github <a name="länk-till-github">här</a>.
 
 Hämta hem .env filen som heter DBlogin från canvas. 
 
@@ -70,8 +70,10 @@ Användarnamn - user
 Lösenord - 1234
 
 ## Lämna feedback
-Vi ser fram emot att få feedback från er. Fokusera gärna på design. Hur den känns och upplevs. Men även hur funktionaliteten fungerar på de implementerade sakerna. 
+Vi ser fram emot att få feedback från er. Fokusera gärna på design. Hur den känns och upplevs. Men även hur funktionaliteten fungerar på de implementerade sakerna.  
 Behövs något mer? Saknas någon funktionalitet?
 
 
 ### Tack så mycket för att du orkade läsa igenom hela och förhoppningsvis fick programmet att köra! 
+För mer information eller kontakt:
+[https://github.com/priscilla-wettlen/GrannSnack.git](#link-till-github)
