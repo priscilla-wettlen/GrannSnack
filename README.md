@@ -33,6 +33,7 @@ Så ha tålamod. Det kommer massor av meddelande i konsolen. Orora dig inte öve
 När meddelanden slutar så titta på sista meddelandet.
 
 Om meddelandet säger följande är du redo att prova programmet:
+
 -dagensdatumochtid-  INFO 8008 --- [GrannSnack] [           main] c.g.GrannSnack.GrannSnackApplication     : Started GrannSnackApplication in 4.152 seconds (process running for 6.502)
 
 ## VS Code
@@ -59,6 +60,7 @@ Så ha tålamod. Det kommer massor av meddelande i konsolen. Orora dig inte öve
 När meddelanden slutar så titta på sista meddelandet.
 
 Om meddelandet säger följande är du redo att prova programmet:
+
 -dagensdatumochtid-  INFO 8008 --- [GrannSnack] [           main] c.g.GrannSnack.GrannSnackApplication     : Started GrannSnackApplication in 4.152 seconds (process running for 6.502)
 
 ## Inlogg
