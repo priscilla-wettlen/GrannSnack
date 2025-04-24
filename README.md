@@ -41,6 +41,7 @@ Om du använder VS Code är processen ungefär samma.
 2. I sökrutan skriver ni **Open launch.json**
 3. Detta kommer antingen öppna er run configuration eller skapa en ny till er.
 4. Därefter ska ni lägga till följande under de andra inställningarna.
+   
         {
             "type": "java",
             "name": "GrannSnackApplication",
@@ -49,7 +50,8 @@ Om du använder VS Code är processen ungefär samma.
             "projectName": "GrannSnack",
             "envFile": "C:\Users\DittNamn\Documents\GitHub\GrannSnack\dblogin.env" <- detta är en exempel sökväg. Ni måste byta ut denna mot sökvägen som .env ni laddade ner innan ligger i.
         }
-5. När ni laggt in den måste ni byta ut sökvägen som står efter "envFile" till den sökvägen som ni sparade .env filen.
+   
+6. När ni laggt in den måste ni byta ut sökvägen som står efter "envFile" till den sökvägen som ni sparade .env filen.
 
 Om allt är gjort rätt så borde programmet gå att köra nu. Tänk på:
 Första gången tar det mycket längre tid att starta programmet på grund av att många olika dependncies måste laddas ner och implementeras.
