@@ -12,6 +12,10 @@ public class MyUser {
     private Integer id;
     @Nonnull
     private String userName;
+
+    @Nonnull
+    private String email;
+
     @Nonnull
     private String password;
     @Nonnull
@@ -33,6 +37,15 @@ public class MyUser {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    @Nonnull
+    public String getUserEmail() {
+        return email;
+    }
+
+    public void setUserEmail(@Nonnull String email) {
+        this.email = email;
     }
 
     public String getPassword() {

@@ -19,4 +19,9 @@ public class LoginController {
         }
         return "redirect:/u/home";
     }
+
+    @GetMapping("/register")
+    public String register() {
+        return "register";
+    }
 }

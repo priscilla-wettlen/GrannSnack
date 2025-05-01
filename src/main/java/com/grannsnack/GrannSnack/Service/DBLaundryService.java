@@ -47,7 +47,6 @@ public class DBLaundryService {
     }
 
     public void createBooking(int day, int slot, String notes, int week, int year) {
-        // Check if slot is already taken
         List<Booking> existingBookings = dbLaundryInterface.findByDayAndTimeSlotAndWeekAndYear(
                 day, slot, week, year);
 

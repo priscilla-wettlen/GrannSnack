@@ -21,27 +21,7 @@ public class LaundryController {
     private DBLaundryService dbLaundryService;
 
     @GetMapping
-    public String showBookingCalendar(
-            @RequestParam(name = "week", required = false) Integer weekParam,
-            @RequestParam(name = "year", required = false) Integer yearParam,
-            Model model) {
-
-        // If week or year not provided, use current date
-        LocalDate now = LocalDate.now();
-        int week = weekParam != null ? weekParam : now.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
-        int year = yearParam != null ? yearParam : now.getYear();
-
-        // Get all bookings for the selected week
-        Set<String> takenSlots = dbLaundryService.getTakenSlotsForWeek(week, year);
-
-        // Get current user's bookings
-        Set<String> userBookings = dbLaundryService.getUserBookingsForWeek(week, year);
-
-        model.addAttribute("weekNumber", week);
-        model.addAttribute("year", year);
-        model.addAttribute("takenSlots", takenSlots);
-        model.addAttribute("userBookings", userBookings);
-
+    public String showBookingCalendar() {
         return "booking-calender";
     }
 
