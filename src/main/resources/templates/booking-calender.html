@@ -203,10 +203,7 @@
   <link rel="stylesheet" href="styles.css">
   <style>
     
-    /*body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }*/
+  
     body {
       font-family: 'Quicksand', 'Inter';
       background-color: #ffffff;
@@ -304,7 +301,7 @@
     .bla { background-color: #0097b2; }
     .gra { background-color: #a6a6a6; }
 
-    .time-slot {
+     .time-slot {
       border: 1px solid #a6a6a6;
       border-radius: 12px;
       padding: 12px;
@@ -337,6 +334,32 @@
       border: 1px solid #a6a6a6;
       background-color: transparent;
     }
+    .calendar-card{
+      border: 1px solid #a6a6a6;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 12px;
+      height: 300px;
+      width: 250px;
+      background-color: #f9f7fb;
+     
+      
+    }
+   
+
+    .booking-container {
+       display: flex;
+       flex-wrap: wrap;
+       justify-content: center;
+       gap: 40px;
+       margin-top: 20px;
+       max-width: 100%;
+      }
+
+      h2{
+        align-items: center;
+      }
+
 
 
 
@@ -354,22 +377,31 @@
     </div>
 </div>
 
-<div class="card">
-  <h2>Tillgängliga tider</h2>
-  <div class="time-slot">
-    <div>Morgon<br><small>07:00 - 12:00</small></div>
-    <button>Boka</button>
+<div class="booking-container">
+  <div class="card">
+    <h2>Tillgängliga tider</h2>
+    <div class="time-slot">
+      <div>Morgon<br><small>07:00 - 12:00</small></div>
+      <button>Boka</button>
+    </div>
+    <div class="time-slot">
+      <div>Eftermiddag<br><small>12:00 - 17:00</small></div>
+      <button>Boka</button>
+    </div>
+    <div class="time-slot">
+      <div>Kväll<br><small>17:00 - 22:00</small></div>
+      <button>Boka</button>
+    </div>
   </div>
-  <div class="time-slot">
-    <div>Eftermiddag<br><small>12:00 - 17:00</small></div>
-    <button>Boka</button>
-  </div>
-  <div class="time-slot">
-    <div>Kväll<br><small>17:00 - 22:00</small></div>
-    <button>Boka</button>
+
+  <div class="calendar-card">
+    <h2>Välj datum</h2>
+    <input type="date" id="datePicker" />
+    <br>
+    <button>Spara datum</button>
   </div>
 </div>
-</div>
+
 
 
 
