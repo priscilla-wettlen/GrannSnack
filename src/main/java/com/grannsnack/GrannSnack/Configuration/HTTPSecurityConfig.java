@@ -1,5 +1,6 @@
 package com.grannsnack.GrannSnack.Configuration;
 
+import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class HTTPSecurityConfig {
 
     @Autowired
-    UserDetailsService userDetailService;
+    MyUserDetailsService userDetailService;
 
     @Bean
 public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
@@ -34,7 +35,7 @@ public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception
                     .defaultSuccessUrl("/default", true))
             .logout(logout -> logout
                     .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login?logout") // <-- This is the key line!
+                    .logoutSuccessUrl("/login?logout")
                     .permitAll())
             .cors(AbstractHttpConfigurer::disable)
             .csrf(AbstractHttpConfigurer::disable)
@@ -42,7 +43,7 @@ public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception
 }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public MyUserDetailsService userDetailsService() {
         return userDetailService;
     }
 

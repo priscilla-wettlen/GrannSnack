@@ -17,17 +17,17 @@ public class MyUserDetailsService implements UserDetailsService {
     private DBUserInterface dbUserInterface;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<MyUser> user = dbUserInterface.findByUserName(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<MyUser> user = dbUserInterface.findByEmail(email);
         if (user.isPresent()) {
             var userObj = user.get();
             return User.builder()
-                    .username(userObj.getUserName())
+                    .username(userObj.getUserEmail())
                     .password(userObj.getPassword())
                     .roles(getRoles(userObj))
                     .build();
         } else {
-            throw new UsernameNotFoundException("User " + username + " not found");
+            throw new UsernameNotFoundException("Email " + email + " not found");
         }
     }
 
