@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GrannSnack</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     * {
       box-sizing: border-box;
@@ -23,26 +23,30 @@
       justify-content: space-between;
       align-items: center;
       padding: 30px 20px 0;
+      background-color: #0097b2;
     }
 
     .logo {
       font-size: 18px;
       font-weight: bold;
       letter-spacing: -0.5px;
+      color: #ffffff;
     }
-    .logo-link{
+
+    .logo-link {
       text-decoration: none;
-      color:black;
+      color: #ffffff;
     }
 
     .login-link {
       font-size: 12px;
-      color: #333;
+      color: #ffffff;
       text-decoration: none;
       margin-right: 20px;
       display: flex;
       align-items: center;
     }
+
     main {
       display: flex;
       flex-direction: column;
@@ -63,15 +67,15 @@
     }
 
     .grid {
-       display: grid;
-       grid-template-columns: repeat(2, 1fr); 
-       gap: 24px;
-       padding: 0 20px;
-       max-width: 700px; 
-}
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      padding: 0 20px;
+      max-width: 700px;
+    }
 
     .card {
-      background: #fff;
+      background: #ffffff;
       border: 1px solid #ddd;
       border-radius: 12px;
       padding: 20px;
@@ -79,10 +83,12 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
     }
 
     .card:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
     }
 
     .icon-bg {
@@ -94,62 +100,66 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 10px;
+      font-size: 20px;
     }
 
     .card-title {
       font-weight: bold;
       font-size: 14px;
       margin-bottom: 4px;
+      color: #144953;
     }
 
     .card-desc {
       font-size: 12px;
-      color: #888;
+      color: #a6a6a6;
       text-align: center;
     }
 
     .bottom {
       margin-top: 40px;
       text-align: center;
-      gap:10px;
     }
+
     .bottom .btn {
       margin-top: 12px;
     }
 
     .btn {
-      background-color: #1a202c;
-      color: #fff;
+      background-color: #144953;
+      color: #ffffff;
       border: none;
       padding: 10px 24px;
       border-radius: 6px;
       font-size: 12px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
     .btn:hover {
-      background-color: #333;
+      background-color: #0e3a3d;
     }
 
     @media (max-width: 600px) {
-      *{
-        padding:5px;
-      }
       .card {
         padding: 16px;
       }
+
       .grid {
         grid-template-columns: 1fr;
-    }
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <a href="index.html" class="logo-link"><div class="logo">GrannSnack</div></a>
-    <a class="login-link" href="login.html">
-      Logga in
+    <a href="index.html" class="logo-link">
+      <div class="logo" style="display: flex; align-items: center;">
+        <img src="logo.png" alt="GrannSnack Logo" style="width: 32px; height: 32px; margin-right: 8px;" />
+        GrannSnack
+      </div>
     </a>
+    <a class="login-link" href="login.html">Logga in</a>
   </header>
 
   <main>
@@ -168,14 +178,14 @@
         <div class="card-desc">Boka tvättid enkelt</div>
       </div>
       <div class="card" onclick="location.href='parkering.html'">
-        <div class="icon-bg">..</div>
+        <div class="icon-bg">🚗</div>
         <div class="card-title">Kommer snart</div>
-        <div class="card-desc">Kommer snart</div>
+        <div class="card-desc">Parkeringstjänst</div>
       </div>
       <div class="card" onclick="location.href='felanmal.html'">
-        <div class="icon-bg">..</div>
+        <div class="icon-bg">🛠️</div>
         <div class="card-title">Kommer snart</div>
-        <div class="card-desc">Kommer snart</div>
+        <div class="card-desc">Felanmälan</div>
       </div>
     </div>
 
