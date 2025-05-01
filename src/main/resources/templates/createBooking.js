@@ -1,8 +1,8 @@
 const savedDates = [];
 
 function saveDate() {
-    const dateInput = document.getElementById("datepicker");
-    const selectedDate = dateInput.value;
+    const dateInput = document.getElementById("bi bi-calendar");
+    const selectedDay = dateInput;
 
     if (selectedDate && !savedDates.includes(selectedDate)) {
         savedDates.push(selectedDate);
