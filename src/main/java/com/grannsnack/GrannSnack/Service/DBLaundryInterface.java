@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface DBLaundryInterface extends JpaRepository<Booking, Long> {
 
-    List<Booking> findByWeekAndYear(int week, int year);
+    List<Booking> findByMonthAndYear(int month, int year);
 
-    List<Booking> findByUserIdAndWeekAndYear(int userId, int week, int year);
+    List<Booking> findByUserIdAndMonthAndYear(int userId, int month, int year);
 
-    List<Booking> findByDayAndTimeSlotAndWeekAndYear(int day, int timeSlot, int week, int year);
+    List<Booking> findByDayAndTimeSlotAndMonthAndYear(int day, int timeSlot, int month, int year);
+
+    int month(int month);
 }

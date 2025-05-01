@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.temporal.WeekFields;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -21,7 +23,17 @@ public class LaundryController {
     private DBLaundryService dbLaundryService;
 
     @GetMapping
-    public String showBookingCalendar() {
+    public String showBookingCalendar(@RequestParam(required = false) Integer month, @RequestParam(required = false) Integer year, Model model) {
+        int bookingMonth = month != null ? month : LocalDate.now().getMonthValue();
+        int bookingYear = year != null ? year : LocalDate.now().getYear();
+
+
+        Set<String> bookings = dbLaundryService.getTakenSlotsForMonth(bookingMonth, bookingYear);
+
+        for(String booking : bookings) {
+            model.addAttribute(booking);
+        }
+
         return "booking-calender";
     }
 
@@ -30,12 +42,12 @@ public class LaundryController {
             @RequestParam("day") int day,
             @RequestParam("slot") int slot,
             @RequestParam(value = "notes", required = false) String notes,
-            @RequestParam(value = "week", required = false) Integer week,
+            @RequestParam(value = "month", required = false) Integer month,
             @RequestParam(value = "year", required = false) Integer year) {
 
         // If week or year not provided, use current date
         LocalDate now = LocalDate.now();
-        int bookingWeek = week != null ? week : now.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+        int bookingWeek = month != null ? month : now.getMonthValue();
         int bookingYear = year != null ? year : now.getYear();
 
         // Create and save booking

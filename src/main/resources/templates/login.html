@@ -138,9 +138,8 @@
   </style>
 </head>
 <body>
-
   <h1>Välkommen till</h1>
-  <div class="brand">GrannSnack.</div>
+  <a th:href="@{/index}" class="logo-link"><div class="brand">GrannSnack.</div>
 
   <div class="form-container">
     <div class="login-container">
@@ -166,9 +165,8 @@
         </div>
       </form>
     </div>
-
     <div class="small-links">
-      <a href="register.html">Registrera konto</a> / <a href="#">BankID</a>
+       <a th:href="@{/register}">Registrera konto</a> / <a href="#">BankID</a>
     </div>
   </div>
 

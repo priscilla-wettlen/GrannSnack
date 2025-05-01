@@ -137,7 +137,7 @@
 </head>
 <body>
   <header>
-    <a href="index.html" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <a th:href="@{/index}" class="logo-link"><div class="logo">GrannSnack</div></a>
   </header>
 
   <main>
@@ -145,7 +145,7 @@
     <div class="subtitle">Bli medlem på GrannSnack</div>
 
     <div class="register-container">
-      <form action="/register" method="POST">
+      <form th:action="/register" method="POST">
         <div class="form-group">
           <label for="name">Namn</label>
           <input type="text" id="name" name="name" placeholder="Ditt namn" required>
@@ -171,7 +171,7 @@
     </div>
 
     <div class="bottom">
-      Har du redan ett konto? <a href="login.html">Logga in</a>
+      Har du redan ett konto? <a th:href="@{/login}">Logga in</a>
     </div>
   </main>
 </body>
