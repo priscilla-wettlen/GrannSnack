@@ -18,8 +18,8 @@ public class Booking {
     @Column(name = "booking_time_slot", columnDefinition = "INT NOT NULL")
     private int timeSlot;
 
-    @Column(name = "booking_week", columnDefinition = "INT NOT NULL")
-    private int week;
+    @Column(name = "booking_month", columnDefinition = "INT NOT NULL")
+    private int month;
 
     @Column(name = "booking_year", columnDefinition = "INT NOT NULL")
     private int year;
@@ -58,12 +58,12 @@ public class Booking {
         this.timeSlot = timeSlot;
     }
 
-    public int getWeek() {
-        return week;
+    public int getMonth() {
+        return month;
     }
 
-    public void setWeek(int week) {
-        this.week = week;
+    public void setMonth(int week) {
+        this.month = week;
     }
 
     public int getYear() {

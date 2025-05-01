@@ -2,8 +2,6 @@ package com.grannsnack.GrannSnack.Service;
 
 import com.grannsnack.GrannSnack.Model.Booking;
 
-import com.grannsnack.GrannSnack.Service.DBLaundryInterface;
-import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,8 +20,8 @@ public class DBLaundryService {
     @Autowired
     private MyUserDetailsService userDetailsService;
 
-    public Set<String> getTakenSlotsForWeek(int week, int year) {
-        List<Booking> bookings = dbLaundryInterface.findByWeekAndYear(week, year);
+    public Set<String> getTakenSlotsForMonth(int month, int year) {
+        List<Booking> bookings = dbLaundryInterface.findByMonthAndYear(month, year);
         Set<String> takenSlots = new HashSet<>();
 
         for (Booking booking : bookings) {
@@ -33,10 +31,10 @@ public class DBLaundryService {
         return takenSlots;
     }
 
-    public Set<String> getUserBookingsForWeek(int week, int year) {
+    public Set<String> getUserBookingsForWeek(int month, int year) {
         int currentUserId = getCurrentUserId();
-        List<Booking> userBookings = dbLaundryInterface.findByUserIdAndWeekAndYear(
-                currentUserId, week, year);
+        List<Booking> userBookings = dbLaundryInterface.findByUserIdAndMonthAndYear(
+                currentUserId, month, year);
 
         Set<String> userSlots = new HashSet<>();
         for (Booking booking : userBookings) {
@@ -46,9 +44,9 @@ public class DBLaundryService {
         return userSlots;
     }
 
-    public void createBooking(int day, int slot, String notes, int week, int year) {
-        List<Booking> existingBookings = dbLaundryInterface.findByDayAndTimeSlotAndWeekAndYear(
-                day, slot, week, year);
+    public void createBooking(int day, int slot, String notes, int month, int year) {
+        List<Booking> existingBookings = dbLaundryInterface.findByDayAndTimeSlotAndMonthAndYear(
+                day, slot, month, year);
 
         if (!existingBookings.isEmpty()) {
             throw new RuntimeException("This time slot is already booked");
@@ -57,7 +55,7 @@ public class DBLaundryService {
         Booking booking = new Booking();
         booking.setDay(day);
         booking.setTimeSlot(slot);
-        booking.setWeek(week);
+        booking.setMonth(month);
         booking.setYear(year);
         booking.setNotes(notes);
         booking.setUserId(getCurrentUserId());
