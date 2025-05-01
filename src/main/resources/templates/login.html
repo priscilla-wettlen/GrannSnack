@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -138,37 +138,37 @@
   </style>
 </head>
 <body>
-  <h1>Välkommen till</h1>
-  <a th:href="@{/index}" class="logo-link"><div class="brand">GrannSnack.</div>
+<h1>Välkommen till</h1>
+<a th:href="@{/index}" class="logo-link">
+  <div class="brand">GrannSnack.</div>
+</a>
+<div class="form-container">
+  <div class="login-container">
+    <form th:action="@{/login}" method="post">
+      <div class="form-group">
+        <label for="username">E-postadress</label>
+        <input type="text" id="username" name="username" placeholder="Email" required>
+      </div>
 
-  <div class="form-container">
-    <div class="login-container">
-      <form th:action="@{/login}" method="post">
-        <div class="form-group">
-          <label for="email">E-postadress</label>
-          <input type="text" id="email" name="username" placeholder="Email">
-        </div>
+      <div class="form-group">
+        <label for="password">Lösenord</label>
+        <input type="password" id="password" name="password" placeholder="*******" required>
+      </div>
 
-        <div class="form-group">
-          <label for="password">Lösenord</label>
-          <input type="password" id="password" name="password" placeholder="*******" required>
-        </div>
+      <button type="submit" class="button">Logga in</button>
 
-        <button type="submit" class="button">Logga in</button>
+      <div th:if="${param.logout}" class="logout-message">
+        Du har loggat ut från ditt konto
+      </div>
 
-        <div th:if="${param.logout}" class="logout-message">
-          Du har loggat ut från ditt konto
-        </div>
-
-        <div th:if="${param.error}" class="error-message">
-          Invalid Email and password.
-        </div>
-      </form>
-    </div>
-    <div class="small-links">
-       <a th:href="@{/register}">Registrera konto</a> / <a href="#">BankID</a>
-    </div>
+      <div th:if="${param.error}" class="error-message">
+        Invalid Email and password.
+      </div>
+    </form>
   </div>
-
+</div>
+<div class="small-links">
+  <a th:href="@{/register}">Registrera konto</a> / <a href="#">BankID</a>
+</div>
 </body>
 </html>

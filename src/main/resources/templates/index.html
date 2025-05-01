@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -166,9 +166,9 @@
         </div>
       </form>
     </div>
-      <button class="btn" onclick="location.href='register.html'">Skapa konto</button>
+      <button class="btn" onclick="location.href='/register'">Skapa konto</button>
     <div class="small-links">
-      <a href="register.html">Registrera konto</a> / <a href="#">BankID</a>
+      <a th:href="@{/register}">Registrera konto</a> / <a href="#">BankID</a>
 
       <button class="btn" onclick="location.href='/register'">Skapa konto</button>
     </div>

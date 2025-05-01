@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -145,7 +145,7 @@
     <div class="subtitle">Bli medlem på GrannSnack</div>
 
     <div class="register-container">
-      <form th:action="/register" method="POST">
+      <form th:action="@{/register}" method="POST">
         <div class="form-group">
           <label for="name">Namn</label>
           <input type="text" id="name" name="name" placeholder="Ditt namn" required>

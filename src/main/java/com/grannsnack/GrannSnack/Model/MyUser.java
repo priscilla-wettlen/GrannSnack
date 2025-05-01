@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 public class MyUser {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Nonnull
     private String userName;

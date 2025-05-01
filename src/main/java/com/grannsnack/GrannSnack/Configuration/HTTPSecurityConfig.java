@@ -27,7 +27,7 @@ public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception
             .authorizeHttpRequests(registry -> {
                 registry.requestMatchers("/u/**").hasRole("USER");
                 registry.requestMatchers(("/a/**")).hasRole("ADMIN");
-                registry.requestMatchers("/register").permitAll();
+                registry.requestMatchers("/register", "/home", "/").permitAll();
                 registry.anyRequest().authenticated();
             })
             .formLogin(formLogin -> formLogin
