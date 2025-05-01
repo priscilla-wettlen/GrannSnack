@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GrannSnack</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
+  <title>Logga in - GrannSnack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet"/>
   <style>
     * {
       box-sizing: border-box;
@@ -13,186 +13,166 @@
     }
 
     body {
-      background: #f4f6f8;
-      font-family: 'Inter', sans-serif;
-      color: #1a202c;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 30px 20px 0;
       background-color: #0097b2;
-    }
-
-    .logo {
-      font-size: 18px;
-      font-weight: bold;
-      letter-spacing: -0.5px;
-      color: #ffffff;
-    }
-
-    .logo-link {
-      text-decoration: none;
-      color: #ffffff;
-    }
-
-    .login-link {
-      font-size: 12px;
-      color: #ffffff;
-      text-decoration: none;
-      margin-right: 20px;
+      font-family: 'Quicksand', 'Inter', sans-serif;
+      min-height: 100vh;
       display: flex;
+      justify-content: center;
       align-items: center;
-    }
-
-    main {
-      display: flex;
       flex-direction: column;
-      align-items: center;
-      margin-top: 50px;
+      padding: 20px;
     }
 
     h1 {
-      font-size: 24px;
-      margin-bottom: 8px;
-      font-weight: 600;
+      color: #ffffff;
+      font-size: 20px;
+      margin-bottom: 10px;
+      font-weight: 500;
     }
 
-    .subtitle {
-      font-size: 14px;
-      color: #6b6b6b;
+    .brand {
+      color: #ffffff;
+      font-size: 40px;
+      font-weight: 700;
       margin-bottom: 30px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
-      padding: 0 20px;
-      max-width: 700px;
-    }
-
-    .card {
-      background: #ffffff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 20px;
+    .form-container {
+      background: none;
+      width: 100%;
+      max-width: 350px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
     }
 
-    .card:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transform: translateY(-2px);
+    .login-container {
+      width: 100%;
     }
 
-    .icon-bg {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: #e0e0e0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-      font-size: 20px;
+    .form-group {
+      margin-bottom: 16px;
+      width: 100%;
     }
 
-    .card-title {
-      font-weight: bold;
+    label {
+      display: block;
       font-size: 14px;
-      margin-bottom: 4px;
-      color: #144953;
+      margin-bottom: 6px;
+      color: #ffffff;
     }
 
-    .card-desc {
-      font-size: 12px;
+    input {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 14px;
+      color: #000000;
+    }
+
+    input::placeholder {
       color: #a6a6a6;
-      text-align: center;
     }
 
-    .bottom {
-      margin-top: 40px;
-      text-align: center;
-    }
-
-    .bottom .btn {
-      margin-top: 12px;
-    }
-
-    .btn {
+    .button {
+      width: 100%;
       background-color: #144953;
       color: #ffffff;
       border: none;
-      padding: 10px 24px;
-      border-radius: 6px;
-      font-size: 12px;
+      padding: 14px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
+      margin-top: 10px;
       transition: background-color 0.3s ease;
     }
 
-    .btn:hover {
-      background-color: #0e3a3d;
+    .button:hover {
+      background-color: #0d3a3d;
+    }
+
+    .small-links {
+      text-align: center;
+      font-size: 12px;
+      color: #ffffff;
+      margin-top: 20px;
+    }
+
+    .small-links a {
+      color: #ffffff;
+      text-decoration: none;
+      margin: 0 4px;
+    }
+
+    .logout-message {
+      background-color: #e1fae1;
+      border: 1px solid #c7f7c7;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 20px;
+      text-align: center;
+      color: #61d26c;
+      font-size: 14px;
+    }
+
+    .error-message {
+      background-color: #ffeaea;
+      border: 1px solid #ffb3b3;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 20px;
+      text-align: center;
+      color: #c0392b;
+      font-size: 14px;
+      font-weight: 600;
     }
 
     @media (max-width: 600px) {
-      .card {
-        padding: 16px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
+      .form-container {
+        padding: 10px;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo-link">
-      <div class="logo" style="display: flex; align-items: center;">
-        <img src="logo.png" alt="GrannSnack Logo" style="width: 32px; height: 32px; margin-right: 8px;" />
-        GrannSnack
-      </div>
-    </a>
-    <a class="login-link" href="login.html">Logga in</a>
-  </header>
 
-  <main>
-    <h1>Välkommen!</h1>
-    <div class="subtitle">Allt för din bostad på ett ställe</div>
+  <h1>Välkommen till</h1>
+  <div class="brand">GrannSnack.</div>
 
-    <div class="grid">
-      <div class="card" onclick="location.href='chat.html'">
-        <div class="icon-bg">💬</div>
-        <div class="card-title">Chatforum</div>
-        <div class="card-desc">Diskutera med grannar</div>
-      </div>
-      <div class="card" onclick="location.href='tvattbokning.html'">
-        <div class="icon-bg">📅</div>
-        <div class="card-title">Tvättbokning</div>
-        <div class="card-desc">Boka tvättid enkelt</div>
-      </div>
-      <div class="card" onclick="location.href='parkering.html'">
-        <div class="icon-bg">🚗</div>
-        <div class="card-title">Kommer snart</div>
-        <div class="card-desc">Parkeringstjänst</div>
-      </div>
-      <div class="card" onclick="location.href='felanmal.html'">
-        <div class="icon-bg">🛠️</div>
-        <div class="card-title">Kommer snart</div>
-        <div class="card-desc">Felanmälan</div>
-      </div>
+  <div class="form-container">
+    <div class="login-container">
+      <form th:action="@{/login}" method="post">
+        <div class="form-group">
+          <label for="email">E-postadress</label>
+          <input type="text" id="email" name="username" placeholder="User">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Lösenord</label>
+          <input type="password" id="password" name="password" placeholder="*******" required>
+        </div>
+
+        <button type="submit" class="button">Logga in</button>
+
+        <div th:if="${param.logout}" class="logout-message">
+          Du har loggat ut från ditt konto
+        </div>
+
+        <div th:if="${param.error}" class="error-message">
+          Invalid username and password.
+        </div>
+      </form>
     </div>
+      <button class="btn" onclick="location.href='register.html'">Skapa konto</button>
+    <div class="small-links">
+      <a href="register.html">Registrera konto</a> / <a href="#">BankID</a>
 
-    <div class="bottom">
-      <p>Ny på GrannSnack?</p>
       <button class="btn" onclick="location.href='/register'">Skapa konto</button>
     </div>
-  </main>
+  </div>
+
 </body>
 </html>
