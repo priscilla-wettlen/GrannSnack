@@ -202,17 +202,178 @@
   <title>Calendar</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    body {
+    
+    /*body {
       font-family: Arial, sans-serif;
       padding: 20px;
+    }*/
+    body {
+      font-family: 'Quicksand', 'Inter';
+      background-color: #ffffff;
+      color: #0097b2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-family: 'Quicksand', 'Inter';
+    }
+
+    input[type="date"] {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      background-color: #0097b2;
+      font-family: inherit;
+    }
+
+    button {
+      background-color: #144953;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 30px;
+    }
+
+    button:hover {
+      background-color: #0d3a3d;
+    }
+
+    ul#savedDates {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    ul#savedDates li {
+      background-color: #ffffff;
+      color: #000000;
+      padding: 10px 16px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     input, button {
       margin: 10px 0;
     }
+    .legend {
+      max-width: 700px;
+      margin: 40px auto 20px;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #a6a6a6;
+      background-color: transparent;
+    }
+
+    .legend-items {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-box {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+    }
+
+    .gron { background-color: #61d26c; }
+    .rod { background-color: #c0392b; }
+    .bla { background-color: #0097b2; }
+    .gra { background-color: #a6a6a6; }
+
+    .time-slot {
+      border: 1px solid #a6a6a6;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f9f7fb;
+    }
+
+    .time-slot button {
+      background-color: #144953;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .time-slot button:hover {
+      background-color: #0097b2;
+    }
+
+    .legend {
+      max-width: 700px;
+      margin: 40px auto 20px;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #a6a6a6;
+      background-color: transparent;
+    }
+
+
+
   </style>
 </head>
 <body>
-<h1>Select Dates</h1>
+<h1>Välja tvättid</h1>
+
+<div class="legend">
+    <div class="legend-items">
+      <div class="legend-item"><div class="color-box gron"></div><span>Ledig</span></div>
+      <div class="legend-item"><div class="color-box rod"></div><span>Upptaget</span></div>
+      <div class="legend-item"><div class="color-box bla"></div><span>Egen tid</span></div>
+      <div class="legend-item"><div class="color-box gra"></div><span>Dagar som har gått</span></div>
+    </div>
+</div>
+
+<div class="card">
+  <h2>Tillgängliga tider</h2>
+  <div class="time-slot">
+    <div>Morgon<br><small>07:00 - 12:00</small></div>
+    <button>Boka</button>
+  </div>
+  <div class="time-slot">
+    <div>Eftermiddag<br><small>12:00 - 17:00</small></div>
+    <button>Boka</button>
+  </div>
+  <div class="time-slot">
+    <div>Kväll<br><small>17:00 - 22:00</small></div>
+    <button>Boka</button>
+  </div>
+</div>
+</div>
+
+
+
+
 <input type="date" id="datePicker" />
 <button onclick="saveDate()">Save Date</button>
 
