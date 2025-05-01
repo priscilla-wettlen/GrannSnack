@@ -15,6 +15,10 @@ public class HomeController {
     @Autowired
     private DBUserService userDB;
 
+    @GetMapping("/")
+    public String handleRoot() {
+        return "redirect:/home";
+    }
 
     @GetMapping("/home")
     public String handleHome() {
