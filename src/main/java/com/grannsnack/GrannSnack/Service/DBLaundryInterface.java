@@ -3,13 +3,10 @@ package com.grannsnack.GrannSnack.Service;
 import com.grannsnack.GrannSnack.Model.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
-public interface DBLaundryInterface extends JpaRepository<Booking, Long> {
+public interface DBLaundryInterface extends JpaRepository<Booking, Integer> {
 
-    List<Booking> findByWeekAndYear(int week, int year);
-
-    List<Booking> findByUserIdAndWeekAndYear(int userId, int week, int year);
-
-    List<Booking> findByDayAndTimeSlotAndWeekAndYear(int day, int timeSlot, int week, int year);
+    List<Booking> findByDate(LocalDate date);
 }

@@ -1,6 +1,8 @@
 package com.grannsnack.GrannSnack.Model;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,22 +14,17 @@ public class Booking {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "booking_day", columnDefinition = "INT NOT NULL")
-    private int day;
+    @Column(name = "booking_date", columnDefinition = "DATE NOT NULL")
+    private LocalDate date;
 
-    @Column(name = "booking_time_slot", columnDefinition = "INT NOT NULL")
-    private int timeSlot;
-
-    @Column(name = "booking_week", columnDefinition = "INT NOT NULL")
-    private int week;
-
-    @Column(name = "booking_year", columnDefinition = "INT NOT NULL")
-    private int year;
+    @ManyToOne
+    @JoinColumn(name = "time_slot_id", nullable = false)
+    private TimeSlots timeSlot;
 
     @Column(name = "booking_notes", columnDefinition = "VARCHAR(255)")
     private String notes;
 
-    @Column(name = "booking_user_id", columnDefinition = "BIGINT")
+    @Column(name = "booking_user_id", columnDefinition = "INT")
     private int userId;
 
     @Column(name = "booking_created_at", columnDefinition = "DATETIME")
@@ -42,36 +39,20 @@ public class Booking {
         this.id = id;
     }
 
-    public int getDay() {
-        return day;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDay(int day) {
-        this.day = day;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public int getTimeSlot() {
+    public TimeSlots getTimeSlot() {
         return timeSlot;
     }
 
-    public void setTimeSlot(int timeSlot) {
+    public void setTimeSlot(TimeSlots timeSlot) {
         this.timeSlot = timeSlot;
-    }
-
-    public int getWeek() {
-        return week;
-    }
-
-    public void setWeek(int week) {
-        this.week = week;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
     }
 
     public String getNotes() {
@@ -100,7 +81,7 @@ public class Booking {
 
     // Helper method to generate a unique key for this booking
     public String getSlotKey() {
-        return day + "_" + timeSlot;
+        return date + "_" + timeSlot;
     }
 
     // Lifecycle callback

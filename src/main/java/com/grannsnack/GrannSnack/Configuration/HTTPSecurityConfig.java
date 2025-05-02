@@ -13,33 +13,39 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
 @EnableWebSecurity
-public class HTTPSecurityConfig {
+public class HTTPSecurityConfig{
 
     @Autowired
     UserDetailsService userDetailService;
 
+    @Autowired CustomCorsConfig customCorsConfig;
+
+
     @Bean
-public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
-    return httpSecurity
-            .authorizeHttpRequests(registry -> {
-                registry.requestMatchers("/u/**").hasRole("USER");
-                registry.requestMatchers(("/a/**")).hasRole("ADMIN");
-                registry.anyRequest().authenticated();
-            })
-            .formLogin(formLogin -> formLogin
-                    .loginPage("/login")
-                    .permitAll()
-                    .defaultSuccessUrl("/default", true))
-            .logout(logout -> logout
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login?logout") // <-- This is the key line!
-                    .permitAll())
-            .cors(AbstractHttpConfigurer::disable)
-            .csrf(AbstractHttpConfigurer::disable)
-            .build();
-}
+    public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .authorizeHttpRequests(registry -> {
+                    registry.requestMatchers("/u/laundry-booking/availability").permitAll(); //access laundry booking without logging in
+                    registry.requestMatchers("/u/**").hasRole("USER");
+                    registry.requestMatchers("/a/**").hasRole("ADMIN");
+                    registry.anyRequest().permitAll(); // or authenticated(), depending on your intent
+                })
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .permitAll()
+                        .defaultSuccessUrl("/default", true))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll())
+
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(c -> c.configurationSource(customCorsConfig))
+                .build();
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -58,4 +64,7 @@ public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+
 }
