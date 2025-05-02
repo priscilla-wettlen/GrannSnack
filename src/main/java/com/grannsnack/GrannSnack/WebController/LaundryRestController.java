@@ -19,18 +19,16 @@ public class LaundryRestController {
     @GetMapping("/availability")
     public List<TimeSlots> getAvailability(@RequestParam LocalDate date) {
         System.out.println("Controller hit with date: " + date);
-        System.out.println(">>>> HIT AVAILABILITY ENDPOINT <<<<");
         return dbLaundryService.getAvailableTimeSlots(date);
     }
 
     @PostMapping("/create")
     public String createBooking(
-            @RequestParam("date") String dateString,
-            @RequestParam("time_slot") int timeSlotId,
+            @RequestParam("date") LocalDate date,
+            @RequestParam("time_slot") int timeSlot,
             @RequestParam(value = "notes", required = false) String notes) {
 
-        LocalDate date = LocalDate.parse(dateString);
-        dbLaundryService.createBooking(date, timeSlotId, notes);
+        dbLaundryService.createBooking(date, timeSlot, notes);
 
         return "redirect:/u/laundry-booking?date=" + date;
     }

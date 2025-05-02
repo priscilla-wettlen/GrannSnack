@@ -171,13 +171,17 @@
             })
             .then(slots => {
               const container = document.getElementById("slotsContainer");
-              container.innerHTML = "<h3>Available Slots:</h3>";
+              container.innerHTML = "<h3>Tillgängliga tider:</h3>";
               slots.forEach(slot => {
                 if (!slot.booked) {
-                  const listItem = document.createElement("div"); // Create a new div
-                  listItem.className = "time-slot";               // Set its class
-                  listItem.textContent = `${slot.label}`; // Add text
-                  container.appendChild(listItem);                // Append to container
+                  const listItem = document.createElement("div");
+                  listItem.className = "time-slot";
+                  listItem.textContent = `${slot.label}`;
+                  container.appendChild(listItem);
+
+                    listItem.addEventListener("click", () => {
+                        createBooking(slot.id);
+                    });
                 }
               });
             })
@@ -185,6 +189,36 @@
               console.error("Error checking availability:", err);
             });
   }
+
+  function createBooking(slotId) {
+      const date = document.getElementById("datePicker").value;
+      const notes = prompt("Enter notes for your booking (optional):") || "";
+
+      const params = new URLSearchParams();
+      params.append("date", date);
+      params.append("time_slot", slotId);
+      params.append("notes", notes);
+
+      fetch("/u/laundry-booking/create", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: params
+      })
+          .then(response => {
+              if (response.redirected) {
+                  window.location.href = response.url;
+              } else if (!response.ok) {
+                  throw new Error("Booking failed");
+              }
+          })
+          .catch(error => {
+              alert("Error creating booking: " + error.message);
+          });
+  }
+
+
 
 </script>
 </body>

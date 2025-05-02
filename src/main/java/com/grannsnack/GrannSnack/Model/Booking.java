@@ -18,7 +18,7 @@ public class Booking {
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "time_slot_id", nullable = false)
+    @JoinColumn(name = "time_slot_id")
     private TimeSlots timeSlot;
 
     @Column(name = "booking_notes", columnDefinition = "VARCHAR(255)")
