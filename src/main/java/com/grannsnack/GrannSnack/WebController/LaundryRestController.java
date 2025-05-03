@@ -3,6 +3,8 @@ package com.grannsnack.GrannSnack.WebController;
 import com.grannsnack.GrannSnack.Model.TimeSlots;
 import com.grannsnack.GrannSnack.Service.DBLaundryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.HashMap;
@@ -25,29 +27,23 @@ public class LaundryRestController {
         return dbLaundryService.getAvailableTimeSlots(date);
     }
 
-//    @PostMapping("/create")
-//    public String createBooking(
-//            @RequestParam("date") LocalDate date,
-//            @RequestParam("time_slot") int timeSlot,
-//            @RequestParam(value = "notes", required = false) String notes) {
-//
-//        dbLaundryService.createBooking(date, timeSlot, notes);
-//
-//        return "redirect:/u/laundry-booking?date=" + date;
-//    }
 @PostMapping("/create")
 public ResponseEntity<Map<String, String>> createBooking(
         @RequestParam("date") LocalDate date,
         @RequestParam("time_slot") int timeSlot,
-        @RequestParam(value = "notes", required = false) String notes){
+        @RequestParam(value = "notes", required = false) String notes,
+        @AuthenticationPrincipal UserDetails userDetails) {
 
-    dbLaundryService.createBooking(date, timeSlot, notes);
+    String userEmail = userDetails.getUsername();
+    int userId = dbLaundryService.getUserIdByEmail(userEmail);
+    dbLaundryService.createBooking(date, timeSlot, notes, userId);
 
     Map<String, String> response = new HashMap<>();
     response.put("message", "Booking successful");
     response.put("url", "/u/laundry-booking");
 
     return ResponseEntity.ok(response);
+
 }
 
 }

@@ -17,37 +17,18 @@ import java.util.stream.Collectors;
 public class DBLaundryService {
     private final DBLaundryInterface laundryInterface;
     private final DBTimeSlotsInterface timeSlotsInterface;
+    private final MyUserDetailsService userDetailsService;
 
 
-    public DBLaundryService(DBLaundryInterface laundryInterface, DBTimeSlotsInterface timeSlotsInterface) {
+    public DBLaundryService(DBLaundryInterface laundryInterface, DBTimeSlotsInterface timeSlotsInterface, MyUserDetailsService userDetailsService) {
         this.laundryInterface = laundryInterface;
         this.timeSlotsInterface = timeSlotsInterface;
+        this.userDetailsService = userDetailsService;
     }
 
     public List<TimeSlots> getAvailableTimeSlots(LocalDate date) {
         List<TimeSlots> allTimeSlots = timeSlotsInterface.findAll();
         List<Booking> bookedTimeSlots = laundryInterface.findByDate(date);
-
-
-//     @Autowired
-//     private MyUserDetailsService userDetailsService;
-
-//     public Set<String> getTakenSlotsForMonth(int month, int year) {
-//         List<Booking> bookings = dbLaundryInterface.findByMonthAndYear(month, year);
-//         Set<String> takenSlots = new HashSet<>();
-
-//         for (Booking booking : bookings) {
-//             takenSlots.add(booking.getSlotKey());
-//         }
-
-//         return takenSlots;
-//     }
-
-//     public Set<String> getUserBookingsForWeek(int month, int year) {
-//         int currentUserId = getCurrentUserId();
-//         List<Booking> userBookings = dbLaundryInterface.findByUserIdAndMonthAndYear(
-//                 currentUserId, month, year);
-
 
         Set<Integer> bookedIds = bookedTimeSlots.stream()
                 .map(b -> b.getTimeSlot().getId())
@@ -58,15 +39,21 @@ public class DBLaundryService {
                 .collect(Collectors.toList());
     }
 
-    public void createBooking(LocalDate date, int timeSlotId, String notes) {
+    public void createBooking(LocalDate date, int timeSlotId, String notes, int userId) {
         Booking booking = new Booking();
         booking.setDate(date);
         booking.setTimeSlot(timeSlotsInterface.findById(timeSlotId).orElseThrow());
-
         booking.setNotes(notes);
         booking.setCreatedAt(LocalDateTime.now());
-        booking.setUserId(booking.getUserId());
+        booking.setUserId(userId);
         laundryInterface.save(booking);
     }
 
+    public int getUserIdByEmail(String userEmail) {
+        Integer userId = userDetailsService.getUserIdByEmail(userEmail);
+        if (userId == null) {
+            throw new IllegalArgumentException("User not found with email: " + userEmail);
+        }
+        return userId;
+    }
 }
