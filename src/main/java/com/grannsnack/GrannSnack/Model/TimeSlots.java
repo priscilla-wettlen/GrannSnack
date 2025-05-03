@@ -20,6 +20,10 @@ public class TimeSlots {
     @Column(name = "label", columnDefinition = "VARCHAR(255)")
     private String label;
 
+//    @Column(name = "isBooked", columnDefinition = "BOOLEAN")
+//    private boolean isBooked;
+
+
     public TimeSlots(int id, LocalTime startTime, LocalTime endTime, String label) {
         this.id = id;
         this.startTime = startTime;
@@ -63,5 +67,13 @@ public class TimeSlots {
     public void setId(int id) {
         this.id = id;
     }
+
+//    public boolean isBooked(){
+//        return false;
+//    }
+//
+//    public void setIsBooked(boolean isBooked){
+//        this.isBooked = isBooked;
+//    }
 
 }

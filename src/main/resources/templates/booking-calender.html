@@ -140,20 +140,21 @@
   </style>
 </head>
 <body>
-<h1>Välja tvättid</h1>
 
+<!--The box containing color-coded keys for the time booking-->
+
+<h1>Välja tvättid</h1>
 <div class="legend">
     <div class="legend-items">
       <div class="legend-item"><div class="color-box gron"></div><span>Ledig</span></div>
       <div class="legend-item"><div class="color-box rod"></div><span>Upptaget</span></div>
       <div class="legend-item"><div class="color-box bla"></div><span>Egen tid</span></div>
-      <div class="legend-item"><div class="color-box gra"></div><span>Dagar som har gått</span></div>
     </div>
 </div>
 
-<input type="date" id="datePicker" />
-<div id="slotsContainer"></div>
+<input type="date" id="datePicker" onfocus="disablePastDates()" />
 <button type="button" id="bookTime"></button>
+<div id="slotsContainer"></div>
 <ul id="savedDates"></ul>
 <script>
 
@@ -163,10 +164,20 @@
         saveBtn.addEventListener("click", checkAvailability);
     });
 
+    function disablePastDates() {
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+        document.getElementById("datePicker").setAttribute("min", today);
+    }
+
   function checkAvailability() {
     const selectedDate = document.getElementById("datePicker").value;
     if (!selectedDate) return alert("Please select a date");
-      document.getElementById("bookTime").style.display = "none";
+      //document.getElementById("bookTime").style.display = "none";
 
     fetch(`http://localhost:8080/u/laundry-booking/availability?date=${selectedDate}`)
             .then(res => {
@@ -175,9 +186,23 @@
             })
             .then(slots => {
               const container = document.getElementById("slotsContainer");
+              const now = new Date();
+              const todayStr = now.toISOString().split("T")[0];
               container.innerHTML = "<h3>Tillgängliga tider:</h3>";
               slots.forEach(slot => {
-                if (!slot.booked) {
+                  /*
+                  * To ensure that only the bookable times on a specific day are shown.
+                  * If a time slot has passed for that specific day, it won't show on the list
+                  * */
+                if (slot) {
+                    if (selectedDate === todayStr) {
+                        const endHourMinute = slot.endTime;
+                        const [endHour, endMinute] = endHourMinute.split(":").map(Number);
+                        const slotTime = new Date();
+                        slotTime.setHours(endHour, endMinute, 0, 0);
+
+                        if (slotTime <= now) return;
+                    }
                   const timeSlot = document.createElement("div");
                   timeSlot.className = "time-slot";
                   timeSlot.textContent = `${slot.label}`;
@@ -206,6 +231,7 @@
   function createBooking(slotId) {
       const date = document.getElementById("datePicker").value;
       const notes = prompt("Enter notes for your booking (optional):") || "";
+      const isBooked = true;
 
       const params = new URLSearchParams();
       params.append("date", date);
@@ -225,7 +251,7 @@
           })
           .then(data => {
               alert(`Your booking on ${date} has been confirmed.`);
-              window.location.href = data.redirectUrl;
+              window.location.href = data.url;
           })
           .catch(error => {
               alert(error.message);

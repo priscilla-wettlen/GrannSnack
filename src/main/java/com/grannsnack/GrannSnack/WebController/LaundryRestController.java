@@ -39,13 +39,13 @@ public class LaundryRestController {
 public ResponseEntity<Map<String, String>> createBooking(
         @RequestParam("date") LocalDate date,
         @RequestParam("time_slot") int timeSlot,
-        @RequestParam(value = "notes", required = false) String notes) {
+        @RequestParam(value = "notes", required = false) String notes){
 
     dbLaundryService.createBooking(date, timeSlot, notes);
 
     Map<String, String> response = new HashMap<>();
     response.put("message", "Booking successful");
-    response.put("redirectUrl", "/u/laundry-booking?date=" + date);
+    response.put("url", "/u/laundry-booking");
 
     return ResponseEntity.ok(response);
 }
