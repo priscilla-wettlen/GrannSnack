@@ -117,6 +117,7 @@
       border: none;
       border-radius: 8px;
       padding: 8px 16px;
+      margin-left: 10px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
@@ -152,17 +153,20 @@
 
 <input type="date" id="datePicker" />
 <div id="slotsContainer"></div>
-<button type="button" id="saveDate">Save Date</button>
+<button type="button" id="bookTime"></button>
 <ul id="savedDates"></ul>
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const saveBtn = document.getElementById("saveDate");
-    saveBtn.addEventListener("click", checkAvailability);
-  });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const saveBtn = document.getElementById("bookTime");
+        saveBtn.innerText = "Välj datum"
+        saveBtn.addEventListener("click", checkAvailability);
+    });
 
   function checkAvailability() {
     const selectedDate = document.getElementById("datePicker").value;
     if (!selectedDate) return alert("Please select a date");
+      document.getElementById("bookTime").style.display = "none";
 
     fetch(`http://localhost:8080/u/laundry-booking/availability?date=${selectedDate}`)
             .then(res => {
@@ -174,16 +178,25 @@
               container.innerHTML = "<h3>Tillgängliga tider:</h3>";
               slots.forEach(slot => {
                 if (!slot.booked) {
-                  const listItem = document.createElement("div");
-                  listItem.className = "time-slot";
-                  listItem.textContent = `${slot.label}`;
-                  container.appendChild(listItem);
+                  const timeSlot = document.createElement("div");
+                  timeSlot.className = "time-slot";
+                  timeSlot.textContent = `${slot.label}`;
 
-                    listItem.addEventListener("click", () => {
+                  const timeSlotButton = document.createElement("button");
+                  timeSlotButton.className = "time-slot button";
+                  timeSlotButton.innerText = "Boka"
+                  timeSlot.appendChild(timeSlotButton);
+
+                  container.appendChild(timeSlot);
+
+                    timeSlotButton.addEventListener("click", () => {
                         createBooking(slot.id);
                     });
                 }
               });
+                if (!slots) {
+                    container.innerHTML += "<p>Inga tider tillgängliga för detta datum.</p>";
+                }
             })
             .catch(err => {
               console.error("Error checking availability:", err);
@@ -206,15 +219,16 @@
           },
           body: params
       })
-          .then(response => {
-              if (response.redirected) {
-                  window.location.href = response.url;
-              } else if (!response.ok) {
-                  throw new Error("Booking failed");
-              }
+          .then(res => {
+              if (!res.ok) throw new Error("Booking failed");
+              return res.json();
+          })
+          .then(data => {
+              alert(`Your booking on ${date} has been confirmed.`);
+              window.location.href = data.redirectUrl;
           })
           .catch(error => {
-              alert("Error creating booking: " + error.message);
+              alert(error.message);
           });
   }
 
