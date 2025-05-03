@@ -1,9 +1,7 @@
 package com.grannsnack.GrannSnack.WebController;
-
-
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 
 @Controller
 @RequestMapping("/u/laundry-booking")
@@ -11,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 public class LaundryController {
 
     @GetMapping
-    public String showBookingCalendar() {
 
+    public String showBookingCalendar() {
         return "booking-calender";
     }
 

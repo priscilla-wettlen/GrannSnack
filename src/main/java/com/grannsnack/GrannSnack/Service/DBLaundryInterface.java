@@ -9,4 +9,5 @@ import java.util.List;
 public interface DBLaundryInterface extends JpaRepository<Booking, Integer> {
 
     List<Booking> findByDate(LocalDate date);
+
 }

@@ -1,5 +1,6 @@
 package com.grannsnack.GrannSnack.Configuration;
 
+import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,12 +20,13 @@ import org.springframework.security.web.SecurityFilterChain;
 public class HTTPSecurityConfig{
 
     @Autowired
-    UserDetailsService userDetailService;
+    MyUserDetailsService userDetailService;
 
     @Autowired CustomCorsConfig customCorsConfig;
 
 
     @Bean
+
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(registry -> {
@@ -48,7 +50,7 @@ public class HTTPSecurityConfig{
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public MyUserDetailsService userDetailsService() {
         return userDetailService;
     }
 

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.List;
 
 @Service
 public class DBUserService {
@@ -45,5 +46,26 @@ public class DBUserService {
         MyUser user = dbUserInterface.findById(id).get();
         dbUserInterface.deleteById(id);
         return user;
+    }
+
+    public void createUser(String userName, String email, String password, String role) {
+        Optional<MyUser> existingUsers = dbUserInterface.findByUserName(userName);
+        Optional<MyUser> existingEmails = dbUserInterface.findByEmail(email);
+
+        if(existingUsers.isPresent()) {
+            throw new RuntimeException("User with username " + userName + " already exists");
+        }
+
+        if(existingEmails.isPresent()) {
+            throw new RuntimeException("User with email " + email + " already exists");
+        }
+
+        MyUser user = new MyUser();
+        user.setUserName(userName);
+        user.setUserEmail(email);
+        user.setPassword(password);
+        user.setRole(role);
+
+        dbUserInterface.save(user);
     }
 }

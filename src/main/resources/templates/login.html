@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Logga in - GrannSnack</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet"/>
   <style>
     * {
       box-sizing: border-box;
@@ -14,116 +13,100 @@
     }
 
     body {
-      background: #f4f6f8;
-      font-family: 'Inter', sans-serif;
-      color: #1a202c;
-    }
-
-    header {
+      background-color: #0097b2;
+      font-family: 'Quicksand', 'Inter', sans-serif;
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      padding: 30px 20px 0;
-    }
-
-    .logo {
-      font-size: 18px;
-      font-weight: bold;
-      letter-spacing: -0.5px;
-    }
-
-    .logo-link {
-      text-decoration: none;
-      color: black;
-    }
-
-    main {
-      display: flex;
       flex-direction: column;
-      align-items: center;
-      margin-top: 50px;
-    }
-
-    .login-container {
-      background: white;
-      padding: 32px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-      width: 100%;
-      max-width: 400px;
-      margin: 20px;
+      padding: 20px;
     }
 
     h1 {
-      font-size: 24px;
-      margin-bottom: 8px;
-      font-weight: 600;
-      text-align: center;
+      color: #ffffff;
+      font-size: 20px;
+      margin-bottom: 10px;
+      font-weight: 500;
     }
 
-    .subtitle {
-      font-size: 14px;
-      color: #6b6b6b;
+    .brand {
+      color: #ffffff;
+      font-size: 40px;
+      font-weight: 700;
       margin-bottom: 30px;
-      text-align: center;
+    }
+
+    .form-container {
+      background: none;
+      width: 100%;
+      max-width: 350px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .login-container {
+      width: 100%;
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      width: 100%;
     }
 
     label {
       display: block;
       font-size: 14px;
-      margin-bottom: 8px;
-      color: #1a202c;
+      margin-bottom: 6px;
+      color: #ffffff;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #1a202c;
-    }
-
-    .btn {
-      background-color: #1a202c;
-      color: #fff;
+      padding: 12px;
       border: none;
-      padding: 12px 24px;
-      border-radius: 6px;
+      border-radius: 8px;
+      background: #ffffff;
       font-size: 14px;
-      cursor: pointer;
+      color: #000000;
+    }
+
+    input::placeholder {
+      color: #a6a6a6;
+    }
+
+    .button {
       width: 100%;
+      background-color: #144953;
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #0d3a3d;
+    }
+
+    .small-links {
+      text-align: center;
+      font-size: 12px;
+      color: #ffffff;
       margin-top: 20px;
     }
 
-    .btn:hover {
-      background-color: #333;
-    }
-
-    .bottom {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .bottom a {
-      color: #1a202c;
+    .small-links a {
+      color: #ffffff;
       text-decoration: none;
-      font-weight: 600;
+      margin: 0 4px;
     }
 
-    .bottom a:hover {
-      text-decoration: underline;
-    }
     .logout-message {
       background-color: #e1fae1;
       border: 1px solid #c7f7c7;
@@ -134,6 +117,7 @@
       color: #61d26c;
       font-size: 14px;
     }
+
     .error-message {
       background-color: #ffeaea;
       border: 1px solid #ffb3b3;
@@ -145,53 +129,46 @@
       font-size: 14px;
       font-weight: 600;
     }
+
     @media (max-width: 600px) {
-      *{
-        padding:5px;
-      }
-      .login-container {
-        margin: 20px;
-        padding: 24px;
+      .form-container {
+        padding: 10px;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo-link"><div class="logo">GrannSnack</div></a>
-  </header>
+<h1>Välkommen till</h1>
+<a th:href="@{/index}" class="logo-link">
+  <div class="brand">GrannSnack.</div>
+</a>
+<div class="form-container">
+  <div class="login-container">
+    <form th:action="@{/login}" method="post">
+      <div class="form-group">
+        <label for="username">E-postadress</label>
+        <input type="text" id="username" name="username" placeholder="Email" required>
+      </div>
 
-  <main>
-    <h1>Välkommen tillbaka!</h1>
-    <div class="subtitle">Logga in på ditt GrannSnack-konto</div>
+      <div class="form-group">
+        <label for="password">Lösenord</label>
+        <input type="password" id="password" name="password" placeholder="*******" required>
+      </div>
 
-    <div class="login-container">
-      <form th:action="@{/login}" method="post">
-        <div class="form-group">
-          <label for="email">E-postadress</label>
-          <input type="text" id="email" name="username" placeholder="User">
-        </div>
+      <button type="submit" class="button">Logga in</button>
 
-        <div class="form-group">
-          <label for="password">Lösenord</label>
-          <input type="password" id="password" name="password" placeholder="*******" required>
-        </div>
+      <div th:if="${param.logout}" class="logout-message">
+        Du har loggat ut från ditt konto
+      </div>
 
-        <button type="submit" class="btn">Logga in</button>
-
-        <div th:if="${param.logout}" class="logout-message">
-          Du har loggat ut från ditt konto
-        </div>
-
-        <div th:if="${param.error}" class="error-message">
-          Invalid username and password.
-        </div>
-      </form>
-    </div>
-
-    <div class="bottom">
-      Har du inget konto? <a href="register.html">Skapa konto</a>
-    </div>
-  </main>
+      <div th:if="${param.error}" class="error-message">
+        Invalid Email and password.
+      </div>
+    </form>
+  </div>
+</div>
+<div class="small-links">
+  <a th:href="@{/register}">Registrera konto</a> / <a href="#">BankID</a>
+</div>
 </body>
 </html>

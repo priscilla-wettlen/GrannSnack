@@ -54,7 +54,7 @@ public class Booking {
     public void setTimeSlot(TimeSlots timeSlot) {
         this.timeSlot = timeSlot;
     }
-
+  
     public String getNotes() {
         return notes;
     }
