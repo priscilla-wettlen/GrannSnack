@@ -40,8 +40,8 @@ public class MyUserDetailsService implements UserDetailsService {
         return role.split(",");
     }
 
-    public Integer getUserIdByUsername(String name) {
-        Optional<MyUser> user = dbUserInterface.findByUserName(name);
+    public Integer getUserIdByEmail(String email) {
+        Optional<MyUser> user = dbUserInterface.findByEmail(email);
         if(user.isPresent()) {
             var userObj = user.get();
             return userObj.getId();

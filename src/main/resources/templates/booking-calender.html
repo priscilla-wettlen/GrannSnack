@@ -231,7 +231,6 @@
   function createBooking(slotId) {
       const date = document.getElementById("datePicker").value;
       const notes = prompt("Enter notes for your booking (optional):") || "";
-      const isBooked = true;
 
       const params = new URLSearchParams();
       params.append("date", date);
