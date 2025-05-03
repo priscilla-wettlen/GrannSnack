@@ -1,104 +1,72 @@
 <!DOCTYPE html>
 <html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tvättbokning</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <title>Calendar</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Quicksand', 'Inter',sans-serif;
       background-color: #ffffff;
-      margin: 0;
-      padding: 40px;
+      color: #0097b2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #000000;
     }
 
-    header {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 40px;
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-family: 'Quicksand', 'Inter',sans-serif;
     }
 
-    header h1 {
-      font-size: 24px;
-      margin: 0;
-      color: #144953;
-    }
-
-    header nav a {
-      margin-left: 20px;
-      text-decoration: none;
-      color: #000000;
-    }
-
-    header nav a.logout {
-      color: #c0392b;
-    }
-
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 40px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .card {
-      background-color: #ffffff;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      width: 300px;
-      min-height: 280px;
-      border: 1px solid #a6a6a6;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    h2 {
-      font-size: 20px;
-      margin-bottom: 16px;
-      color: #144953;
-      text-align: center;
-    }
-
-    .time-slot {
-      border: 1px solid #a6a6a6;
-      border-radius: 12px;
+    input[type="date"] {
       padding: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #f9f7fb;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      background-color: #0097b2;
+      font-family: inherit;
     }
 
-    .time-slot button {
+    button {
       background-color: #144953;
       color: #ffffff;
       border: none;
-      border-radius: 8px;
-      padding: 8px 16px;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin-bottom: 30px;
     }
 
-    .time-slot button:hover {
-      background-color: #0097b2;
+    button:hover {
+      background-color: #0d3a3d;
     }
 
+    ul#savedDates {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    ul#savedDates li {
+      background-color: #ffffff;
+      color: #000000;
+      padding: 10px 16px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    input, button {
+      margin: 10px 0;
+    }
     .legend {
       max-width: 700px;
       margin: 40px auto 20px;
@@ -131,65 +99,167 @@
     .rod { background-color: #c0392b; }
     .bla { background-color: #0097b2; }
     .gra { background-color: #a6a6a6; }
+
+    .time-slot {
+      border: 1px solid #a6a6a6;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f9f7fb;
+    }
+
+    .time-slot button {
+      background-color: #144953;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .time-slot button:hover {
+      background-color: #0097b2;
+    }
+
+    .legend {
+      max-width: 700px;
+      margin: 40px auto 20px;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #a6a6a6;
+      background-color: transparent;
+    }
+
+
+
   </style>
 </head>
 <body>
-  <header>
-    <h1>GrannSnack</h1>
-    <nav>
-      <a href="#">Profil</a>
-      <a href="#" class="logout">Logga ut</a>
-    </nav>
-  </header>
 
-  <h2>Tvättbokning</h2>
+<!--The box containing color-coded keys for the time booking-->
 
-  <div class="legend">
+<h1>Välja tvättid</h1>
+<div class="legend">
     <div class="legend-items">
       <div class="legend-item"><div class="color-box gron"></div><span>Ledig</span></div>
       <div class="legend-item"><div class="color-box rod"></div><span>Upptaget</span></div>
       <div class="legend-item"><div class="color-box bla"></div><span>Egen tid</span></div>
-      <div class="legend-item"><div class="color-box gra"></div><span>Dagar som har gått</span></div>
     </div>
-  </div>
+</div>
 
-  <div class="container">
-    <div class="card">
-      <h2>Välj datum</h2>
-      <div class="input-group date" id="datepicker">
-        <input type="text" class="form-control" placeholder="Välj datum" />
-        <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-      </div>
-    </div>
+<input type="date" id="datePicker" onfocus="disablePastDates()" />
+<button type="button" id="bookTime"></button>
+<div id="slotsContainer"></div>
+<ul id="savedDates"></ul>
+<script>
 
-    <div class="card">
-      <h2>Tillgängliga tider</h2>
-      <div class="time-slot">
-        <div>Morgon<br><small>07:00 - 12:00</small></div>
-        <button>Boka</button>
-      </div>
-      <div class="time-slot">
-        <div>Eftermiddag<br><small>12:00 - 17:00</small></div>
-        <button>Boka</button>
-      </div>
-      <div class="time-slot">
-        <div>Kväll<br><small>17:00 - 22:00</small></div>
-        <button>Boka</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('#datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        todayHighlight: true,
-        autoclose: true
-      });
+    document.addEventListener("DOMContentLoaded", () => {
+        const saveBtn = document.getElementById("bookTime");
+        saveBtn.innerText = "Välj datum"
+        saveBtn.addEventListener("click", checkAvailability);
     });
-  </script>
+
+    function disablePastDates() {
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+        document.getElementById("datePicker").setAttribute("min", today);
+    }
+
+  function checkAvailability() {
+    const selectedDate = document.getElementById("datePicker").value;
+    if (!selectedDate) return alert("Please select a date");
+      //document.getElementById("bookTime").style.display = "none";
+
+    fetch(`http://localhost:8080/u/laundry-booking/availability?date=${selectedDate}`)
+            .then(res => {
+              if (!res.ok) throw new Error("Network error");
+              return res.json();
+            })
+            .then(slots => {
+              const container = document.getElementById("slotsContainer");
+              const now = new Date();
+              const todayStr = now.toISOString().split("T")[0];
+              container.innerHTML = "<h3>Tillgängliga tider:</h3>";
+              slots.forEach(slot => {
+                  /*
+                  * To ensure that only the bookable times on a specific day are shown.
+                  * If a time slot has passed for that specific day, it won't show on the list
+                  * */
+                if (slot) {
+                    if (selectedDate === todayStr) {
+                        const endHourMinute = slot.endTime;
+                        const [endHour, endMinute] = endHourMinute.split(":").map(Number);
+                        const slotTime = new Date();
+                        slotTime.setHours(endHour, endMinute, 0, 0);
+
+                        if (slotTime <= now) return;
+                    }
+                  const timeSlot = document.createElement("div");
+                  timeSlot.className = "time-slot";
+                  timeSlot.textContent = `${slot.label}`;
+
+                  const timeSlotButton = document.createElement("button");
+                  timeSlotButton.className = "time-slot button";
+                  timeSlotButton.innerText = "Boka"
+                  timeSlot.appendChild(timeSlotButton);
+
+                  container.appendChild(timeSlot);
+
+                    timeSlotButton.addEventListener("click", () => {
+                        createBooking(slot.id);
+                    });
+                }
+              });
+                if (!slots) {
+                    container.innerHTML += "<p>Inga tider tillgängliga för detta datum.</p>";
+                }
+            })
+            .catch(err => {
+              console.error("Error checking availability:", err);
+            });
+  }
+
+  function createBooking(slotId) {
+      const date = document.getElementById("datePicker").value;
+      const notes = prompt("Enter notes for your booking (optional):") || "";
+      const isBooked = true;
+
+      const params = new URLSearchParams();
+      params.append("date", date);
+      params.append("time_slot", slotId);
+      params.append("notes", notes);
+
+      fetch("/u/laundry-booking/create", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: params
+      })
+          .then(res => {
+              if (!res.ok) throw new Error("Booking failed");
+              return res.json();
+          })
+          .then(data => {
+              alert(`Your booking on ${date} has been confirmed.`);
+              window.location.href = data.url;
+          })
+          .catch(error => {
+              alert(error.message);
+          });
+  }
+
+
+
+</script>
 </body>
 </html>

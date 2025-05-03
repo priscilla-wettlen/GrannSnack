@@ -2,69 +2,71 @@ package com.grannsnack.GrannSnack.Service;
 
 import com.grannsnack.GrannSnack.Model.Booking;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import com.grannsnack.GrannSnack.Model.TimeSlots;
+
+import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class DBLaundryService {
+    private final DBLaundryInterface laundryInterface;
+    private final DBTimeSlotsInterface timeSlotsInterface;
 
-    @Autowired
-    private DBLaundryInterface dbLaundryInterface;
 
-    @Autowired
-    private MyUserDetailsService userDetailsService;
-
-    public Set<String> getTakenSlotsForMonth(int month, int year) {
-        List<Booking> bookings = dbLaundryInterface.findByMonthAndYear(month, year);
-        Set<String> takenSlots = new HashSet<>();
-
-        for (Booking booking : bookings) {
-            takenSlots.add(booking.getSlotKey());
-        }
-
-        return takenSlots;
+    public DBLaundryService(DBLaundryInterface laundryInterface, DBTimeSlotsInterface timeSlotsInterface) {
+        this.laundryInterface = laundryInterface;
+        this.timeSlotsInterface = timeSlotsInterface;
     }
 
-    public Set<String> getUserBookingsForWeek(int month, int year) {
-        int currentUserId = getCurrentUserId();
-        List<Booking> userBookings = dbLaundryInterface.findByUserIdAndMonthAndYear(
-                currentUserId, month, year);
+    public List<TimeSlots> getAvailableTimeSlots(LocalDate date) {
+        List<TimeSlots> allTimeSlots = timeSlotsInterface.findAll();
+        List<Booking> bookedTimeSlots = laundryInterface.findByDate(date);
 
-        Set<String> userSlots = new HashSet<>();
-        for (Booking booking : userBookings) {
-            userSlots.add(booking.getSlotKey());
-        }
 
-        return userSlots;
+//     @Autowired
+//     private MyUserDetailsService userDetailsService;
+
+//     public Set<String> getTakenSlotsForMonth(int month, int year) {
+//         List<Booking> bookings = dbLaundryInterface.findByMonthAndYear(month, year);
+//         Set<String> takenSlots = new HashSet<>();
+
+//         for (Booking booking : bookings) {
+//             takenSlots.add(booking.getSlotKey());
+//         }
+
+//         return takenSlots;
+//     }
+
+//     public Set<String> getUserBookingsForWeek(int month, int year) {
+//         int currentUserId = getCurrentUserId();
+//         List<Booking> userBookings = dbLaundryInterface.findByUserIdAndMonthAndYear(
+//                 currentUserId, month, year);
+
+
+        Set<Integer> bookedIds = bookedTimeSlots.stream()
+                .map(b -> b.getTimeSlot().getId())
+                .collect(Collectors.toSet());
+
+        return allTimeSlots.stream()
+                .filter(slot -> !bookedIds.contains(slot.getId()))
+                .collect(Collectors.toList());
     }
 
-    public void createBooking(int day, int slot, String notes, int month, int year) {
-        List<Booking> existingBookings = dbLaundryInterface.findByDayAndTimeSlotAndMonthAndYear(
-                day, slot, month, year);
-
-        if (!existingBookings.isEmpty()) {
-            throw new RuntimeException("This time slot is already booked");
-        }
-
+    public void createBooking(LocalDate date, int timeSlotId, String notes) {
         Booking booking = new Booking();
-        booking.setDay(day);
-        booking.setTimeSlot(slot);
-        booking.setMonth(month);
-        booking.setYear(year);
+        booking.setDate(date);
+        booking.setTimeSlot(timeSlotsInterface.findById(timeSlotId).orElseThrow());
+
         booking.setNotes(notes);
-        booking.setUserId(getCurrentUserId());
-
-        dbLaundryInterface.save(booking);
+        booking.setCreatedAt(LocalDateTime.now());
+        booking.setUserId(booking.getUserId());
+        laundryInterface.save(booking);
     }
 
-    private int getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userDetailsService.getUserIdByUsername(authentication.getName());
-    }
 }
