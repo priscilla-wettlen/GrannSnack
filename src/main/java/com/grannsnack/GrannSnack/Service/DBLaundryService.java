@@ -56,4 +56,16 @@ public class DBLaundryService {
         }
         return userId;
     }
+
+    public List<Booking> getAllBookingsByUserId(Integer userId) {
+        return laundryInterface.findByUserId(userId);
+    }
+
+//    public List<Booking> getAllBookedTimeSlotsByDateExceptUser(LocalDate date, int currentUserId) {
+//        List<Booking> bookedTimeSlots = laundryInterface.findByDate(date);
+//
+//        return bookedTimeSlots.stream()
+//                .filter(booking -> booking.getUserId() != currentUserId)
+//                .collect(Collectors.toList());
+//    }
 }

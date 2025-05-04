@@ -142,7 +142,6 @@
 <body>
 
 <!--The box containing color-coded keys for the time booking-->
-
 <h1>Välja tvättid</h1>
 <div class="legend">
     <div class="legend-items">
@@ -152,22 +151,30 @@
     </div>
 </div>
 
+<!--Calendar input with a label that deactivates past dates-->
 <input type="date" id="datePicker" onfocus="disablePastDates()" />
-<button type="button" id="bookTime"></button>
+<!--Big button to select time-->
+<button type="button" id="selectDate"></button>
+<!--A container element to append divs with time slots-->
 <div id="slotsContainer"></div>
+<!--Booking confirmation message to the user-->
+<h3 id="booking-confirmation"></h3>
+<!--A list of a specific user bookings. Currently not in use-->
 <ul id="savedDates"></ul>
 <script>
-
+    //Click event for selectDate button
     document.addEventListener("DOMContentLoaded", () => {
-        const saveBtn = document.getElementById("bookTime");
+        const saveBtn = document.getElementById("selectDate");
         saveBtn.innerText = "Välj datum"
         saveBtn.addEventListener("click", checkAvailability);
     });
 
+    //Function that "grays out" or inactivates the dates on the calendar that
+    //have already passed. Used on calendar element onfocus
     function disablePastDates() {
         let today = new Date();
         let dd = String(today.getDate()).padStart(2, '0');
-        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0 in the calendar element
         let yyyy = today.getFullYear();
 
         today = yyyy + '-' + mm + '-' + dd;
@@ -177,61 +184,82 @@
   function checkAvailability() {
     const selectedDate = document.getElementById("datePicker").value;
     if (!selectedDate) return alert("Please select a date");
-      //document.getElementById("bookTime").style.display = "none";
 
+    //API call to availability endpoint to check the available times on that specific date
     fetch(`http://localhost:8080/u/laundry-booking/availability?date=${selectedDate}`)
             .then(res => {
               if (!res.ok) throw new Error("Network error");
+
+              //The response send is always on JSON
               return res.json();
             })
-            .then(slots => {
-              const container = document.getElementById("slotsContainer");
-              const now = new Date();
-              const todayStr = now.toISOString().split("T")[0];
-              container.innerHTML = "<h3>Tillgängliga tider:</h3>";
-              slots.forEach(slot => {
-                  /*
-                  * To ensure that only the bookable times on a specific day are shown.
-                  * If a time slot has passed for that specific day, it won't show on the list
-                  * */
-                if (slot) {
-                    if (selectedDate === todayStr) {
-                        const endHourMinute = slot.endTime;
-                        const [endHour, endMinute] = endHourMinute.split(":").map(Number);
-                        const slotTime = new Date();
-                        slotTime.setHours(endHour, endMinute, 0, 0);
+        .then(slots => {
+            const container = document.getElementById("slotsContainer");
 
-                        if (slotTime <= now) return;
-                    }
-                  const timeSlot = document.createElement("div");
-                  timeSlot.className = "time-slot";
-                  timeSlot.textContent = `${slot.label}`;
+            //Lines 203-225 ensure that only the bookable times on a specific day are shown.
+            //If a time slot has passed for that specific day, it won't show on the list
+            //Because the time slots are stored as labels (strings), they need to be converted
+            //to LocalTime in order to check if they have passed or not
 
-                  const timeSlotButton = document.createElement("button");
-                  timeSlotButton.className = "time-slot button";
-                  timeSlotButton.innerText = "Boka"
-                  timeSlot.appendChild(timeSlotButton);
+            const now = new Date();
+            const todayStr = now.toISOString().split("T")[0];
+            container.innerHTML = "<h3>Lediga tider:</h3>";
 
-                  container.appendChild(timeSlot);
+            const filteredSlots = slots.filter(slot => {
+                if (selectedDate === todayStr) {
+                    const endHourMinute = slot.endTime;
+                    const [endHour, endMinute] = endHourMinute.split(":").map(Number);
+                    const slotTime = new Date();
+                    slotTime.setHours(endHour, endMinute, 0, 0);
 
-                    timeSlotButton.addEventListener("click", () => {
-                        createBooking(slot.id);
-                    });
+                    if (slotTime <= now) return false;
                 }
-              });
-                if (!slots) {
-                    container.innerHTML += "<p>Inga tider tillgängliga för detta datum.</p>";
-                }
-            })
-            .catch(err => {
-              console.error("Error checking availability:", err);
+                return true;
             });
+
+            if (filteredSlots.length === 0) {
+                const ingaLedigaTider = document.createElement("div");
+                ingaLedigaTider.innerHTML = "<p>Inga lediga tider</p>";
+                container.appendChild(ingaLedigaTider);
+                return;
+            }
+
+            //Here we take the bookable times and append them to the
+            //container we had previously created, along with an
+            //individual button for each time to book it
+            filteredSlots.forEach(slot => {
+                const timeSlot = document.createElement("div");
+                timeSlot.className = "time-slot";
+                timeSlot.textContent = `${slot.label}`;
+
+                const timeSlotButton = document.createElement("button");
+                timeSlotButton.className = "time-slot button";
+                timeSlotButton.innerText = "Boka";
+                timeSlot.appendChild(timeSlotButton);
+
+                container.appendChild(timeSlot);
+
+                //This event calls on function createBpoking (declared below)
+                timeSlotButton.addEventListener("click", () => {
+                    createBooking(slot.id);
+                });
+            });
+        })
+        .catch(err => {
+            console.error("Error checking availability:", err);
+        });
+
   }
 
   function createBooking(slotId) {
       const date = document.getElementById("datePicker").value;
+
+      //This promt element is a temporary fix. Needs to be exchanged
+      //for a custom text field
       const notes = prompt("Enter notes for your booking (optional):") || "";
 
+      //Parameters to be sent as a POST request to server and then be stored
+      //in database
       const params = new URLSearchParams();
       params.append("date", date);
       params.append("time_slot", slotId);
@@ -240,6 +268,8 @@
       fetch("/u/laundry-booking/create", {
           method: "POST",
           headers: {
+              //Format in which the parameters are to be sent, as key-value pairs
+              //the url
               "Content-Type": "application/x-www-form-urlencoded"
           },
           body: params
@@ -249,15 +279,22 @@
               return res.json();
           })
           .then(data => {
-              alert(`Your booking on ${date} has been confirmed.`);
-              window.location.href = data.url;
+              let slotsContainer = document.getElementById("slotsContainer");
+              slotsContainer.innerHTML = '';
+
+              let bookingConfirmation = document.createElement("H3");
+              bookingConfirmation.innerText = `Din bokning på ${date} är bekräftad`;
+              bookingConfirmation.style.marginBottom = "1rem";
+              slotsContainer.appendChild(bookingConfirmation);
+
+              //The confirmation message is shown for 2 seconds and then the
+              //page reloads
+               window.setTimeout(() => window.location.href = data.url, 2000);
           })
           .catch(error => {
               alert(error.message);
           });
   }
-
-
 
 </script>
 </body>

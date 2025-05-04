@@ -1,7 +1,10 @@
 package com.grannsnack.GrannSnack.WebController;
 
+import com.grannsnack.GrannSnack.Model.Booking;
+import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.TimeSlots;
 import com.grannsnack.GrannSnack.Service.DBLaundryService;
+import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,33 +20,55 @@ import java.util.List;
 @RequestMapping("/u/laundry-booking")
 @CrossOrigin(origins = "http://127.0.0.1:8080")
 public class LaundryRestController {
+    private final DBLaundryService dbLaundryService;
+    private final MyUserDetailsService myUserDetailsService;
 
-    @Autowired
-    private DBLaundryService dbLaundryService;
+    public LaundryRestController(DBLaundryService dbLaundryService, MyUserDetailsService myUserDetailsService) {
+        this.dbLaundryService = dbLaundryService;
+        this.myUserDetailsService = myUserDetailsService;
+    }
+
+    /*
+     * Check available time slots
+     * */
 
     @GetMapping("/availability")
     public List<TimeSlots> getAvailability(@RequestParam LocalDate date) {
-        System.out.println("Controller hit with date: " + date);
         return dbLaundryService.getAvailableTimeSlots(date);
     }
 
-@PostMapping("/create")
-public ResponseEntity<Map<String, String>> createBooking(
+    /*
+     * Create a booking
+     * */
+
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, String>> createBooking(
         @RequestParam("date") LocalDate date,
         @RequestParam("time_slot") int timeSlot,
         @RequestParam(value = "notes", required = false) String notes,
         @AuthenticationPrincipal UserDetails userDetails) {
 
-    String userEmail = userDetails.getUsername();
-    int userId = dbLaundryService.getUserIdByEmail(userEmail);
-    dbLaundryService.createBooking(date, timeSlot, notes, userId);
+        String userEmail = userDetails.getUsername();
+        int userId = dbLaundryService.getUserIdByEmail(userEmail);
+        dbLaundryService.createBooking(date, timeSlot, notes, userId);
 
-    Map<String, String> response = new HashMap<>();
-    response.put("message", "Booking successful");
-    response.put("url", "/u/laundry-booking");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Booking successful");
+        response.put("url", "/u/laundry-booking");
 
-    return ResponseEntity.ok(response);
+        return ResponseEntity.ok(response);
 
-}
+    }
+
+    /*
+    * Endpoint to see a specific user's bookings. Not yet mapped on frontend
+    * */
+
+    @GetMapping("/bookings")
+    public List<Booking> getBookings(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        Integer userId = myUserDetailsService.getUserIdByEmail(email);
+        return dbLaundryService.getAllBookingsByUserId(userId);
+    }
 
 }
