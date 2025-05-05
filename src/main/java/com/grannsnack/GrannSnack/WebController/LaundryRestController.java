@@ -43,7 +43,6 @@ public class LaundryRestController {
 //    }
 
     @GetMapping("/availability")
-    //Spring Security sets the Principal's name to the username
     public List<TimeSlotStatus> getAvailability(@RequestParam LocalDate date) {
 
         String email = myUserDetailsService.getAuthenticatedUserEmail();

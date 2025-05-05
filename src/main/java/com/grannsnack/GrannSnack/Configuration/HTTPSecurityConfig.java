@@ -31,14 +31,9 @@ public class HTTPSecurityConfig{
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(registry -> {
-                    //registry.requestMatchers("/u/laundry-booking/availability").permitAll();
-                    //registry.requestMatchers("/u/laundry-booking/create").permitAll();//access laundry booking without logging in
-                    registry.requestMatchers("/css/**", "/js/**").permitAll();
-                    registry.requestMatchers("/u/laundry-booking/availability").authenticated();
-                    registry.requestMatchers("/u/laundry-booking/create").authenticated();
                     registry.requestMatchers("/u/**").hasRole("USER");
                     registry.requestMatchers("/a/**").hasRole("ADMIN");
-                    registry.anyRequest().permitAll(); // or authenticated(), depending on your intent
+                    registry.anyRequest().authenticated();
                 })
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
@@ -48,13 +43,6 @@ public class HTTPSecurityConfig{
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll())
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setContentType("application/json");
-                            response.getWriter().write("{\"error\": \"Unauthorized\"}");
-                        })
-                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(customCorsConfig))
                 .build();
@@ -64,6 +52,7 @@ public class HTTPSecurityConfig{
     public MyUserDetailsService userDetailsService() {
         return userDetailService;
     }
+
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
