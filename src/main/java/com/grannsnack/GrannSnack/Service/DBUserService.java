@@ -51,6 +51,16 @@ public class DBUserService {
         return user;
     }
 
+    public MyUser getUserByEmail(String email) {
+        Optional<MyUser> user;
+        if(email == null) {
+            user = Optional.empty();
+        } else {
+            user = dbUserInterface.findByEmail(email);
+        }
+        return user.orElse(null);
+    }
+
     public boolean createUser(String userName, String email, String password, String role) {
         Optional<MyUser> existingUsers = dbUserInterface.findByUserName(userName);
         Optional<MyUser> existingEmails = dbUserInterface.findByEmail(email);
