@@ -1,27 +1,33 @@
 package com.grannsnack.GrannSnack.Model;
 
-import java.util.Date;
+import jakarta.persistence.*;
 
+import java.util.Date;
+@Entity
+@Table(name="POST")
 public class Post {
-    private int postId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(name = "post_date", columnDefinition = "DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date postDate;
-    private MyUser postAuthor;
+    @Column(name = "post_author_id", columnDefinition = "INT NOT NULL")
+    private int postAuthorID;
+    @Column(name = "post_title", columnDefinition = "VARCHAR(255)")
+    private String postTitle;
+    @Column(name = "post_content", columnDefinition = "LONGTEXT")
     private String postContent;
+    @Column(name = "post_image", columnDefinition = "VARCHAR(255)")
     private String postImage;
 
-    public Post(int postId, Date postDate, MyUser postAuthor, String postContent) {
-        this.postId = postId;
-        this.postDate = postDate;
-        this.postAuthor = postAuthor;
-        this.postContent = postContent;
-    }
-
     public int getPostId() {
-        return postId;
+        return id;
     }
 
     public void setPostId(int postId) {
-        this.postId = postId;
+        this.id = postId;
     }
 
     public Date getPostDate() {
@@ -32,12 +38,20 @@ public class Post {
         this.postDate = postDate;
     }
 
-    public MyUser getPostAuthor() {
-        return postAuthor;
+    public int getPostAuthorID() {
+        return postAuthorID;
     }
 
-    public void setPostAuthor(MyUser postAuthor) {
-        this.postAuthor = postAuthor;
+    public void setPostAuthorID(int postAuthorID) {
+        this.postAuthorID = postAuthorID;
+    }
+
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
     }
 
     public String getPostContent() {

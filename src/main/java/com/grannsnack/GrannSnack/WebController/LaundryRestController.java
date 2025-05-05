@@ -20,13 +20,12 @@ import java.util.List;
 @RequestMapping("/u/laundry-booking")
 @CrossOrigin(origins = "http://127.0.0.1:8080")
 public class LaundryRestController {
-    private final DBLaundryService dbLaundryService;
-    private final MyUserDetailsService myUserDetailsService;
 
-    public LaundryRestController(DBLaundryService dbLaundryService, MyUserDetailsService myUserDetailsService) {
-        this.dbLaundryService = dbLaundryService;
-        this.myUserDetailsService = myUserDetailsService;
-    }
+    @Autowired
+    private  DBLaundryService dbLaundryService;
+
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
 
     /*
      * Check available time slots
