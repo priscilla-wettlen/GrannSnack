@@ -3,6 +3,7 @@ package com.grannsnack.GrannSnack.WebController;
 import com.grannsnack.GrannSnack.Service.DBUserService;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +24,13 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public MyUser createUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
-        MyUser user = new MyUser();
-        user.setUserName(name);
-        user.setUserEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        if(user.getRole() == null) {
-            user.setRole("USER");
+    public String createUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
+        boolean isCreated = dbUserService.createUser(name, email, passwordEncoder.encode(password), "USER");
+
+        if(!isCreated) {
+            return "redirect:/register?error=true";
+        } else {
+            return "redirect:/login";
         }
-        return dbUserService.saveUser(user);
     }
 }
