@@ -2,6 +2,8 @@ package com.grannsnack.GrannSnack.Service;
 
 import com.grannsnack.GrannSnack.Model.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -48,4 +50,14 @@ public class MyUserDetailsService implements UserDetailsService {
         }
         return null;
     }
+
+    public String getAuthenticatedUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getName();
+        }
+        return null;
+    }
+
+
 }

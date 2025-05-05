@@ -186,7 +186,10 @@
     if (!selectedDate) return alert("Please select a date");
 
     //API call to availability endpoint to check the available times on that specific date
-    fetch(`http://localhost:8080/u/laundry-booking/availability?date=${selectedDate}`)
+    fetch(`http://localhost:8080/u/laundry-booking/availability?date=${selectedDate}`, {
+        method: "GET",
+        credentials: "include"
+    })
             .then(res => {
               if (!res.ok) throw new Error("Network error");
 

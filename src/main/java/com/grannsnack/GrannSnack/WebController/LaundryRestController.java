@@ -2,14 +2,19 @@ package com.grannsnack.GrannSnack.WebController;
 
 import com.grannsnack.GrannSnack.Model.Booking;
 import com.grannsnack.GrannSnack.Model.MyUser;
+import com.grannsnack.GrannSnack.Model.TimeSlotStatus;
 import com.grannsnack.GrannSnack.Model.TimeSlots;
 import com.grannsnack.GrannSnack.Service.DBLaundryService;
 import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+
+import java.security.Principal;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,9 +37,18 @@ public class LaundryRestController {
      * Check available time slots
      * */
 
+//    @GetMapping("/availability")
+//    public List<TimeSlots> getAvailability(@RequestParam LocalDate date) {
+//        return dbLaundryService.getAvailableTimeSlots(date);
+//    }
+
     @GetMapping("/availability")
-    public List<TimeSlots> getAvailability(@RequestParam LocalDate date) {
-        return dbLaundryService.getAvailableTimeSlots(date);
+    //Spring Security sets the Principal's name to the username
+    public List<TimeSlotStatus> getAvailability(@RequestParam LocalDate date) {
+
+        String email = myUserDetailsService.getAuthenticatedUserEmail();
+        int userId = dbLaundryService.getUserIdByEmail(email);
+        return dbLaundryService.getAllBookingsWithStatus(date, userId);
     }
 
     /*
@@ -70,5 +84,13 @@ public class LaundryRestController {
         Integer userId = myUserDetailsService.getUserIdByEmail(email);
         return dbLaundryService.getAllBookingsByUserId(userId);
     }
+
+    @GetMapping("/slots-with-status")
+    public List<TimeSlotStatus> getSlotsWithStatus(@RequestParam LocalDate date,
+                                                   @AuthenticationPrincipal UserDetails userDetails) {
+        int userId = dbLaundryService.getUserIdByEmail(userDetails.getUsername());
+        return dbLaundryService.getAllBookingsWithStatus(date, userId);
+    }
+
 
 }
