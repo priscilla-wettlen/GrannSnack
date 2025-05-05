@@ -2,6 +2,9 @@ package com.grannsnack.GrannSnack.Service;
 
 import com.grannsnack.GrannSnack.Model.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -48,16 +51,16 @@ public class DBUserService {
         return user;
     }
 
-    public void createUser(String userName, String email, String password, String role) {
+    public boolean createUser(String userName, String email, String password, String role) {
         Optional<MyUser> existingUsers = dbUserInterface.findByUserName(userName);
         Optional<MyUser> existingEmails = dbUserInterface.findByEmail(email);
 
         if(existingUsers.isPresent()) {
-            throw new RuntimeException("User with username " + userName + " already exists");
+            return false;
         }
 
         if(existingEmails.isPresent()) {
-            throw new RuntimeException("User with email " + email + " already exists");
+            return false;
         }
 
         MyUser user = new MyUser();
@@ -67,5 +70,6 @@ public class DBUserService {
         user.setRole(role);
 
         dbUserInterface.save(user);
+        return true;
     }
 }
