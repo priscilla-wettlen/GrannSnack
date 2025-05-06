@@ -135,12 +135,48 @@
       background-color: transparent;
     }
 
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 20px 0;
+    }
+    .logo {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+    }
+    .logo-link {
+      text-decoration: none;
+      color: black;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #1a202c;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .nav-link.logout {
+      color: #ff4d4f;
+      font-weight: 500;
+      gap: 7px;
+    }
+    .nav-link.logout:hover {
+      color: #d9363e;
+
 
 
   </style>
 </head>
 <body>
-
   <header>
     <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
     <nav class="nav">

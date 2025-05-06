@@ -34,7 +34,8 @@ public class HTTPSecurityConfig{
                     //registry.requestMatchers("/u/laundry-booking/create").permitAll();//access laundry booking without logging in
                     registry.requestMatchers("/u/**").hasRole("USER");
                     registry.requestMatchers("/a/**").hasRole("ADMIN");
-                    registry.anyRequest().authenticated(); // or authenticated(), depending on your intent
+                    registry.requestMatchers("/", "/home", "/login", "/register", "/index", "/default").permitAll();
+                    //registry.anyRequest().authenticated(); // or authenticated(), depending on your intent
                 })
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")

@@ -11,38 +11,38 @@
       margin: 0;
       padding: 0;
     }
-
     body {
       background: #f4f6f8;
       font-family: 'Inter', sans-serif;
       color: #1a202c;
     }
-
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 30px 20px 0;
+      padding: 14px 38px 14px 38px;
+      background: #fff;
+      border-bottom: 1px solid #d9d9d9;
     }
-
     .logo {
-      font-size: 18px;
+      font-size: 24px;
       font-weight: bold;
       letter-spacing: -0.5px;
+      text-decoration: none;
+      background: linear-gradient(90deg, #10B781, #0D9688);
+      background-clip: text;
+      color: transparent;
+      cursor: pointer;
     }
-
     .logo-link {
       text-decoration: none;
-      color: black;
     }
-
     main {
       display: flex;
       flex-direction: column;
       align-items: center;
       margin-top: 50px;
     }
-
     .register-container {
       background: white;
       padding: 32px;
@@ -50,34 +50,28 @@
       border: 1px solid #ddd;
       width: 100%;
       max-width: 400px;
-      margin: 20px;
     }
-
     h1 {
       font-size: 24px;
       margin-bottom: 8px;
       font-weight: 600;
       text-align: center;
     }
-
     .subtitle {
       font-size: 14px;
       color: #6b6b6b;
-      margin-bottom: 30px;
+      margin-bottom: 15px;
       text-align: center;
     }
-
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
-
     label {
       display: block;
       font-size: 14px;
       margin-bottom: 8px;
       color: #1a202c;
     }
-
     input {
       width: 100%;
       padding: 10px;
@@ -86,12 +80,10 @@
       font-size: 14px;
       font-family: 'Inter', sans-serif;
     }
-
     input:focus {
       outline: none;
       border-color: #1a202c;
     }
-
     .btn {
       background-color: #1a202c;
       color: #fff;
@@ -101,19 +93,15 @@
       font-size: 14px;
       cursor: pointer;
       width: 100%;
-      margin-top: 20px;
     }
-
     .btn:hover {
       background-color: #333;
     }
-
     .bottom {
-      margin-top: 40px;
       text-align: center;
       font-size: 14px;
+      padding:10px;
     }
-
     .bottom a {
       color: #1a202c;
       text-decoration: none;
@@ -123,7 +111,18 @@
     .bottom a:hover {
       text-decoration: underline;
     }
-
+    .errorMessage {
+      background-color: #ffeaea;
+      border: 1px solid #ffb3b3;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 20px;
+      text-align: center;
+      color: #c0392b;
+      font-size: 14px;
+      font-weight: 600;
+      display: none;
+    }
     @media (max-width: 600px) {
       *{
         padding:5px;
@@ -137,7 +136,7 @@
 </head>
 <body>
   <header>
-    <a th:href="@{/home}" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
   </header>
 
   <main>
@@ -145,7 +144,7 @@
     <div class="subtitle">Bli medlem på GrannSnack</div>
 
     <div class="register-container">
-      <form th:action="@{/register}" method="POST">
+      <form th:action="@{/register}" method="POST" onsubmit="return checkPasswords()">
         <div class="form-group">
           <label for="name">Namn</label>
           <input type="text" id="name" name="name" placeholder="Ditt namn" required>
@@ -164,10 +163,42 @@
         <div class="form-group">
           <label for="confirm-password">Bekräfta lösenord</label>
           <input type="password" id="confirm-password" name="confirm-password" placeholder="******" required>
+          <div id="pwMessage" class="errorMessage">Lösenordet matchar inte</div>
+          <div id="falseMessage" class="errorMessage">Email eller lösenordet är felaktigt. Försök igen</div>
+
         </div>
 
         <button type="submit" class="btn">Registrera</button>
       </form>
+      <script>
+        document.addEventListener('DOMContentLoaded', checkLoginPage);
+    
+        function checkLoginPage() {
+            var msg = document.getElementById('falseMessage');
+            if (window.location.search === '?error=true') {
+                msg.style.display = 'block';
+            }
+            else{
+              msg.style.display = 'none';
+            }
+        }
+    
+        function checkPasswords() {
+            var pw = document.getElementById('password').value;
+            var cpw = document.getElementById('confirm-password').value;
+            var msg = document.getElementById('pwMessage');
+            
+            if (pw !== cpw) {
+                msg.style.display = 'block';
+                document.getElementById('password').value = '';
+                document.getElementById('confirm-password').value = '';
+                return false;
+            } else {
+                msg.style.display = 'none';
+                return true;
+            }
+        }
+    </script>
     </div>
 
     <div class="bottom">

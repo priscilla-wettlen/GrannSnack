@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - GrannSnack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #f4f6f8;
+      font-family: 'Inter', sans-serif;
+      color: #1a202c;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 38px 14px 38px;
+      background: #fff;
+      border-bottom: 1px solid #d9d9d9;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      background: linear-gradient(90deg, #10B781, #0D9688);
+      background-clip: text;
+      color: transparent;
+      cursor: pointer;
+    }
+    .logo-link {
+      text-decoration: none;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .link {
+      color: #3da641;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #cfe5d0;
+      cursor: pointer;
+      }
+      .link:hover {
+        color: #cfe5d0;
+        background-color: #3da641;
+      }
+    @media (max-width: 600px) {
+      *{
+        padding:5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
+  </header>
+
+  <main>
+    <div style="padding-top:15%;">
+	<center>
+	<h2 style="padding-bottom:10px;">404 - Sidan finns inte</h2>
+    <a th:href="@{/default}" class="link">Gå tillbaka till hem</a>
+	</div>
+   
+<main>
+</body>
+</html>
