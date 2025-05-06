@@ -30,7 +30,7 @@ public class RegistrationController {
         if(!isCreated) {
             return "redirect:/register?error=true";
         } else {
-            return "redirect:/login";
+            return "successful";
         }
     }
 }
