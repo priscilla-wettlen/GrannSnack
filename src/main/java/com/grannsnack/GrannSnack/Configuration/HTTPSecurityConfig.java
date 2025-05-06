@@ -35,6 +35,7 @@ public class HTTPSecurityConfig{
                     registry.requestMatchers("/u/**").hasRole("USER");
                     registry.requestMatchers("/a/**").hasRole("ADMIN");
                     registry.requestMatchers("/", "/home", "/login", "/register", "/index", "/default").permitAll();
+                    registry.requestMatchers("/error", "/error/**").permitAll();
                     //registry.anyRequest().authenticated(); // or authenticated(), depending on your intent
                 })
                 .formLogin(formLogin -> formLogin
