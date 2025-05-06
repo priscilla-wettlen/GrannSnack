@@ -42,15 +42,14 @@ public class DBUserService {
         return user.orElse(null);
     }
 
-    //TODO Can a user remove themselves? Otherwise this task is only reserved for admin
-//    public MyUser removeUser(Integer id) {
-//        if(!dbUserInterface.existsById(id)) {
-//            return null;
-//        }
-//        MyUser user = dbUserInterface.findById(id).get();
-//        dbUserInterface.deleteById(id);
-//        return user;
-//    }
+    public MyUser removeUser(Integer id) {
+        if(!dbUserInterface.existsById(id)) {
+            return null;
+        }
+        MyUser user = dbUserInterface.findById(id).get();
+        dbUserInterface.deleteById(id);
+        return user;
+    }
 
     public MyUser getUserByEmail(String email) {
         Optional<MyUser> user;

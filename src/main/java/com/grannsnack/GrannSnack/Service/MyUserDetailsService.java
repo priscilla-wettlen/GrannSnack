@@ -16,6 +16,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private DBUserInterface dbUserInterface;
 
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<MyUser> user = dbUserInterface.findByEmail(email);
@@ -40,12 +41,4 @@ public class MyUserDetailsService implements UserDetailsService {
         return role.split(",");
     }
 
-    public Integer getUserIdByEmail(String email) {
-        Optional<MyUser> user = dbUserInterface.findByEmail(email);
-        if(user.isPresent()) {
-            var userObj = user.get();
-            return userObj.getId();
-        }
-        return null;
-    }
 }

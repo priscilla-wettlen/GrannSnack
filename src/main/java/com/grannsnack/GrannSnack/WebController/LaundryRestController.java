@@ -5,6 +5,7 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.TimeSlots;
 import com.grannsnack.GrannSnack.Service.DBLaundryService;
 import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
+import com.grannsnack.GrannSnack.Service.UserSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,12 +21,11 @@ import java.util.List;
 @RequestMapping("/u/laundry-booking")
 @CrossOrigin(origins = "http://127.0.0.1:8080")
 public class LaundryRestController {
-
     @Autowired
     private  DBLaundryService dbLaundryService;
 
     @Autowired
-    private MyUserDetailsService myUserDetailsService;
+    private UserSearchService userSearchService;
 
     /*
      * Check available time slots
@@ -66,7 +66,7 @@ public class LaundryRestController {
     @GetMapping("/bookings")
     public List<Booking> getBookings(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
-        Integer userId = myUserDetailsService.getUserIdByEmail(email);
+        Integer userId = userSearchService.getUserIdByEmail(email);
         return dbLaundryService.getAllBookingsByUserId(userId);
     }
 

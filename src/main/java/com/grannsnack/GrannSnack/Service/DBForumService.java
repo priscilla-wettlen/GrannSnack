@@ -3,6 +3,7 @@ package com.grannsnack.GrannSnack.Service;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -15,6 +16,7 @@ public class DBForumService {
     @Autowired
     private  DBForumInterface dbForumInterface;
 
+    @Qualifier("DBUserService")
     @Autowired
     private  DBUserService dbUserService;
 

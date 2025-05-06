@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
@@ -7,5 +7,45 @@
 <body>
 <h1>Admin Homepage</h1><hr>
 <p>Welcome to the Admin Home Page</p>
+
+<div id="user-container"></div>
+<div id="user-item"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        getAllUsers();
+    })
+
+    function getAllUsers(){
+        fetch("a/home/users",{
+            method: "GET"
+        }).then(res =>{
+            if(!res.ok) throw new Error("Error: Användarlistan kunde inte hämtas.");
+        }).then(users => {
+            const userContainer = document.getElementById("user-container");
+            userContainer.innerHTML = "";
+            let userContainerTitle = document.createElement("H3");
+            userContainerTitle.innerText = "Registrerade användarna"
+            userContainer.appendChild(userContainerTitle);
+
+            users.forEach(user => {
+                const userItem = document.getElementById("user-item");
+                userItem.textContent = `User: ${user.id} ${user.name} ${user.email} `;
+
+                const deleteUserBtn = document.createElement('button');
+                deleteUserBtn.textContent = 'Delete';
+                deleteUserBtn.addEventListener("click", deleteUser);
+
+                userItem.appendChild(deleteBtn);
+                userContainer.appendChild(userItem);
+            })
+
+        })
+    }
+
+    function deleteUser(){
+        fetch()
+    }
+</script>
 </body>
 </html>
