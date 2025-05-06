@@ -171,33 +171,39 @@
         <button type="submit" class="btn">Registrera</button>
       </form>
       <script>
-        document.addEventListener('DOMContentLoaded', checkLoginPage);
-    
-        function checkLoginPage() {
-            var msg = document.getElementById('falseMessage');
-            if (window.location.search === '?error=true') {
-                msg.style.display = 'block';
-            }
-            else{
+        document.addEventListener('DOMContentLoaded', function() {
+          const msg = document.getElementById('falseMessage');
+          const form = document.querySelector('form');
+          
+          if (window.location.search === '?error=true') {
+              msg.style.display = 'block';
+              window.history.replaceState({}, '', window.location.pathname);
+          }
+          form.addEventListener('reset', function() {
               msg.style.display = 'none';
-            }
-        }
-    
-        function checkPasswords() {
-            var pw = document.getElementById('password').value;
-            var cpw = document.getElementById('confirm-password').value;
-            var msg = document.getElementById('pwMessage');
-            
-            if (pw !== cpw) {
-                msg.style.display = 'block';
-                document.getElementById('password').value = '';
-                document.getElementById('confirm-password').value = '';
-                return false;
-            } else {
-                msg.style.display = 'none';
-                return true;
-            }
-        }
+          });
+          document.querySelectorAll('input').forEach(input => {
+              input.addEventListener('focus', function() {
+                  msg.style.display = 'none';
+              });
+          });
+      });
+      
+      function checkPasswords() {
+          var pw = document.getElementById('password').value;
+          var cpw = document.getElementById('confirm-password').value;
+          var msg = document.getElementById('pwMessage');
+          
+          if (pw !== cpw) {
+              msg.style.display = 'block';
+              document.getElementById('password').value = '';
+              document.getElementById('confirm-password').value = '';
+              return false;
+          } else {
+              msg.style.display = 'none';
+              return true;
+          }
+      }
     </script>
     </div>
 
