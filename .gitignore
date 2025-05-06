@@ -223,3 +223,4 @@ $RECYCLE.BIN/
 *.json
 application.properties
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,windows,macos,intellij
+/src/main
