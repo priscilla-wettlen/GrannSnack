@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 public class LaundryController {
 
     @GetMapping
-
     public String showBookingCalendar() {
         return "booking-calender";
     }

@@ -310,32 +310,35 @@
   </div>
 
   <script>
-    var form = document.getElementById('postForm');
-    form.onsubmit = function(event) {
-      event.preventDefault();
-  
-      var title = document.getElementById('title').value.trim();
-      var content = document.getElementById('content').value.trim();
-  
-      if (!title || !content) return;
-  
-      var postDiv = document.createElement('div');
-      postDiv.className = 'post';
-      postDiv.innerHTML =
-        '<div class="top-header">' +
-          '<div class="avatar"></div>' +
-          '<div class="information">' +
-            '<div class="title">' + title + '</div>' +
-            '<div class="name-date">User • ' + new Date().toLocaleString('sv-SE') + '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="content">' + content + '</div>';
-  
-      var posts = document.getElementById('posts');
-      posts.insertBefore(postDiv, posts.firstChild);
-  
-      form.reset();
-    };
+    document.getElementById('postForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('postTitle').value;
+      const content = document.getElementById('postContent').value;
+
+      fetch('/u/forum/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          postTitle: title,
+          postContent: content
+        })
+      })
+      .then(res => {
+        if(res.status === 201) {
+          document.getElementById('postForm').reset();
+          alert('Inlägg publicerat!');
+          window.location.reload();
+        } else {
+          alert('Något gick fel!');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    })
   </script>
 </body>
 </html>

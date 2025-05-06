@@ -5,6 +5,7 @@ import com.grannsnack.GrannSnack.Model.Booking;
 
 import com.grannsnack.GrannSnack.Model.TimeSlots;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,16 +16,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class DBLaundryService {
-    private final DBLaundryInterface laundryInterface;
-    private final DBTimeSlotsInterface timeSlotsInterface;
-    private final MyUserDetailsService userDetailsService;
 
+    @Autowired
+    private DBLaundryInterface laundryInterface;
 
-    public DBLaundryService(DBLaundryInterface laundryInterface, DBTimeSlotsInterface timeSlotsInterface, MyUserDetailsService userDetailsService) {
-        this.laundryInterface = laundryInterface;
-        this.timeSlotsInterface = timeSlotsInterface;
-        this.userDetailsService = userDetailsService;
-    }
+    @Autowired
+    private DBTimeSlotsInterface timeSlotsInterface;
+
+    @Autowired
+    private MyUserDetailsService userDetailsService;
+
 
     public List<TimeSlots> getAvailableTimeSlots(LocalDate date) {
         List<TimeSlots> allTimeSlots = timeSlotsInterface.findAll();
