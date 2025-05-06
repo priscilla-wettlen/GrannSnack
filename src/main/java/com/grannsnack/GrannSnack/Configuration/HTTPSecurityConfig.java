@@ -30,8 +30,8 @@ public class HTTPSecurityConfig{
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(registry -> {
-                    //registry.requestMatchers("/u/laundry-booking/availability").permitAll();
-                    //registry.requestMatchers("/u/laundry-booking/create").permitAll();//access laundry booking without logging in
+                    registry.requestMatchers("/u/laundry-booking/availability").permitAll();
+                    registry.requestMatchers("/u/laundry-booking/create").permitAll();//access laundry booking without logging in
                     registry.requestMatchers("/u/**").hasRole("USER");
                     registry.requestMatchers("/a/**").hasRole("ADMIN");
                     registry.requestMatchers("/", "/home", "/login", "/register", "/index", "/default").permitAll();

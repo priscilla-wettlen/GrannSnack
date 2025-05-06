@@ -16,4 +16,6 @@ public interface DBForumInterface extends JpaRepository<Post, Integer> {
     Post findPostById(int id);
 
     List<Post> findPostsByPostAuthorID(int postAuthorID);
+
+    void deletePostById(int id);
 }
