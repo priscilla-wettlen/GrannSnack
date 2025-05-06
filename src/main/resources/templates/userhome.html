@@ -5,33 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GrannSnack</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/40282c7580.js" crossorigin="anonymous"></script>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
     body {
-      background: #f4f6f8;
+      background: #f7fafd;
       font-family: 'Inter', sans-serif;
       color: #1a202c;
     }
-
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 30px 20px 0;
+      padding: 14px 38px 14px 38px;
+      background: #fff;
+      border-bottom: 1px solid #d9d9d9;
     }
   .logo {
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: -0.5px;
-  }
-  .logo-link {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      background: linear-gradient(90deg, #10B781, #0D9688);
+      background-clip: text;
+      color: transparent;
+      cursor: pointer;
+}
+  .logo-link{
     text-decoration: none;
-    color: black;
   }
   .nav {
     display: flex;
@@ -42,10 +47,10 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 12px;
+    font-size: 16px;
     color: #1a202c;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: bold;
   }
   .nav-link.logout {
     color: #ff4d4f;
@@ -54,6 +59,7 @@
   }
   .nav-link.logout:hover {
     color: #d9363e;
+    cursor: pointer;
   }
     main {
       display: flex;
@@ -61,42 +67,31 @@
       align-items: center;
       margin-top: 50px;
     }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #6b6b6b;
-      margin-bottom: 30px;
-    }
-
     .grid {
        display: grid;
        grid-template-columns: repeat(2, 1fr); 
        gap: 24px;
        padding: 0 20px;
-       max-width: 700px; 
+       max-width: 800px; 
+       width: 100%;
 }
-
-    .card {
+.card {
       background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      padding: 36px 32px 28px 32px;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      min-height: 200px;
+      position: relative;
+      transition: box-shadow 0.2s;
       cursor: pointer;
+      border:1px solid #f0f0f0;
     }
 
     .card:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
     }
-
     .icon-bg {
       width: 42px;
       height: 42px;
@@ -107,17 +102,23 @@
       justify-content: center;
       margin-bottom: 10px;
     }
-
+    .icon-green { 
+      background: #c6f7e2; color: #1ec98b; 
+    }
+    .icon-blue { 
+      background: #d0f0fd; color: #2bb3f6; 
+    }
+    .icon-yellow { 
+      background: #fff3c4; color: #f6c026; 
+    }
     .card-title {
       font-weight: bold;
       font-size: 14px;
       margin-bottom: 4px;
     }
-
     .card-desc {
       font-size: 12px;
       color: #888;
-      text-align: center;
     }
     .btn {
       background-color: #1a202c;
@@ -128,7 +129,6 @@
       font-size: 12px;
       cursor: pointer;
     }
-
     .btn:hover {
       background-color: #333;
     }
@@ -150,33 +150,34 @@
   <header>
     <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
     <nav class="nav">
-      <a href="#" class="nav-link">Profil</a>
-      <a th:href="@{/logout}" class="nav-link logout">Logga ut</a>
+      <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
+      <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #f38183;"></i></i></a>
     </nav>
   </header>
 
   <main>
-    <h1>Välkommen!</h1>
-    <div class="subtitle">Allt för din bostad på ett ställe</div>
 
     <div class="grid">
       <div class="card" onclick="location.href='/u/forum'">
-        <div class="icon-bg">💬</div>
+        <div class="icon-bg icon-green"><i class="fa-regular fa-message" style="color: #2aa87f;"></i></div>
         <div class="card-title">Chatforum</div>
         <div class="card-desc">Diskutera med grannar</div>
+        <div class="card-desc">
+          Dela information, ställ frågor och lär känna dina grannar i vårt forum.</div>
       </div>
       <div class="card" onclick="location.href='/u/laundry-booking'">
-        <div class="icon-bg">📅</div>
+        <div class="icon-bg icon-blue"><i class="fa-regular fa-calendar" style="color: #1d91cd;"></i></div>
         <div class="card-title">Tvättbokning</div>
         <div class="card-desc">Boka tvättid enkelt</div>
+        <div class="card-desc">Boka tvättider, se dina bokningar och få påminnelser när det är dags att tvätta.</div>
       </div>
       <div class="card" onclick="location.href='#'">
-        <div class="icon-bg">..</div>
+        <div class="icon-bg icon-yellow">..</div>
         <div class="card-title">Kommer snart</div>
         <div class="card-desc">Kommer snart</div>
       </div>
       <div class="card" onclick="location.href='#'">
-        <div class="icon-bg">..</div>
+        <div class="icon-bg icon-yellow">..</div>
         <div class="card-title">Kommer snart</div>
         <div class="card-desc">Kommer snart</div>
       </div>
