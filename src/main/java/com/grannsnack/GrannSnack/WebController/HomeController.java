@@ -35,7 +35,7 @@ public class HomeController {
         String name = request.getUserPrincipal().getName();
         MyUser user = userDB.getUserByName(name);
         model.addAttribute("user", user);
-        return "userhomenew";
+        return "userhome";
     }
 
     @GetMapping("/u/home/redirectToLaundry")
