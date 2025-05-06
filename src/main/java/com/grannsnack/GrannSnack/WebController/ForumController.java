@@ -44,4 +44,16 @@ public class ForumController {
         }
     }
 
+    @DeleteMapping("/u/forum/delete")
+    public ResponseEntity<String> deleting(@RequestBody Post post, @AuthenticationPrincipal UserDetails userDetails) {
+        Post newPost = dbForumService.getPostById(post.getPostId());
+
+        if(newPost == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post not found");
+        } else {
+            dbForumService.deletePostById(newPost.getPostId());
+            return ResponseEntity.status(HttpStatus.OK).body("Post deleted");
+        }
+    }
+
 }

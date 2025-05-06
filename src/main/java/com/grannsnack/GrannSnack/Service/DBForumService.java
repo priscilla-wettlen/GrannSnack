@@ -31,4 +31,12 @@ public class DBForumService {
         Optional<Post> newPost = Optional.ofNullable(dbForumInterface.findPostById(post.getPostId()));
         return newPost.isPresent();
     }
+
+    public Post getPostById(int id) {
+        return dbForumInterface.findPostById(id);
+    }
+
+    public void deletePostById(int id) {
+        dbForumInterface.deleteById(id);
+    }
 }
