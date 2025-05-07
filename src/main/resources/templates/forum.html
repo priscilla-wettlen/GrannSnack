@@ -375,9 +375,10 @@
       forumDTOs.forEach(dto => {
         const post = dto.post;
         const username = dto.username;
+        const initial = username.charAt(0);
 
         const postDate = new Date(post.postDate);
-        const formattedDate = postDate.toLocaleDateString('sv-SE') + ' ' +
+        const formattedDate = postDate.toLocaleDateString('sv-SE') + ' • ' +
                               postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
 
         const postElement = document.createElement('div');
@@ -385,11 +386,11 @@
         postElement.innerHTML = `
         <div class="top-header">
             <div class="avatar">
-                <i class="fa-solid fa-user"></i>
+                <p style="font-weight:bold">${initial}</p>
             </div>
             <div class="information">
                 <h2 class="title">${post.postTitle}</h2>
-                <p class="name-date">${username} - ${formattedDate}</p>
+                <p class="name-date">${username} • ${formattedDate}</p>
             </div>
         </div>
         <div class="content">${post.postContent}</div>
