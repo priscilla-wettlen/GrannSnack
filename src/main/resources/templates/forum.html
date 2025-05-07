@@ -288,9 +288,40 @@
             <input type="text" name="postTitle" id="postTitle" placeholder="Titel">
             <textarea class="post-textarea" id="postContent" placeholder="Skriv in ditt inlägg..."></textarea>
           </div>
+            <script>
+              document.getElementById('postForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const title = document.getElementById('postTitle').value;
+                const content = document.getElementById('postContent').value;
+
+                fetch('/u/forum/create', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    postTitle: title,
+                    postContent: content
+                  })
+                })
+                        .then(res => {
+                          if(res.status === 201) {
+                            document.getElementById('postForm').reset();
+                            alert('Inlägg publicerat!');
+                            window.location.reload();
+                          } else {
+                            alert('Något gick fel!');
+                          }
+                        })
+                        .catch(err => {
+                          console.log(err);
+                        })
+              })
+            </script>
           <div class="post-btns">
             <input type="file" id="imageUpload" accept="image/*" style="display:none;">
-            <label for="imageUpload" class="upload-btn">Ladda bild</label>
+            <label for="imageUpload" class="upload-btn">Ladda up bild</label>
             <input type="submit" value="Publicera">
           </div>
         </form>
@@ -309,37 +340,63 @@
     </div>
     <div id="posts"></div>
   </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
 
-  <script>
-    document.getElementById('postForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    fetchPosts();
 
-      const title = document.getElementById('postTitle').value;
-      const content = document.getElementById('postContent').value;
-
-      fetch('/u/forum/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          postTitle: title,
-          postContent: content
-        })
-      })
+    function fetchPosts() {
+      fetch('/u/forum/posts')
       .then(res => {
-        if(res.status === 201) {
-          document.getElementById('postForm').reset();
-          alert('Inlägg publicerat!');
-          window.location.reload();
-        } else {
-          alert('Något gick fel!');
+        if(res.status === 204) {
+          document.getElementById('posts').innerHTML = '<div class="post"><p>Inga inlägg att visa.</p></div>';
+          return null;
+        }
+        if(!res.ok) {
+          throw new Error('Error fetching posts');
+        }
+        return res.json();
+      })
+      .then(data => {
+        if(data && data.length > 0) {
+          renderPosts(data);
         }
       })
       .catch(err => {
-        console.log(err);
-      })
-    })
-  </script>
+        console.error('Error fetching posts: ', err);
+        document.getElementById('posts').innerHTML = '<div class="post"><p>Kunde inte hämta inlägg. Försök igen senare.</p></div>\n'
+      });
+    }
+
+    function renderPosts(posts) {
+      const postContainer = document.getElementById('posts');
+      postContainer.innerHTML = '';
+
+      posts.forEach(post => {
+        const postDate = new Date(post.postDate);
+        const formattedDate = postDate.toLocaleDateString('sv-SE') + ' ' +
+                              postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+        postElement.innerHTML = `
+        <div class="top-header">
+            <div class="avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="information">
+                <h2 class="title">${post.postTitle}</h2>
+                <p class="name-date">Användare #${post.postAuthorID} - ${formattedDate}</p>
+            </div>
+        </div>
+        <div class="content">${post.postContent}</div>
+        ${post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}
+        `;
+        postContainer.appendChild(postElement);
+      });
+    }
+  });
+</script>
+
 </body>
 </html>
