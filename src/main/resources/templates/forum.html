@@ -124,13 +124,17 @@
       align-items: center;
     }
     .post-btns input[type="submit"]{
-        background: #82cab4;
+        background: #10B781;
         color: white;
         padding:10px 20px;
         border:none;
         border-radius: 10px;
         width: 150px;
         cursor: pointer;
+    }
+    .post-btns input[type="submit"]:hover{
+      background: #82cab4;
+
     }
     .upload-btn{
         padding:10px 20px;
@@ -169,6 +173,10 @@
       font-size: 16px;
       box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.10);
       margin-bottom:10px;
+    }
+    .post h2{
+      display: flex;
+      justify-content: space-between;
     }
     .top-header{
       display: flex;
@@ -389,7 +397,7 @@
                 <p style="font-weight:bold">${initial}</p>
             </div>
             <div class="information">
-                <h2 class="title">${post.postTitle}</h2>
+                <h2 class="title">${post.postTitle} <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; margin-bottom:-10px; cursor:pointer;"></i></h2>
                 <p class="name-date">${username} • ${formattedDate}</p>
             </div>
         </div>
