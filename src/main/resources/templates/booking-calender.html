@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calendar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/40282c7580.js" crossorigin="anonymous"></script>
   <style>
     body {
       font-family: 'Quicksand', 'Inter',sans-serif;
@@ -136,41 +140,59 @@
     }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 30px 20px 0;
-    }
-    .logo {
-      font-size: 18px;
-      font-weight: bold;
-      letter-spacing: -0.5px;
-    }
-    .logo-link {
-      text-decoration: none;
-      color: black;
-    }
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: #1a202c;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .nav-link.logout {
-      color: #ff4d4f;
-      font-weight: 500;
-      gap: 7px;
-    }
-    .nav-link.logout:hover {
-      color: #d9363e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 38px;
+  background: #fff;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  background: linear-gradient(90deg, #10B781, #0D9688);
+  background-clip: text;
+  color: transparent;
+  cursor: pointer;
+}
+
+.logo-link {
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: #1a202c;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-link.logout {
+  color: #ff4d4f;
+  font-weight: 500;
+  gap: 7px;
+}
+
+.nav-link.logout:hover {
+  color: #d9363e;
+  cursor: pointer;
+}
+
+
+    
+    
 
 
 
@@ -180,10 +202,11 @@
   <header>
     <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
     <nav class="nav">
-      <a href="#" class="nav-link">Profil</a>
-      <a th:href="@{/logout}" class="nav-link logout">Logga ut</a>
+      <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
+      <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #f38183;"></i></a>
     </nav>
   </header>
+  
 
 <!--The box containing color-coded keys for the time booking-->
 <h1>Välja tvättid</h1>
