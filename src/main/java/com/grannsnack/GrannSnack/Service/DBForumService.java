@@ -1,5 +1,6 @@
 package com.grannsnack.GrannSnack.Service;
 
+import com.grannsnack.GrannSnack.Model.ForumDTO;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class DBForumService {
 
@@ -43,13 +43,20 @@ public class DBForumService {
         dbForumInterface.deleteById(id);
     }
 
-    public List<Post> getRecentPosts(Timestamp dateAfter, Timestamp dateBefore) {
+    public List<ForumDTO> getRecentPosts(Timestamp dateAfter, Timestamp dateBefore) {
+        List<ForumDTO> postsDTO = new ArrayList<>();
+
         Date after = Date.valueOf(dateAfter.toLocalDateTime().toLocalDate());
         Date before = Date.valueOf(dateBefore.toLocalDateTime().toLocalDate());
 
         List<Post> posts = dbForumInterface.findPostsByPostDateBetween(after, before);
         posts.sort((p1, p2) -> p2.getPostDate().compareTo(p1.getPostDate()));
-        return posts;
+
+        for(Post post : posts) {
+            postsDTO.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID()).getUserName()));
+        }
+
+        return postsDTO;
     }
 
     public Timestamp getDate() {
