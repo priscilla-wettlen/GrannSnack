@@ -7,8 +7,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/40282c7580.js" crossorigin="anonymous"></script>
   <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+   
+    }
     body {
-      font-family: 'Quicksand', 'Inter',sans-serif;
+      font-family: , 'Inter',sans-serif;
       background-color: #ffffff;
       color: #0097b2;
       display: flex;
@@ -138,8 +147,9 @@
       border: 1px solid #a6a6a6;
       background-color: transparent;
     }
+/* Header style */
 
-    header {
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -182,7 +192,7 @@
 .nav-link.logout {
   color: #ff4d4f;
   font-weight: 500;
-  gap: 7px;
+  
 }
 
 .nav-link.logout:hover {
@@ -190,8 +200,36 @@
   cursor: pointer;
 }
 
+/* Mina bookning del */
 
-    
+.time-slot {
+  background-color: #f9f7fb;
+  border: 1px solid #a6a6a6;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #000000;
+}
+
+.time-slot button {
+  background-color: #144953;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+}
+
+.time-slot button:hover {
+  background-color: #0097b2;
+}
+
     
 
 
@@ -203,9 +241,12 @@
     <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
     <nav class="nav">
       <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
-      <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #f38183;"></i></a>
+      <a th:href="@{/logout}" class="nav-link logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </a>
     </nav>
   </header>
+  
   
 
 <!--The box containing color-coded keys for the time booking-->
@@ -364,5 +405,13 @@
   }
 
 </script>
+
+<!-- Mina Bokningar Sektion -->
+<h2 style="margin-top: 60px; font-size: 24px; color: #144953;">Mina bokningar</h2>
+<div id="myBookings" style="max-width: 700px; width: 100%; margin-top: 20px;"></div>
+
+
+
+
 </body>
 </html>
