@@ -411,7 +411,88 @@ header {
 <div id="myBookings" style="max-width: 700px; width: 100%; margin-top: 20px;"></div>
 
 
+<script> // Hämta användarens bokningar
+  function loadMyBookings() {
+  // Testdata – används endast för att visa gränssnittet innan backend är klar
+  const testBookings = [
+    { id: 1, date: "2025-05-10", label: "08:00 - 10:00", notes: "Morgonpass" },
+    { id: 2, date: "2025-05-12", label: "14:00 - 16:00", notes: "Eftermiddag" }
+  ];
+  displayBookings(testBookings);
+}
 
+function displayBookings(bookings) {
+  const container = document.getElementById("myBookings");
+  container.innerHTML = "";
+
+  if (bookings.length === 0) {
+    container.innerHTML = "<p>Du har inga bokningar ännu.</p>";
+    return;
+  }
+
+  bookings.forEach(booking => {
+    const bookingCard = document.createElement("div");
+    bookingCard.className = "time-slot";
+    bookingCard.innerHTML = `
+      <div>
+        <strong>Datum:</strong> ${booking.date} <br>
+        <strong>Tid:</strong> ${booking.label} <br>
+        <strong>Notering:</strong> ${booking.notes || "-"}
+      </div>
+      <div>
+        <button onclick="deleteBooking(${booking.id})" style="background-color: #c0392b;">Ta bort</button>
+        <button onclick="editBooking(${booking.id})" style="background-color: #0097b2;">Ändra</button>
+      </div>
+    `;
+    container.appendChild(bookingCard);
+  });
+}
+
+function deleteBooking(id) {
+  alert("Borttagning är inte aktiverad i testläget.");
+}
+
+function editBooking(id) {
+  alert("Redigering är inte aktiverad i testläget.");
+}
+
+document.addEventListener("DOMContentLoaded", loadMyBookings);
+
+  
+
+
+
+  
+  // Ta bort bokning
+  function deleteBooking(id) {
+    if (!confirm("Är du säker på att du vill ta bort bokningen?")) return;
+    fetch(`/u/laundry-booking/delete?id=${id}`, { method: "DELETE" })
+      .then(res => {
+        if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
+        loadMyBookings();
+      })
+      .catch(err => alert("Fel vid borttagning: " + err.message));
+  }
+  
+  // Ändra bokning (endast notering)
+  function editBooking(id) {
+    const newNote = prompt("Ange ny notering:");
+    if (newNote === null) return;
+    fetch(`/u/laundry-booking/update`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ id, notes: newNote })
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Kunde inte uppdatera bokningen");
+        loadMyBookings();
+      })
+      .catch(err => alert("Fel vid uppdatering: " + err.message));
+  }
+  
+  // Ladda bokningar när sidan öppnas
+  document.addEventListener("DOMContentLoaded", loadMyBookings);
+  </script>
 
 </body>
 </html>
