@@ -4,7 +4,6 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import com.grannsnack.GrannSnack.Service.DBForumService;
 import com.grannsnack.GrannSnack.Service.DBUserService;
-import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.sql.Timestamp;
+import java.util.List;
 
 @Controller
 public class ForumController {
@@ -32,7 +31,7 @@ public class ForumController {
     }
 
     @PostMapping("/u/forum/create")
-    public ResponseEntity<String> posting(@RequestBody Post post, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<String> posting(@RequestBody Post post , @AuthenticationPrincipal UserDetails userDetails) {
         String userEmail = userDetails.getUsername();
         MyUser user = dbUserService.getUserByEmail(userEmail);
         boolean ok = dbForumService.createPost(post.getPostTitle(), post.getPostContent(), user);
@@ -53,6 +52,35 @@ public class ForumController {
         } else {
             dbForumService.deletePostById(newPost.getPostId());
             return ResponseEntity.status(HttpStatus.OK).body("Post deleted");
+        }
+    }
+
+    @GetMapping("/u/forum/posts")
+    @ResponseBody
+    public ResponseEntity<List<Post>> fetchPosts(@RequestParam(required = false) Timestamp fromDate,
+                                           @RequestParam(required = false) Timestamp toDate) {
+
+        if(fromDate == null || toDate == null) {
+            if(fromDate == null && toDate == null) {
+                Timestamp now = new Timestamp(System.currentTimeMillis());
+
+                fromDate = now;
+
+                toDate = Timestamp.valueOf(now.toLocalDateTime().plusWeeks(1));
+            }
+            if(fromDate == null) {
+                fromDate = Timestamp.valueOf(toDate.toLocalDateTime().minusWeeks(1));
+            } else {
+                toDate = Timestamp.valueOf(fromDate.toLocalDateTime().plusWeeks(1));
+            }
+        }
+
+        List<Post> posts = dbForumService.getRecentPosts(fromDate, toDate);
+
+        if(posts.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(posts);
         }
     }
 
