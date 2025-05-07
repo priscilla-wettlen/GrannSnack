@@ -6,6 +6,7 @@ public class ForumDTO {
 
     private String username;
 
+
     public ForumDTO(Post post, String userName) {
         this.post = post;
         this.username = userName;

@@ -47,7 +47,6 @@ public class HTTPSecurityConfig{
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll())
-
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(customCorsConfig))
                 .build();
