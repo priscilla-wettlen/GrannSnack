@@ -1,5 +1,6 @@
 package com.grannsnack.GrannSnack.WebController;
 
+import com.grannsnack.GrannSnack.Model.ForumDTO;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import com.grannsnack.GrannSnack.Service.DBForumService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ForumController {
@@ -57,8 +59,8 @@ public class ForumController {
 
     @GetMapping("/u/forum/posts")
     @ResponseBody
-    public ResponseEntity<List<Post>> fetchPosts(@RequestParam(required = false) Timestamp fromDate,
-                                           @RequestParam(required = false) Timestamp toDate) {
+    public ResponseEntity<List<ForumDTO>> fetchPosts(@RequestParam(required = false) Timestamp fromDate,
+                                                     @RequestParam(required = false) Timestamp toDate) {
 
         if(fromDate == null || toDate == null) {
             if(fromDate == null && toDate == null) {
@@ -75,7 +77,7 @@ public class ForumController {
             }
         }
 
-        List<Post> posts = dbForumService.getRecentPosts(fromDate, toDate);
+        List<ForumDTO> posts = dbForumService.getRecentPosts(fromDate, toDate);
 
         if(posts.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);

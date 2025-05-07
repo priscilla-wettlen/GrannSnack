@@ -368,11 +368,14 @@
       });
     }
 
-    function renderPosts(posts) {
+    function renderPosts(forumDTOs) {
       const postContainer = document.getElementById('posts');
       postContainer.innerHTML = '';
 
-      posts.forEach(post => {
+      forumDTOs.forEach(dto => {
+        const post = dto.post;
+        const username = dto.username;
+
         const postDate = new Date(post.postDate);
         const formattedDate = postDate.toLocaleDateString('sv-SE') + ' ' +
                               postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
@@ -386,7 +389,7 @@
             </div>
             <div class="information">
                 <h2 class="title">${post.postTitle}</h2>
-                <p class="name-date">Användare #${post.postAuthorID} - ${formattedDate}</p>
+                <p class="name-date">${username} - ${formattedDate}</p>
             </div>
         </div>
         <div class="content">${post.postContent}</div>
