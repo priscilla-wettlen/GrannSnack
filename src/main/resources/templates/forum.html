@@ -435,7 +435,7 @@
         console.log("Post ID:", post.postId, "isUsers value:", dto.isUsers);
 
         const isUserPost = dto.isUsers !== undefined ? dto.isUsers : dto.users;
-
+        const username = user.userName ? user.userName : 'Anonym';
         const initial = user.userName ? user.userName.charAt(0) : '?';
 
         const postDate = new Date(dto.post.postDate);
