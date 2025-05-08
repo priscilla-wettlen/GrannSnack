@@ -61,7 +61,6 @@ public class ForumController {
     @ResponseBody
     public ResponseEntity<List<ForumDTO>> fetchPosts(@RequestParam(required = false) Timestamp fromDate,
                                                      @RequestParam(required = false) Timestamp toDate) {
-
         if(fromDate == null || toDate == null) {
             if(fromDate == null && toDate == null) {
                 Timestamp now = new Timestamp(System.currentTimeMillis());
