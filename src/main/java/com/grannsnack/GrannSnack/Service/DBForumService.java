@@ -53,7 +53,7 @@ public class DBForumService {
         posts.sort((p1, p2) -> p2.getPostDate().compareTo(p1.getPostDate()));
 
         for(Post post : posts) {
-            postsDTO.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID()).getUserName()));
+            postsDTO.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID())));
         }
 
         return postsDTO;

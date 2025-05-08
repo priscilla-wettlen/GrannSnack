@@ -8,6 +8,8 @@ import com.grannsnack.GrannSnack.Service.DBUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -60,7 +62,13 @@ public class ForumController {
     @GetMapping("/u/forum/posts")
     @ResponseBody
     public ResponseEntity<List<ForumDTO>> fetchPosts(@RequestParam(required = false) Timestamp fromDate,
-                                                     @RequestParam(required = false) Timestamp toDate) {
+                                                     @RequestParam(required = false) Timestamp toDate,
+                                                     Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("User is not authenticated");
+        }
+
         if(fromDate == null || toDate == null) {
             if(fromDate == null && toDate == null) {
                 Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -77,6 +85,21 @@ public class ForumController {
         }
 
         List<ForumDTO> posts = dbForumService.getRecentPosts(fromDate, toDate);
+
+        //String UserEmail = authentication.getName();
+        String userEmail = null;
+        Object principle = authentication.getPrincipal();
+        if(principle instanceof UserDetails) {
+            userEmail = ((UserDetails)principle).getUsername();
+        }
+
+        for(ForumDTO post : posts) {
+            if(post.getMyUser().getUserEmail().equals(userEmail)) {
+                post.setIsUsers(true);
+            } else {
+                post.setIsUsers(false);
+            }
+        }
 
         if(posts.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
