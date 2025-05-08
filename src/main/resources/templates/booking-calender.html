@@ -421,35 +421,49 @@ header {
   displayBookings(testBookings);
 }
 
-function displayBookings(bookings) {
-  const container = document.getElementById("myBookings");
-  container.innerHTML = "";
+function displayBookings(bookingsArray) {
+  fetch("/u/laundry-booking/bookings", {
+    method: "GET",
+    credentials: "include"
+  }).then(res => {
+    if (!res.ok) throw new Error("Booking failed");
+    return res.json();
+  })
+          .then(bookings => {
+            let bookingsContainer = document.getElementById("myBookings");
+            bookingsContainer.innerHTML = '';
 
-  if (bookings.length === 0) {
-    container.innerHTML = "<p>Du har inga bokningar ännu.</p>";
-    return;
-  }
+            if (bookings.length === 0) {
+              bookingsContainer.innerHTML = "<p>Du har inga bokningar ännu.</p>";
+              return;
+            }
 
-  bookings.forEach(booking => {
-    const bookingCard = document.createElement("div");
-    bookingCard.className = "time-slot";
-    bookingCard.innerHTML = `
-      <div>
-        <strong>Datum:</strong> ${booking.date} <br>
-        <strong>Tid:</strong> ${booking.label} <br>
-        <strong>Notering:</strong> ${booking.notes || "-"}
-      </div>
-      <div>
-        <button onclick="deleteBooking(${booking.id})" style="background-color: #c0392b;">Ta bort</button>
-        <button onclick="editBooking(${booking.id})" style="background-color: #0097b2;">Ändra</button>
-      </div>
-    `;
-    container.appendChild(bookingCard);
-  });
+            bookings.forEach(booking => {
+              const bookingCard = document.createElement("div");
+              bookingCard.className = "time-slot";
+              bookingCard.innerHTML = `
+                <div>
+                    <strong>Datum:</strong> ${booking.date} <br>
+                    <strong>Tid:</strong> ${booking.label} <br>
+                    <strong>Notering:</strong> ${booking.notes || "-"}
+                </div>
+                <div>
+                    <button onclick="deleteBooking(${booking.id})" style="background-color: #c0392b;">Ta bort</button>
+                    <button onclick="editBooking(${booking.id})" style="background-color: #0097b2;">Ändra</button>
+                </div>
+                `;
+                bookingsContainer.appendChild(bookingCard);
+            });
+
+          })
+          .catch(error => {
+            alert(error.message);
+          });
+
 }
 
 function deleteBooking(id) {
-  alert("Borttagning är inte aktiverad i testläget.");
+  //document.getElementById()
 }
 
 function editBooking(id) {
