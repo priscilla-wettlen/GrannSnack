@@ -394,10 +394,16 @@
 
       forumDTOs.forEach(dto => {
         const post = dto.post;
-        const username = dto.username;
-        const initial = username.charAt(0);
+        const user = dto.myUser;
+        const isUsers = dto.isUsers;
 
-        const postDate = new Date(post.postDate);
+        console.log("Post ID:", post.postId, "isUsers value:", dto.isUsers);
+
+        const isUserPost = dto.isUsers !== undefined ? dto.isUsers : dto.users;
+
+        const initial = user.userName ? user.userName.charAt(0) : '?';
+
+        const postDate = new Date(dto.post.postDate);
         const formattedDate = postDate.toLocaleDateString('sv-SE') + ' • ' +
                               postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
 
@@ -409,23 +415,62 @@
                 <p style="font-weight:bold">${initial}</p>
             </div>
             <div class="information">
-                <h2 class="title">${post.postTitle} <span style="display: flex; gap: 8px;"><i class="fa-regular fa-trash-can fa-xs" style="color:#ff4d4f; margin-bottom:-10px; cursor:pointer;"></i><i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;"></i></span></h2>
-                <p class="name-date">${username} • ${formattedDate}</p>
+                <h2 class="title">${dto.post.postTitle}
+                    <span style="display: flex; gap: 8px;">
+                        ${isUserPost === true ? `
+                            <i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${post.postId})"
+                            style="color:#ff4d4f; cursor:pointer;"></i>
+                        ` : ''}
+                        <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;"></i>
+                      </span>
+                </h2>
+                <p class="name-date">${user.userName} • ${formattedDate}</p>
             </div>
         </div>
         <div class="content">${post.postContent}</div>
-        ${post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}
+        ${dto.post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}
         `;
         postContainer.appendChild(postElement);
       });
     }
   });
 
-
-  function showPopup(message) {
+  window.showPopup = function(message) {
     const popup = document.getElementById('popup-posted');
     popup.textContent = message;
     popup.style.display = 'block';
+
+    setTimeout(() => {
+      popup.style.display = 'none';
+    }, 3000);
+  };
+
+  window.deletePost = function(postId) {
+    if(!confirm('Är du säker på att du vill ta bort detta inlägg?')) {
+      return;
+    }
+
+    fetch(`/u/forum/delete`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        postId: postId
+      })
+    })
+    .then(res => {
+      if(res.ok) {
+        showPopup('Inlägget har tagits bort');
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        showPopup('Något gick fel, prova igen senare')
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      showPopup('Något gick fel, prova igen senare')
+    })
   }
 </script>
 <div id="popup-posted"></div>

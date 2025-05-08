@@ -4,12 +4,13 @@ public class ForumDTO {
 
     private Post post;
 
-    private String username;
+    private MyUser user;
 
+    private boolean isUsers = false;
 
-    public ForumDTO(Post post, String userName) {
+    public ForumDTO(Post post, MyUser user) {
         this.post = post;
-        this.username = userName;
+        this.user = user;
     }
 
     public Post getPost() {
@@ -20,11 +21,19 @@ public class ForumDTO {
         this.post = post;
     }
 
-    public String getUsername() {
-        return username;
+    public MyUser getMyUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setMyUser(MyUser user) {
+        this.user = user;
+    }
+
+    public boolean isUsers() {
+        return isUsers;
+    }
+
+    public void setIsUsers(boolean users) {
+        isUsers = users;
     }
 }
