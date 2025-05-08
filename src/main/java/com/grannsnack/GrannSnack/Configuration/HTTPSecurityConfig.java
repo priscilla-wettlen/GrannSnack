@@ -32,9 +32,9 @@ public class HTTPSecurityConfig{
                 .authorizeHttpRequests(registry -> {
                     //registry.requestMatchers("/u/laundry-booking/availability").permitAll();
                     //registry.requestMatchers("/u/laundry-booking/create").permitAll();//access laundry booking without logging in
-                    registry.requestMatchers("/u/**").hasRole("USER");
+                    registry.requestMatchers("/u/**", "/default").hasRole("USER");
                     registry.requestMatchers("/a/**").hasRole("ADMIN");
-                    registry.requestMatchers("/", "/home", "/login", "/register", "/index", "/default").permitAll();
+                    registry.requestMatchers("/", "/home", "/login", "/register", "/index").permitAll();
                     registry.requestMatchers("/error", "/error/**").permitAll();
                     //registry.anyRequest().authenticated(); // or authenticated(), depending on your intent
                 })
