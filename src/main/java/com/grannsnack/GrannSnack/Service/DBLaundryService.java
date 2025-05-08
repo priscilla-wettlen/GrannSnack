@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,23 @@ public class DBLaundryService {
         booking.setCreatedAt(LocalDateTime.now());
         booking.setUserId(userId);
         laundryInterface.save(booking);
+    }
+
+    public Booking deleteBooking(int timeSlotId, int userId) {
+        Optional<Booking> optionalBooking = laundryInterface.findById(timeSlotId);
+
+        if (optionalBooking.isPresent()) {
+            Booking booking = optionalBooking.get();
+
+            if (booking.getUserId() == userId) {
+                laundryInterface.deleteById(timeSlotId);
+            } else {
+                throw new SecurityException("Error: Du får bara radera dina egna tider!");
+            }
+        } else {
+            throw new IllegalArgumentException("Bokning hittades inte!.");
+        }
+        return optionalBooking.get();
     }
 
     public int getUserIdByEmail(String userEmail) {
