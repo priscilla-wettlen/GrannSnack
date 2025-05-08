@@ -213,7 +213,44 @@
       font-size: 16px;
       line-height: 1.5;
     }
-
+    .comment-buttons input[type="text"]{
+      width:80%;
+      padding: 8px 12px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+    }
+    .comment-buttons input[type="submit"]{
+    	width:20%;
+      background: #10B781;
+      color: white;
+      border:none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .comment-buttons input[type="submit"]:hover{
+      background: #82cab4;
+    }
+    .comment-buttons{
+      display:flex;
+      gap: 14px;
+      margin-bottom:20px;
+    }
+    .comment-section .information{
+      width:80%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      background: #f0f4fa;
+      color:#a2aab9;
+    }
+    .comment-section .information p{
+      margin-top:10px;
+    }
+    .comment-section{
+      display: flex;
+    }
     @media (max-width: 1200px) {
       .container {
         gap: 24px;
@@ -288,7 +325,6 @@
   </style>
 </head>
 <body>
-
     <header>
         <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
         <nav class="nav">
@@ -296,7 +332,6 @@
           <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #f38183;"></i></i></a>
         </nav>
     </header>
-
   <div class="container">
     <div class="aside-row">
       <aside>
@@ -428,7 +463,21 @@
             </div>
         </div>
         <div class="content">${post.postContent}</div>
-        ${dto.post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}
+        
+        <hr style="margin:20px 0px; color:#D3D3D3; border-top:none;">
+
+        <div class="comment-buttons">            
+          <input type="text" name="comment" id="comment" placeholder="Skriv en kommentar...">
+          <input type="submit" name="send-comment" id="send-comment">
+        </div>
+        <div class="comment-section">
+          <div class="avatar" style="height:30px; width:30px; font-size:11px;">
+              <p>${initial}</p>
+          </div>
+          <div class="information"><div class="name-date"><span class="name-date" style="font-size:14px; color:black;">${username} • ${formattedDate}</span></div><p>${post.postContent}</p>
+        </div>
+        </div>
+        ${post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}
         `;
         postContainer.appendChild(postElement);
       });
