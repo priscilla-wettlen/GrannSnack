@@ -252,6 +252,18 @@
         margin-top: 0;
       }
     }
+    #popup-posted{
+      display: none;
+      position: fixed;
+      top: 32px;
+      right: 32px;
+      background: #10B781;
+      color: #fff;
+      padding: 18px 32px;
+      border-radius: 10px;
+      font-size: 18px;
+      box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.15);
+    }
 
     @media (max-width: 600px) {
       .container {
@@ -316,8 +328,8 @@
                         .then(res => {
                           if(res.status === 201) {
                             document.getElementById('postForm').reset();
-                            alert('Inlägg publicerat!');
-                            window.location.reload();
+                            showPopup('Inlägget har publicerats');
+                            setTimeout(() => window.location.reload(), 1500);
                           } else {
                             alert('Något gick fel!');
                           }
@@ -329,7 +341,7 @@
             </script>
           <div class="post-btns">
             <input type="file" id="imageUpload" accept="image/*" style="display:none;">
-            <label for="imageUpload" class="upload-btn">Ladda up bild</label>
+            <label for="imageUpload" class="upload-btn">Ladda bild</label>
             <input type="submit" value="Publicera">
           </div>
         </form>
@@ -397,7 +409,7 @@
                 <p style="font-weight:bold">${initial}</p>
             </div>
             <div class="information">
-                <h2 class="title">${post.postTitle} <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; margin-bottom:-10px; cursor:pointer;"></i></h2>
+                <h2 class="title">${post.postTitle} <span style="display: flex; gap: 8px;"><i class="fa-regular fa-trash-can fa-xs" style="color:#ff4d4f; margin-bottom:-10px; cursor:pointer;"></i><i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;"></i></span></h2>
                 <p class="name-date">${username} • ${formattedDate}</p>
             </div>
         </div>
@@ -408,7 +420,14 @@
       });
     }
   });
-</script>
 
+
+  function showPopup(message) {
+    const popup = document.getElementById('popup-posted');
+    popup.textContent = message;
+    popup.style.display = 'block';
+  }
+</script>
+<div id="popup-posted"></div>
 </body>
 </html>
