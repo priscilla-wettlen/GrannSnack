@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calendar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/40282c7580.js" crossorigin="anonymous"></script>
   <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+   
+    }
     body {
-      font-family: 'Quicksand', 'Inter',sans-serif;
+      font-family: , 'Inter',sans-serif;
       background-color: #ffffff;
       color: #0097b2;
       display: flex;
@@ -134,43 +147,90 @@
       border: 1px solid #a6a6a6;
       background-color: transparent;
     }
+/* Header style */
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 30px 20px 0;
-    }
-    .logo {
-      font-size: 18px;
-      font-weight: bold;
-      letter-spacing: -0.5px;
-    }
-    .logo-link {
-      text-decoration: none;
-      color: black;
-    }
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: #1a202c;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .nav-link.logout {
-      color: #ff4d4f;
-      font-weight: 500;
-      gap: 7px;
-    }
-    .nav-link.logout:hover {
-      color: #d9363e;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 38px;
+  background: #fff;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  background: linear-gradient(90deg, #10B781, #0D9688);
+  background-clip: text;
+  color: transparent;
+  cursor: pointer;
+}
+
+.logo-link {
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: #1a202c;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-link.logout {
+  color: #ff4d4f;
+  font-weight: 500;
+  
+}
+
+.nav-link.logout:hover {
+  color: #d9363e;
+  cursor: pointer;
+}
+
+/* Mina bookning del */
+
+.time-slot {
+  background-color: #f9f7fb;
+  border: 1px solid #a6a6a6;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #000000;
+}
+
+.time-slot button {
+  background-color: #144953;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+}
+
+.time-slot button:hover {
+  background-color: #0097b2;
+}
+
+    
 
 
 
@@ -180,10 +240,14 @@
   <header>
     <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
     <nav class="nav">
-      <a href="#" class="nav-link">Profil</a>
-      <a th:href="@{/logout}" class="nav-link logout">Logga ut</a>
+      <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
+      <a th:href="@{/logout}" class="nav-link logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </a>
     </nav>
   </header>
+  
+  
 
 <!--The box containing color-coded keys for the time booking-->
 <h1>Välja tvättid</h1>
@@ -230,7 +294,7 @@
     if (!selectedDate) return alert("Please select a date");
 
     //API call to availability endpoint to check the available times on that specific date
-    fetch(`http://localhost:8080/u/laundry-booking/availability?date=${selectedDate}`)
+    fetch(`http://127.0.0.1:8080/u/laundry-booking/availability?date=${selectedDate}`)
             .then(res => {
               if (!res.ok) throw new Error("Network error");
 
@@ -341,5 +405,94 @@
   }
 
 </script>
+
+<!-- Mina Bokningar Sektion -->
+<h2 style="margin-top: 60px; font-size: 24px; color: #144953;">Mina bokningar</h2>
+<div id="myBookings" style="max-width: 700px; width: 100%; margin-top: 20px;"></div>
+
+
+<script> // Hämta användarens bokningar
+  function loadMyBookings() {
+  // Testdata – används endast för att visa gränssnittet innan backend är klar
+  const testBookings = [
+    { id: 1, date: "2025-05-10", label: "08:00 - 10:00", notes: "Morgonpass" },
+    { id: 2, date: "2025-05-12", label: "14:00 - 16:00", notes: "Eftermiddag" }
+  ];
+  displayBookings(testBookings);
+}
+
+function displayBookings(bookings) {
+  const container = document.getElementById("myBookings");
+  container.innerHTML = "";
+
+  if (bookings.length === 0) {
+    container.innerHTML = "<p>Du har inga bokningar ännu.</p>";
+    return;
+  }
+
+  bookings.forEach(booking => {
+    const bookingCard = document.createElement("div");
+    bookingCard.className = "time-slot";
+    bookingCard.innerHTML = `
+      <div>
+        <strong>Datum:</strong> ${booking.date} <br>
+        <strong>Tid:</strong> ${booking.label} <br>
+        <strong>Notering:</strong> ${booking.notes || "-"}
+      </div>
+      <div>
+        <button onclick="deleteBooking(${booking.id})" style="background-color: #c0392b;">Ta bort</button>
+        <button onclick="editBooking(${booking.id})" style="background-color: #0097b2;">Ändra</button>
+      </div>
+    `;
+    container.appendChild(bookingCard);
+  });
+}
+
+function deleteBooking(id) {
+  alert("Borttagning är inte aktiverad i testläget.");
+}
+
+function editBooking(id) {
+  alert("Redigering är inte aktiverad i testläget.");
+}
+
+document.addEventListener("DOMContentLoaded", loadMyBookings);
+
+  
+
+
+
+  
+  // Ta bort bokning
+  function deleteBooking(id) {
+    if (!confirm("Är du säker på att du vill ta bort bokningen?")) return;
+    fetch(`/u/laundry-booking/delete?id=${id}`, { method: "DELETE" })
+      .then(res => {
+        if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
+        loadMyBookings();
+      })
+      .catch(err => alert("Fel vid borttagning: " + err.message));
+  }
+  
+  // Ändra bokning (endast notering)
+  function editBooking(id) {
+    const newNote = prompt("Ange ny notering:");
+    if (newNote === null) return;
+    fetch(`/u/laundry-booking/update`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ id, notes: newNote })
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Kunde inte uppdatera bokningen");
+        loadMyBookings();
+      })
+      .catch(err => alert("Fel vid uppdatering: " + err.message));
+  }
+  
+  // Ladda bokningar när sidan öppnas
+  document.addEventListener("DOMContentLoaded", loadMyBookings);
+  </script>
+
 </body>
 </html>

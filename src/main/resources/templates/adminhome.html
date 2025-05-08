@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
@@ -7,5 +7,148 @@
 <body>
 <h1>Admin Homepage</h1><hr>
 <p>Welcome to the Admin Home Page</p>
+
+<div id="user-container"></div>
+<div id="user-item"></div>
+
+<div id="post-container"></div>
+<div id="post-item"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        getAllUsers();
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        getAllPosts();
+    });
+
+    function getAllUsers(){
+        fetch("http://127.0.0.1:8080/a/home/users", {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => {
+                if(!res.ok) throw new Error("Error: Användarlistan kunde inte hämtas.");
+                return res.json();
+            })
+            .then(users => {
+                const userContainer = document.getElementById("user-container");
+                userContainer.innerHTML = "";
+
+                let userContainerTitle = document.createElement("H3");
+                userContainerTitle.innerText = "Registrerade användarna";
+                userContainer.appendChild(userContainerTitle);
+
+                users.forEach(user => {
+                    const userItem = document.createElement("div");
+                    userItem.className = "user-item";
+                    userItem.textContent = `User: ${user.id} ${user.userName} ${user.userEmail} ${user.role}`;
+
+                    // Delete user button
+                    const deleteUserBtn = document.createElement('button');
+                    deleteUserBtn.textContent = 'Delete';
+                    deleteUserBtn.addEventListener("click", () => {
+                        deleteUser(user.id);
+                    });
+
+                    userItem.appendChild(deleteUserBtn);
+                    userContainer.appendChild(userItem);
+                });
+            })
+            .catch(error => {
+                console.error("Failed to fetch users:", error);
+                const userContainer = document.getElementById("user-container");
+                userContainer.innerHTML = `<p>Error loading users: ${error.message}</p>`;
+            });
+    }
+
+
+    function deleteUser(id) {
+        fetch(`/a/home/delete-user/${id}`, {
+            method: "DELETE",
+            credentials: "include"
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Error: Användaren kunde inte raderas.");
+                return res.text();
+            })
+            .then(message => {
+                alert(`Användaren med id ${id} har raderats!`);
+                getAllUsers();
+            })
+            .catch(error => {
+                console.error("Failed to delete user:", error);
+                const userContainer = document.getElementById("user-container");
+                userContainer.innerHTML = `<p>Error deleting user: ${error.message}</p>`;
+            });
+    }
+
+
+    function getAllPosts(){
+        fetch("http://127.0.0.1:8080/u/forum/posts", {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => {
+                if(!res.ok) throw new Error("Error: Postlistan kunde inte hämtas.");
+                return res.json();
+            })
+            .then(posts => {
+                const postContainer = document.getElementById("post-container");
+                postContainer.innerHTML = "";
+
+                let postContainerTitle = document.createElement("H3");
+                postContainerTitle.innerText = "Publicerade inlägg";
+                postContainer.appendChild(postContainerTitle);
+
+                posts.forEach(forumDTO => {
+                    const post = forumDTO.post;
+
+                    const postItem = document.createElement("div");
+                    postItem.className = "post-item";
+
+                    postItem.textContent = `Post: ${post.postId} ${post.postDate} ${post.postAuthorID} ${post.postTitle} ${post.postContent} ${post.postImage}`;
+
+                    // Delete post button
+                    const deletePostBtn = document.createElement('button');
+                    deletePostBtn.textContent = 'Delete';
+                    deletePostBtn.addEventListener("click", () => {
+                        deletePost(post.postId);
+                    });
+
+                    postItem.appendChild(deletePostBtn);
+                    postContainer.appendChild(postItem);
+                });
+            })
+            .catch(error => {
+                console.error("Failed to fetch users:", error);
+                const postContainer = document.getElementById("post-container");
+                postContainer.innerHTML = `<p>Error loading posts: ${error.message}</p>`;
+            });
+    }
+
+    function deletePost(postId) {
+        fetch(`http://127.0.0.1:8080/a/home/posts/${postId}`, {
+            method: "DELETE",
+            credentials: "include"
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Error: Inlägg kunde inte raderas.");
+                return res.text();
+            })
+            .then(message => {
+                alert(`Inlägget med id ${postId} har raderats!`);
+                getAllPosts();
+            })
+            .catch(error => {
+                console.error("Failed to delete post:", error);
+                const userContainer = document.getElementById("user-container");
+                userContainer.innerHTML = `<p>Error deleting post: ${error.message}</p>`;
+            });
+    }
+
+
+</script>
 </body>
 </html>

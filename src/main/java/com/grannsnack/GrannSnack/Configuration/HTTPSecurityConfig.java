@@ -20,23 +20,25 @@ import org.springframework.security.web.SecurityFilterChain;
 public class HTTPSecurityConfig{
 
     @Autowired
-    MyUserDetailsService userDetailService;
+    MyUserDetailsService userDetailsService;
 
     @Autowired CustomCorsConfig customCorsConfig;
 
 
     @Bean
-
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(registry -> {
                     //registry.requestMatchers("/u/laundry-booking/availability").permitAll();
                     //registry.requestMatchers("/u/laundry-booking/create").permitAll();//access laundry booking without logging in
                     registry.requestMatchers("/u/**", "/default").hasRole("USER");
+                    //registry.requestMatchers("/a/home/users").permitAll();
+
+                    registry.requestMatchers("/u/**").hasRole("USER");
                     registry.requestMatchers("/a/**").hasRole("ADMIN");
                     registry.requestMatchers("/", "/home", "/login", "/register", "/index").permitAll();
                     registry.requestMatchers("/error", "/error/**").permitAll();
-                    //registry.anyRequest().authenticated(); // or authenticated(), depending on your intent
+                    registry.anyRequest().authenticated();
                 })
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
@@ -46,7 +48,6 @@ public class HTTPSecurityConfig{
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll())
-
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(customCorsConfig))
                 .build();
@@ -54,7 +55,7 @@ public class HTTPSecurityConfig{
 
     @Bean
     public MyUserDetailsService userDetailsService() {
-        return userDetailService;
+        return userDetailsService;
     }
 
     @Bean

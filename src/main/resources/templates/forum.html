@@ -124,13 +124,17 @@
       align-items: center;
     }
     .post-btns input[type="submit"]{
-        background: #82cab4;
+        background: #10B781;
         color: white;
         padding:10px 20px;
         border:none;
         border-radius: 10px;
         width: 150px;
         cursor: pointer;
+    }
+    .post-btns input[type="submit"]:hover{
+      background: #82cab4;
+
     }
     .upload-btn{
         padding:10px 20px;
@@ -169,6 +173,10 @@
       font-size: 16px;
       box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.10);
       margin-bottom:10px;
+    }
+    .post h2{
+      display: flex;
+      justify-content: space-between;
     }
     .top-header{
       display: flex;
@@ -275,7 +283,7 @@
           <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
           <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #f38183;"></i></i></a>
         </nav>
-      </header>
+    </header>
 
   <div class="container">
     <div class="aside-row">
@@ -285,12 +293,43 @@
           <p>Dela information eller ställ en fråga till dina grannar</p>
           <form id="postForm">
           <div class="input-fields">
-            <input type="text" name="postTitle" id="postTitle" placeholder="Titel">
-            <textarea class="post-textarea" id="postContent" placeholder="Skriv in ditt inlägg..."></textarea>
+            <input type="text" name="postTitle" id="postTitle" placeholder="Titel" required>
+            <textarea class="post-textarea" id="postContent" placeholder="Skriv in ditt inlägg..." required></textarea>
           </div>
+            <script>
+              document.getElementById('postForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const title = document.getElementById('postTitle').value;
+                const content = document.getElementById('postContent').value;
+
+                fetch('/u/forum/create', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    postTitle: title,
+                    postContent: content
+                  })
+                })
+                        .then(res => {
+                          if(res.status === 201) {
+                            document.getElementById('postForm').reset();
+                            alert('Inlägg publicerat!');
+                            window.location.reload();
+                          } else {
+                            alert('Något gick fel!');
+                          }
+                        })
+                        .catch(err => {
+                          console.log(err);
+                        })
+              })
+            </script>
           <div class="post-btns">
             <input type="file" id="imageUpload" accept="image/*" style="display:none;">
-            <label for="imageUpload" class="upload-btn">Ladda bild</label>
+            <label for="imageUpload" class="upload-btn">Ladda up bild</label>
             <input type="submit" value="Publicera">
           </div>
         </form>
@@ -309,37 +348,67 @@
     </div>
     <div id="posts"></div>
   </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
 
-  <script>
-    document.getElementById('postForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    fetchPosts();
 
-      const title = document.getElementById('postTitle').value;
-      const content = document.getElementById('postContent').value;
-
-      fetch('/u/forum/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          postTitle: title,
-          postContent: content
-        })
-      })
+    function fetchPosts() {
+      fetch('/u/forum/posts')
       .then(res => {
-        if(res.status === 201) {
-          document.getElementById('postForm').reset();
-          alert('Inlägg publicerat!');
-          window.location.reload();
-        } else {
-          alert('Något gick fel!');
+        if(res.status === 204) {
+          document.getElementById('posts').innerHTML = '<div class="post"><p>Inga inlägg att visa.</p></div>';
+          return null;
+        }
+        if(!res.ok) {
+          throw new Error('Error fetching posts');
+        }
+        return res.json();
+      })
+      .then(data => {
+        if(data && data.length > 0) {
+          renderPosts(data);
         }
       })
       .catch(err => {
-        console.log(err);
-      })
-    })
-  </script>
+        console.error('Error fetching posts: ', err);
+        document.getElementById('posts').innerHTML = '<div class="post"><p>Kunde inte hämta inlägg. Försök igen senare.</p></div>\n'
+      });
+    }
+
+    function renderPosts(forumDTOs) {
+      const postContainer = document.getElementById('posts');
+      postContainer.innerHTML = '';
+
+      forumDTOs.forEach(dto => {
+        const post = dto.post;
+        const username = dto.username;
+        const initial = username.charAt(0);
+
+        const postDate = new Date(post.postDate);
+        const formattedDate = postDate.toLocaleDateString('sv-SE') + ' • ' +
+                              postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+        postElement.innerHTML = `
+        <div class="top-header">
+            <div class="avatar">
+                <p style="font-weight:bold">${initial}</p>
+            </div>
+            <div class="information">
+                <h2 class="title">${post.postTitle} <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; margin-bottom:-10px; cursor:pointer;"></i></h2>
+                <p class="name-date">${username} • ${formattedDate}</p>
+            </div>
+        </div>
+        <div class="content">${post.postContent}</div>
+        ${post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}
+        `;
+        postContainer.appendChild(postElement);
+      });
+    }
+  });
+</script>
+
 </body>
 </html>

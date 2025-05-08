@@ -72,7 +72,7 @@
       margin-bottom: 8px;
       color: #1a202c;
     }
-    input {
+    input{
       width: 100%;
       padding: 10px;
       border: 1px solid #ddd;
@@ -84,8 +84,16 @@
       outline: none;
       border-color: #1a202c;
     }
+    .selectbox{
+      width:100%;
+      padding:10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;     
+    }
     .btn {
-      background-color: #1a202c;
+      background-color: #10B781;
       color: #fff;
       border: none;
       padding: 12px 24px;
@@ -95,7 +103,7 @@
       width: 100%;
     }
     .btn:hover {
-      background-color: #333;
+      background-color: #82cab4;
     }
     .bottom {
       text-align: center;
@@ -152,7 +160,7 @@
 
         <div class="form-group">
           <label for="email">E-postadress</label>
-          <input type="email" id="email" name="email" placeholder="din.emai@gmail.com" required>
+          <input type="email" id="email" name="email" placeholder="din.e-postadress@gmail.com" required>
         </div>
 
         <div class="form-group">
@@ -163,14 +171,31 @@
         <div class="form-group">
           <label for="confirm-password">Bekräfta lösenord</label>
           <input type="password" id="confirm-password" name="confirm-password" placeholder="******" required>
-          <div id="pwMessage" class="errorMessage">Lösenordet matchar inte</div>
-          <div id="falseMessage" class="errorMessage">Email eller lösenordet är felaktigt. Försök igen</div>
-
         </div>
 
+        <div class="form-group">
+          <label for="unit">Förening</label>
+          <select name="unit" id="unit" class="selectbox" onChange="check(this);">
+            <option disabled selected value> -- Välj förening -- </option>
+            <option value="1">Förening 1</option>
+            <option value="2">Förening 2</option>
+            <option value="3">Förening 3</option>
+            <option value="4">Förening 4</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div id="hidden-selectbox" disabled="disabled" style="display:none;">
+            <label for="apartment">Lägenhetsnummer</label>
+            <select name="apartment" id="apartment" class="selectbox">
+            </select>
+          </div>
+          <div id="pwMessage" class="errorMessage">Lösenordet matchar inte</div>
+          <div id="falseMessage" class="errorMessage">Email eller lösenordet är felaktigt. Försök igen</div>
+        </div>
         <button type="submit" class="btn">Registrera</button>
       </form>
       <script>
+        
         document.addEventListener('DOMContentLoaded', function() {
           const msg = document.getElementById('falseMessage');
           const form = document.querySelector('form');
@@ -204,6 +229,49 @@
               return true;
           }
       }
+
+        function check(elem) {
+          var apartmentSelect = document.getElementById('apartment');
+          var hiddenSelectBox = document.getElementById('hidden-selectbox');
+            
+          hiddenSelectBox.style.display = "inline";
+      
+          if (elem.value == '1') {
+            apartmentSelect.innerHTML = `
+              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
+              <option>1101</option>
+              <option>1102</option>
+              <option>1103</option>
+              <option>1104</option>
+            `;
+          } else if (elem.value == '2') {
+            apartmentSelect.innerHTML = `
+              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
+              <option>1201</option>
+              <option>1202</option>
+              <option>1203</option>
+              <option>1204</option>
+            `;
+          } else if (elem.value == '3') {
+            apartmentSelect.innerHTML = `
+              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
+              <option>1301</option>
+              <option>1302</option>
+              <option>1303</option>
+              <option>1304</option>
+            `;
+          } else if (elem.value == '4') {
+            apartmentSelect.innerHTML = `
+              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
+              <option>1401</option>
+              <option>1402</option>
+              <option>1403</option>
+              <option>1404</option>
+            `;
+          } else {
+            hiddenSelectBox.style.display = 'none';
+          }
+        }      
     </script>
     </div>
 

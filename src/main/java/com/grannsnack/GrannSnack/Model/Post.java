@@ -2,6 +2,8 @@ package com.grannsnack.GrannSnack.Model;
 
 import jakarta.persistence.*;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 @Entity
 @Table(name="POST")
@@ -12,7 +14,7 @@ public class Post {
     private int id;
     @Column(name = "post_date", columnDefinition = "DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date postDate;
+    private Timestamp postDate;
     @Column(name = "post_author_id", columnDefinition = "INT NOT NULL")
     private int postAuthorID;
     @Column(name = "post_title", columnDefinition = "VARCHAR(255)")
@@ -30,11 +32,11 @@ public class Post {
         this.id = postId;
     }
 
-    public Date getPostDate() {
+    public Timestamp getPostDate() {
         return postDate;
     }
 
-    public void setPostDate(Date postDate) {
+    public void setPostDate(Timestamp postDate) {
         this.postDate = postDate;
     }
 
