@@ -1,154 +1,262 @@
 <!DOCTYPE html>
 <html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - GrannSnack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/40282c7580.js" crossorigin="anonymous"></script>
 </head>
+<style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body{
+        background: #f7fafd;
+        font-family: 'Inter', sans-serif;
+        color: #1a202c;
+      }
+      header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 38px 14px 38px;
+        background: #fff;
+        border-bottom: 1px solid #d9d9d9;
+      }
+      .logo{
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: -0.5px;
+        text-decoration: none;
+        background: linear-gradient(90deg, #10B781, #0D9688);
+        background-clip: text;
+        color: transparent;
+        cursor: pointer;
+      }
+      .logo-link{
+        text-decoration: none;
+      }
+      .nav{
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+      .nav-link{
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 16px;
+        color: #1a202c;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .nav-link.logout{
+        color: #ff4d4f;
+        font-weight: 500;
+        gap: 7px;
+      }
+      .nav-link.logout:hover{
+        color: #d9363e;
+        cursor: pointer;
+      }
+      .wrapper{
+        display: flex;
+        max-width: 1600px;
+        margin: 10px auto;
+      }
+      .sidebar, .main{
+        background: #fff;
+        border:1px solid #f0f0f0;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        border-radius: 10px;
+        min-height: 200px;
+        flex: 1;
+        margin:10px;
+      }
+      .sidebar{
+        max-width: 250px;
+        height: 400px;
+      }
+      .main{
+        padding:20px;
+      }
+      .top-header{
+        display: flex;
+        justify-content: space-between;
+      }
+      .top-header button{
+        background: #10B781;
+        color:white;
+        border: none;
+        border-radius: 10px;
+        padding:0px 20px;
+        height: 40px;
+        cursor: pointer;
+      }
+      .top-header i{
+        margin-right:15px;
+      }
+      .top-header-text p{
+        color:#707070;
+      }
+      .links{
+        margin:20px 12px;
+      }
+      .links a{
+        display:block;
+        padding:10px 20px;
+        text-decoration: none;
+        border-radius: 8px;
+        color:#4a4a4a;
+        margin:10px 0px;
+      }
+      .links i{
+        margin-right:25px;
+      }
+      #selected{
+        background-color: #48bc94;
+        border-radius: 8px;
+        color:white;
+      }
+      .table {
+        border-radius: 10px;
+        overflow-x:auto;    
+    }
+      .table table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+        background: #fff;
+      }
+      
+      .table th, .table td {
+        padding: 12px 16px;
+        text-align: left;
+        border: none;
+      }
+      
+      .table tr {
+        border-bottom: 1px solid #e0e0e0;
+        color:#616161
+      }
+      .table th {
+        font-weight: 600;
+        color: #918f8f;
+      }
+      
+      .table tr:last-child {
+        border-bottom: none;
+      }
+    
+      @media (max-width: 1100px){
+        .wrapper{
+          flex-direction: column;
+        }
+        .sidebar{
+          max-width: none;
+        }
+      }
+</style>
 <body>
-<h1>Admin Homepage</h1><hr>
-<p>Welcome to the Admin Home Page</p>
+  <header>
+    <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <nav class="nav">
+      <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
+      <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #f38183;"></i></a>
+    </nav>
+  </header>
 
-<div id="user-container"></div>
-<div id="user-item"></div>
+  <div class="wrapper">
+    <div class="sidebar">
+      <div class="links">
+        <a href="adminuser.html" id="selected"><i class="fa-regular fa-user" style="color: #fff;"></i>Användare</a>
+        <a href="adminforum.html"><i class="fa-regular fa-message" style="color: #4a4a4a;"></i>Forum</a>
+        <a href="adminlaudry.html"><i class="fa-regular fa-calendar" style="color: #4a4a4a;"></i>Tvättbokning</a>
+        <a href="adminmessage.html"><i class="fa-regular fa-star" style="color: #4a4a4a;"></i>Meddelande</a>
+      </div>
+    </div>
+    <div class="main">
+      <div class="top-header">
+        <span class="top-header-text">
+          <h1>Användare</h1>
+          <p>Hantera användare i systemet</p>
+        </span>
+        <button><a href="u/register"><i class="fa-regular fa-user" style="color: #fff;"></i>Lägg användare</a></button>
+      </div>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Förening</th>
+              <th>Lägenhetsnummer</th>
+              <th>E-postadress</th>
+              <th>Roll</th>
+              <th>Användarnamn</th>
+              <th>Radera</th>
+            </tr>
+          </thead>
+          <tbody id="user-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-<div id="post-container"></div>
-<div id="post-item"></div>
-
-<script>
+  <script>
     document.addEventListener("DOMContentLoaded", () => {
-        getAllUsers();
+      getAllUsers();
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-        getAllPosts();
-    });
-
-    function getAllUsers(){
+    function getAllUsers() {
         fetch("/a/home/users", {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(res => {
-                if(!res.ok) throw new Error("Error: Användarlistan kunde inte hämtas.");
-                return res.json();
-            })
-            .then(users => {
-                const userContainer = document.getElementById("user-container");
-                userContainer.innerHTML = "";
-
-                let userContainerTitle = document.createElement("H3");
-                userContainerTitle.innerText = "Registrerade användarna";
-                userContainer.appendChild(userContainerTitle);
-
-                users.forEach(user => {
-                    const userItem = document.createElement("div");
-                    userItem.className = "user-item";
-                    userItem.textContent = `User: ${user.id} ${user.userName} ${user.userEmail} ${user.role}`;
-
-                    // Delete user button
-                    const deleteUserBtn = document.createElement('button');
-                    deleteUserBtn.textContent = 'Delete';
-                    deleteUserBtn.addEventListener("click", () => {
-                        deleteUser(user.id);
-                    });
-
-                    userItem.appendChild(deleteUserBtn);
-                    userContainer.appendChild(userItem);
-                });
-            })
-            .catch(error => {
-                console.error("Failed to fetch users:", error);
-                const userContainer = document.getElementById("user-container");
-                userContainer.innerHTML = `<p>Error loading users: ${error.message}</p>`;
-            });
-    }
-
-
+          method: "GET",
+          credentials: "include"
+        });
+        .then(res => {
+          if (!res.ok) throw new Error("Error: Användarlistan kunde inte hämtas.");
+          return res.json();
+        });
+        .then(users => {
+          const userTableBody = document.getElementById("user-table-body");
+          userTableBody.innerHTML = "";
+      
+          users.forEach(user => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${user.id}</td>
+              <td>${user.association}</td>
+              <td>${user.apartmentCode}</td>
+              <td>${user.userEmail}</td>
+              <td>${user.role}</td>
+              <td>${user.userName}</td>
+              <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
+            `;
+            userTableBody.appendChild(row);
+          });
+        .catch(error => {
+          console.error("Failed to fetch users:", error);
+          const userTableBody = document.getElementById("user-table-body");
+          userTableBody.innerHTML = `<tr><td colspan="7">Error loading users: ${error.message}</td></tr>`;
+        });
+      }
     function deleteUser(id) {
-        fetch(`/a/home/delete-user/${id}`, {
-            method: "DELETE",
-            credentials: "include"
-        })
-            .then(res => {
-                if (!res.ok) throw new Error("Error: Användaren kunde inte raderas.");
-                return res.text();
-            })
-            .then(message => {
-                alert(`Användaren med id ${id} har raderats!`);
-                getAllUsers();
-            })
-            .catch(error => {
-                console.error("Failed to delete user:", error);
-                const userContainer = document.getElementById("user-container");
-                userContainer.innerHTML = `<p>Error deleting user: ${error.message}</p>`;
-            });
+      fetch(`/a/home/delete-user/${id}`, {
+        method: "DELETE",
+        credentials: "include"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Error: Användaren kunde inte raderas.");
+        alert(`Användaren med id ${id} har raderats!`);
+        getAllUsers();
+      })
+      .catch(error => {
+        console.error("Failed to delete user:", error);
+        alert(`Error deleting user: ${error.message}`);
+      });
     }
-
-
-    function getAllPosts(){
-        fetch("/a/home/posts", {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(res => {
-                if(!res.ok) throw new Error("Error: Postlistan kunde inte hämtas.");
-                return res.json();
-            })
-            .then(posts => {
-                const postContainer = document.getElementById("post-container");
-                postContainer.innerHTML = "";
-
-                let postContainerTitle = document.createElement("H3");
-                postContainerTitle.innerText = "Publicerade inlägg";
-                postContainer.appendChild(postContainerTitle);
-
-                posts.forEach(forumDTO => {
-                    const post = forumDTO.post;
-
-                    const postItem = document.createElement("div");
-                    postItem.className = "post-item";
-
-                    postItem.textContent = `Post: ${post.postId} ${post.postDate} ${post.postAuthorID} ${post.postTitle} ${post.postContent} ${post.postImage}`;
-
-                    // Delete post button
-                    const deletePostBtn = document.createElement('button');
-                    deletePostBtn.textContent = 'Delete';
-                    deletePostBtn.addEventListener("click", () => {
-                        deletePost(post.postId);
-                    });
-
-                    postItem.appendChild(deletePostBtn);
-                    postContainer.appendChild(postItem);
-                });
-            })
-            .catch(error => {
-                console.error("Failed to fetch users:", error);
-                const postContainer = document.getElementById("post-container");
-                postContainer.innerHTML = `<p>Error loading posts: ${error.message}</p>`;
-            });
-    }
-
-    function deletePost(postId) {
-        fetch(`/a/home/posts/${postId}`, {
-            method: "DELETE",
-            credentials: "include"
-        })
-            .then(res => {
-                if (!res.ok) throw new Error("Error: Inlägg kunde inte raderas.");
-                return res.text();
-            })
-            .then(message => {
-                alert(`Inlägget med id ${postId} har raderats!`);
-                getAllPosts();
-            })
-            .catch(error => {
-                console.error("Failed to delete post:", error);
-                const userContainer = document.getElementById("user-container");
-                userContainer.innerHTML = `<p>Error deleting post: ${error.message}</p>`;
-            });
-    }
-
-
-</script>
+  </script>
 </body>
 </html>

@@ -21,12 +21,10 @@ import java.util.List;
 public class AdminController {
     private final DBUserService dbUserService;
     private final DBForumService dbForumService;
-    private final DBForumInterface dbForumInterface;
 
-    public AdminController(DBUserService dbUserService, DBForumService dbForumService, DBForumInterface dbForumInterface) {
+    public AdminController(DBUserService dbUserService, DBForumService dbForumService) {
         this.dbUserService = dbUserService;
         this.dbForumService = dbForumService;
-        this.dbForumInterface = dbForumInterface;
     }
 
     @GetMapping("/users")
@@ -45,6 +43,11 @@ public class AdminController {
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<String> deleteUser (@PathVariable Integer id){
         MyUser userIdToDelete = dbUserService.removeUser(id);
+        List<Post> userPosts = dbForumService.findPostByPostAuthorID(userIdToDelete.getId());
+
+        for(Post post : userPosts) {
+            dbForumService.deletePostById(post.getPostId());
+        }
         if (userIdToDelete == null) {
             return ResponseEntity.notFound().build();
         }

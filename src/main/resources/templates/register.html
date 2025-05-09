@@ -20,18 +20,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 38px;
-      background-color: #0097b2;
-      
+      padding: 14px 38px 14px 38px;
+      background: #fff;
+      border-bottom: 1px solid #d9d9d9;
     }
     .logo {
       font-size: 24px;
       font-weight: bold;
-      color: #ffffff;
+      letter-spacing: -0.5px;
       text-decoration: none;
+      background: linear-gradient(90deg, #10B781, #0D9688);
+      background-clip: text;
+      color: transparent;
+      cursor: pointer;
     }
-      
-    
     .logo-link {
       text-decoration: none;
     }
@@ -39,18 +41,16 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 40px;
+      margin-top: 50px;
     }
     .register-container {
-      background: #ffffff;
+      background: white;
       padding: 32px;
       border-radius: 12px;
-      border: 1px solid #a6a6a6;
+      border: 1px solid #ddd;
       width: 100%;
       max-width: 400px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.04);
     }
-    
     h1 {
       font-size: 24px;
       margin-bottom: 8px;
@@ -177,10 +177,10 @@
           <label for="unit">Förening</label>
           <select name="unit" id="unit" class="selectbox" onChange="check(this);">
             <option disabled selected value> -- Välj förening -- </option>
-            <option value="1">Förening 1</option>
-            <option value="2">Förening 2</option>
-            <option value="3">Förening 3</option>
-            <option value="4">Förening 4</option>
+            <option value="Ekbacken">Ekbacken</option>
+            <option value="Rönnegården">Rönnegården</option>
+            <option value="LMK">LMK</option>
+            <option value="Pansarvägen">Pansarvägen</option>
           </select>
         </div>
         <div class="form-group">
@@ -197,7 +197,7 @@
       <script>
         
         document.addEventListener('DOMContentLoaded', function() {
-          const msg = document.getElementById('falseMessage');
+          const msg = document.getapartmentCodeElementById('falseMessage');
           const form = document.querySelector('form');
           
           if (window.location.search === '?error=true') {
@@ -236,38 +236,38 @@
             
           hiddenSelectBox.style.display = "inline";
       
-          if (elem.value == '1') {
-            apartmentSelect.innerHTML = `
-              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
-              <option>1101</option>
-              <option>1102</option>
-              <option>1103</option>
-              <option>1104</option>
-            `;
-          } else if (elem.value == '2') {
-            apartmentSelect.innerHTML = `
-              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
-              <option>1201</option>
-              <option>1202</option>
-              <option>1203</option>
-              <option>1204</option>
-            `;
-          } else if (elem.value == '3') {
-            apartmentSelect.innerHTML = `
-              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
-              <option>1301</option>
-              <option>1302</option>
-              <option>1303</option>
-              <option>1304</option>
-            `;
-          } else if (elem.value == '4') {
-            apartmentSelect.innerHTML = `
-              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
-              <option>1401</option>
-              <option>1402</option>
-              <option>1403</option>
-              <option>1404</option>
-            `;
+          if (elem.value == 'Ekbacken') {
+            let options = '<option disable selected value> -- Välj lägenhetsnummer -- </option>';
+
+            for(let i = 0; i < 10; i++) {
+              options +=`<option value="${110+i}">${110+i}</option>`
+            }
+
+            apartmentSelect.innerHTML = options;
+          } else if (elem.value == 'Rönnegården') {
+            let options = '<option disable selected value> -- Välj lägenhetsnummer -- </option>';
+
+            for(let i = 0; i < 10; i++) {
+              options +=`<option value="${110+i}">${110+i}</option>`
+            }
+
+            apartmentSelect.innerHTML = options;
+          } else if (elem.value == 'LMK') {
+            let options = '<option disable selected value> -- Välj lägenhetsnummer -- </option>';
+
+            for(let i = 0; i < 10; i++) {
+              options +=`<option value="${110+i}">${110+i}</option>`
+            }
+
+            apartmentSelect.innerHTML = options;
+          } else if (elem.value == 'Pansarvägen') {
+            let options = '<option disable selected value> -- Välj lägenhetsnummer -- </option>';
+
+            for(let i = 0; i < 10; i++) {
+              options +=`<option value="${110+i}">${110+i}</option>`
+            }
+
+            apartmentSelect.innerHTML = options;
           } else {
             hiddenSelectBox.style.display = 'none';
           }
