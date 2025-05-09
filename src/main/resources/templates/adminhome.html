@@ -86,7 +86,7 @@
 
 
     function getAllPosts(){
-        fetch("/u/forum/posts", {
+        fetch("a/home/posts", {
             method: "GET",
             credentials: "include"
         })
@@ -129,7 +129,7 @@
     }
 
     function deletePost(postId) {
-        fetch(`http://127.0.0.1:8080/a/home/posts/${postId}`, {
+        fetch(`/a/home/posts/${postId}`, {
             method: "DELETE",
             credentials: "include"
         })

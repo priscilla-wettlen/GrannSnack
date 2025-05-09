@@ -59,6 +59,11 @@ public class DBForumService {
         return postsDTO;
     }
 
+    public List<Post> findPostsByReported(boolean reported) {
+        return dbForumInterface.findPostsByReported(reported);
+    }
+
+
     public Timestamp getDate() {
         return date = new Timestamp(System.currentTimeMillis());
     }

@@ -24,6 +24,9 @@ public class Post {
     @Column(name = "post_image", columnDefinition = "VARCHAR(255)")
     private String postImage;
 
+    @Column(name = "is_reported", columnDefinition = "BOOLEAN")
+    private boolean reported;
+
     public int getPostId() {
         return id;
     }
@@ -70,5 +73,13 @@ public class Post {
 
     public void setPostImage(String postImage) {
         this.postImage = postImage;
+    }
+
+    public boolean isReported() {
+        return reported;
+    }
+
+    public void setReported(boolean isReported) {
+        this.reported = isReported;
     }
 }
