@@ -30,6 +30,11 @@ public class HomeController {
         return "adminhome";
     }
 
+    @GetMapping("/a/forum")
+    public String handleAdminForum() {
+        return "adminforum";
+    }
+
     @GetMapping("/u/home")
     public String handleUserHome(HttpServletRequest request, Model model) {
         String name = request.getUserPrincipal().getName();

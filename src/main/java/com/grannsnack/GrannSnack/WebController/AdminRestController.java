@@ -51,17 +51,16 @@ public class AdminRestController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<Post>> getAllReportedPosts() {
+    public List<Post> getAllReportedPosts() {
         List<Post> posts;
         posts = dbForumService.findPostsByReported(true);
-        if(posts.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(posts);
+        if(posts == null) {
+            return new ArrayList<>();
         }
+        return posts;
     }
 
-    @DeleteMapping("/posts/{postId}")
+    @DeleteMapping("/delete-post/{postId}")
     public ResponseEntity<String> deletePost (@PathVariable Integer postId){
        Post postToDelete = dbForumService.getPostById(postId);
        dbForumService.deletePostById(postToDelete.getPostId());

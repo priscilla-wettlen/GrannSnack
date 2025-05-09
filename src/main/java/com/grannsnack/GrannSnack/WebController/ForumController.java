@@ -114,4 +114,16 @@ public class ForumController {
         }
     }
 
+    @PostMapping("/u/forum/report")
+    public ResponseEntity<String> report(@RequestParam("postId") int postId) {
+        int newId = postId;
+        boolean ok = dbForumService.reportPost(newId);
+
+        if(ok) {
+            return ResponseEntity.status(HttpStatus.OK).body("Post reported");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post not found");
+        }
+    }
+
 }

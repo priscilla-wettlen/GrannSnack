@@ -493,9 +493,26 @@
     setTimeout(() => {
       popup.style.display = 'none';
     }, 3000);
-  };
+  }
+
   window.reportPost = function(postId){
-    showPopup('Inlägget har rapporterats');
+    const formData = new FormData();
+    formData.append('postId', postId);
+
+    fetch(`/u/forum/report`, {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => {
+      if(res.ok) {
+        showPopup('Inlägget har rapporterats');
+        setTimeout(() => window.location.reload(), 1500);
+      }
+    })
+    .catch(err => {
+      showPopup("Något gick fel, prova igen senare")
+      console.log(err);
+    })
   }
 
   window.deletePost = function(postId) {
