@@ -7,38 +7,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/40282c7580.js" crossorigin="anonymous"></script>
   <style>
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-   
-    
     body {
-
-      font-family:'Inter',sans-serif;
+      font-family: 'Inter', sans-serif;
       background-color: #ffffff;
       color: #144953;
-      padding: 0;
-      margin: 0;
       line-height: 1.6;
     }
 
     header {
+      display: flex;
       position: sticky;
       top: 0;
       z-index: 1000;
-      display: flex;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       justify-content: space-between;
       align-items: center;
       padding: 10px 20px;
-      background: #ffffff;
+      background: #fff;
       border-bottom: 1px solid #d9d9d9;
     }
 
-    logo {
+    .logo {
       font-size: 24px;
       font-weight: bold;
       letter-spacing: -0.5px;
@@ -77,17 +72,17 @@
 
     .main-section {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: row; 
       justify-content: space-between;
+      align-items: flex-start;
       gap: 40px;
       max-width: 1200px;
       margin: 40px auto;
       padding: 0 20px;
     }
-
     .booking-left,
-    .booking-right {
-      flex: 1 1 500px;
+    .booking-right{
+      flex: 1 1 48%;
     }
 
     .booking-left h1,
@@ -97,6 +92,12 @@
       margin-bottom: 20px;
     }
 
+    .section-title {
+      margin-top: 60px;
+      font-size: 24px;
+      color: #144953;
+      text-align: left;
+}
 
 
     input[type="date"] {
@@ -130,7 +131,7 @@
 
     .time-slot {
       background-color: #f9f7fb;
-      border: 1px solid #a6a6a6;
+      border: 1px solid #e0e0e0;
       padding: 16px;
       border-radius: 12px;
       margin-bottom: 12px;
@@ -138,7 +139,7 @@
       justify-content: space-between;
       align-items: center;
       color: #000000;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
 
     .time-slot button {
@@ -178,162 +179,6 @@
       }
     }
 
- 
-
-/* Header style */
-
-header {
-  display: flex;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, alpha);
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background: #fff;
-  border-bottom: 1px solid #d9d9d9;
-  
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  letter-spacing: -0.5px;
-  text-decoration: none;
-  background: linear-gradient(90deg, #2694aa, #144953);
-  background-clip: text;
-  color: transparent;
-  cursor: pointer;
-}
-
-.logo-link {
-  text-decoration: none;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 16px;
-  color: #1a202c;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.nav-link.logout {
-  color: #ff4d4f;
-  font-weight: 500;
-  
-}
-
-.nav-link.logout:hover {
-  color: #d9363e;
-  cursor: pointer;
-}
-
-/* Mina bookning del */
-
-.time-slot {
-  background-color: #f9f7fb;
-  border: 1px solid #a6a6a6;
-  padding: 12px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #000000;
-}
-
-
-.time-slot button {
-  background-color: #144953;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-  margin-left: 10px;
-  transition: background-color 0.3s ease;
-  font-size: 14px;
-}
-
-.time-slot button:hover {
-  background-color: #0097b2;
-}
-/* Styla knapparna i Mina bokningar */
-.time-slot > div:last-child {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-
-.main-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 40px;
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
-
-.booking-left,
-.booking-right {
-  flex: 1 1 500px;
-}
-
-.booking-left h1,
-.booking-right h2 {
-  text-align: left;
-}
-
-
-/* Responsiv stil för små skärmar */
-@media (max-width: 600px) {
-  .time-slot > div:last-child {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .time-slot > div:last-child button {
-    width: 100%;
-  }
-}
-
-/* Styla knapparna i Mina bokningar */
-.time-slot > div:last-child {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-/* Responsiv stil för små skärmar */
-@media (max-width: 600px) {
-  .time-slot > div:last-child {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .time-slot > div:last-child button {
-    width: 100%;
-  }
-}
-
-
-    
-
-
 
   </style>
 </head>
@@ -347,267 +192,173 @@ header {
       </a>
     </nav>
   </header>
-  
-  
 
-<!--The box containing color-coded keys for the time booking-->
-<div class="main-section">
+  <div class="main-section">
+    <div class="booking-left">
+      <h1 class="section-title">Välja tvättid</h1>
+      <input type="date" id="datePicker" onfocus="disablePastDates()" />
+      <button type="button" id="selectDate"></button>
+      <div id="slotsContainer"></div>
+      <h3 id="booking-confirmation"></h3>
+    </div>
 
-  <div class="booking-left">
-<h1>Välja tvättid</h1>
+    <ul id="savedDates"></ul>
 
-<!--Calendar input with a label that deactivates past dates-->
-<input type="date" id="datePicker" onfocus="disablePastDates()" />
-<!--Big button to select time-->
-<button type="button" id="selectDate"></button>
-<!--A container element to append divs with time slots-->
-<div id="slotsContainer"></div>
-<!--Booking confirmation message to the user-->
-<h3 id="booking-confirmation"></h3>
-</div>
-<!--A list of a specific user bookings. Currently not in use-->
-<ul id="savedDates"></ul>
-<script>
-    //Click event for selectDate button
+    <div class="booking-right">
+      <h2 class="section-title">Mina bokningar</h2>
+      <div id="myBookings" style="max-width: 700px; width: 100%; margin-top: 20px;"></div>
+    </div>
+  </div>
+
+  <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const saveBtn = document.getElementById("selectDate");
-        saveBtn.innerText = "Välj datum"
-        saveBtn.addEventListener("click", checkAvailability);
+      document.getElementById("selectDate").innerText = "Välj datum";
+      document.getElementById("selectDate").addEventListener("click", checkAvailability);
+      loadMyBookings();
     });
 
-    //Function that "grays out" or inactivates the dates on the calendar that
-    //have already passed. Used on calendar element onfocus
     function disablePastDates() {
-        let today = new Date();
-        let dd = String(today.getDate()).padStart(2, '0');
-        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0 in the calendar element
-        let yyyy = today.getFullYear();
-
-        today = yyyy + '-' + mm + '-' + dd;
-        document.getElementById("datePicker").setAttribute("min", today);
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, '0');
+      let mm = String(today.getMonth() + 1).padStart(2, '0');
+      let yyyy = today.getFullYear();
+      today = yyyy + '-' + mm + '-' + dd;
+      document.getElementById("datePicker").setAttribute("min", today);
     }
 
-  function checkAvailability() {
-    const selectedDate = document.getElementById("datePicker").value;
-    if (!selectedDate) return alert("Please select a date");
+    function checkAvailability() {
+      const selectedDate = document.getElementById("datePicker").value;
+      if (!selectedDate) return alert("Please select a date");
 
-    //API call to availability endpoint to check the available times on that specific date
-    fetch(`/u/laundry-booking/availability?date=${selectedDate}`)
-            .then(res => {
-              if (!res.ok) throw new Error("Network error");
-
-              //The response send is always on JSON
-              return res.json();
-            })
-        .then(slots => {
-            const container = document.getElementById("slotsContainer");
-
-            //Lines 203-225 ensure that only the bookable times on a specific day are shown.
-            //If a time slot has passed for that specific day, it won't show on the list
-            //Because the time slots are stored as labels (strings), they need to be converted
-            //to LocalTime in order to check if they have passed or not
-
-            const now = new Date();
-            const todayStr = now.toISOString().split("T")[0];
-            container.innerHTML = "<h3>Lediga tider:</h3>";
-
-            const filteredSlots = slots.filter(slot => {
-                if (selectedDate === todayStr) {
-                    const endHourMinute = slot.endTime;
-                    const [endHour, endMinute] = endHourMinute.split(":").map(Number);
-                    const slotTime = new Date();
-                    slotTime.setHours(endHour, endMinute, 0, 0);
-
-                    if (slotTime <= now) return false;
-                }
-                return true;
-            });
-
-            if (filteredSlots.length === 0) {
-                const ingaLedigaTider = document.createElement("div");
-                ingaLedigaTider.innerHTML = "<p>Inga lediga tider</p>";
-                container.appendChild(ingaLedigaTider);
-                return;
-            }
-
-            //Here we take the bookable times and append them to the
-            //container we had previously created, along with an
-            //individual button for each time to book it
-            filteredSlots.forEach(slot => {
-                const timeSlot = document.createElement("div");
-                timeSlot.className = "time-slot";
-                timeSlot.textContent = `${slot.label}`;
-
-                const timeSlotButton = document.createElement("button");
-                timeSlotButton.className = "time-slot button";
-                timeSlotButton.innerText = "Boka";
-                timeSlot.appendChild(timeSlotButton);
-
-                container.appendChild(timeSlot);
-
-                //This event calls on function createBpoking (declared below)
-                timeSlotButton.addEventListener("click", () => {
-                    createBooking(slot.id);
-                });
-            });
+      fetch(`/u/laundry-booking/availability?date=${selectedDate}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Network error");
+          return res.json();
         })
-        .catch(err => {
-            console.error("Error checking availability:", err);
-        });
+        .then(slots => {
+          const container = document.getElementById("slotsContainer");
+          const now = new Date();
+          const todayStr = now.toISOString().split("T")[0];
+          container.innerHTML = "<h3>Lediga tider:</h3>";
 
-  }
+          const filteredSlots = slots.filter(slot => {
+            if (selectedDate === todayStr) {
+              const [endHour, endMinute] = slot.endTime.split(":" ).map(Number);
+              const slotTime = new Date();
+              slotTime.setHours(endHour, endMinute, 0, 0);
+              if (slotTime <= now) return false;
+            }
+            return true;
+          });
 
-  function createBooking(slotId) {
+          if (filteredSlots.length === 0) {
+            container.innerHTML += "<p>Inga lediga tider</p>";
+            return;
+          }
+
+          filteredSlots.forEach(slot => {
+            const timeSlot = document.createElement("div");
+            timeSlot.className = "time-slot";
+            timeSlot.textContent = `${slot.label}`;
+
+            const btn = document.createElement("button");
+            btn.innerText = "Boka";
+            btn.addEventListener("click", () => createBooking(slot.id));
+
+            timeSlot.appendChild(btn);
+            container.appendChild(timeSlot);
+          });
+        })
+        .catch(err => console.error("Error checking availability:", err));
+    }
+
+    function createBooking(slotId) {
       const date = document.getElementById("datePicker").value;
-
-      //This promt element is a temporary fix. Needs to be exchanged
-      //for a custom text field
       const notes = prompt("Enter notes for your booking (optional):") || "";
 
-      //Parameters to be sent as a POST request to server and then be stored
-      //in database
       const params = new URLSearchParams();
       params.append("date", date);
       params.append("time_slot", slotId);
       params.append("notes", notes);
 
       fetch("/u/laundry-booking/create", {
-          method: "POST",
-          headers: {
-              //Format in which the parameters are to be sent, as key-value pairs
-              //the url
-              "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: params
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params
       })
-          .then(res => {
-              if (!res.ok) throw new Error("Booking failed");
-              return res.json();
-          })
-          .then(data => {
-              let slotsContainer = document.getElementById("slotsContainer");
-              slotsContainer.innerHTML = '';
-
-              let bookingConfirmation = document.createElement("H3");
-              bookingConfirmation.innerText = `Din bokning på ${date} är bekräftad`;
-              bookingConfirmation.style.marginBottom = "1rem";
-              slotsContainer.appendChild(bookingConfirmation);
-
-              //The confirmation message is shown for 2 seconds and then the
-              //page reloads
-               window.setTimeout(() => window.location.href = data.url, 2000);
-          })
-          .catch(error => {
-              alert(error.message);
-          });
-  }
-
-</script>
-
-<!-- Mina Bokningar Sektion -->
-<div class="booking-right">
-<h2 style="margin-top: 60px; font-size: 24px; color: #144953;">Mina bokningar</h2>
-<div id="myBookings" style="max-width: 700px; width: 100%; margin-top: 20px;"></div>
-</div>
-</div>
-
-<script> // Hämta användarens bokningar
-  function loadMyBookings() {
-  // Testdata – används endast för att visa gränssnittet innan backend är klar
-  const testBookings = [
-    { id: 1, date: "2025-05-10", label: "08:00 - 10:00", notes: "Morgonpass" },
-    { id: 2, date: "2025-05-12", label: "14:00 - 16:00", notes: "Eftermiddag" }
-  ];
-  displayBookings(testBookings);
-}
-
-function displayBookings() {
-  fetch("/u/laundry-booking/bookings", {
-    method: "GET",
-    credentials: "include"
-  }).then(res => {
-    if (!res.ok) throw new Error("Booking failed");
-    return res.json();
-  })
-          .then(bookings => {
-            let bookingsContainer = document.getElementById("myBookings");
-            bookingsContainer.innerHTML = '';
-
-            if (bookings.length === 0) {
-              bookingsContainer.innerHTML = "<p>Du har inga bokningar ännu.</p>";
-              return;
-            }
-
-            bookings.forEach(booking => {
-              const bookingCard = document.createElement("div");
-              bookingCard.className = "time-slot";
-              bookingCard.innerHTML = `
-                <div>
-                    <strong>Datum:</strong> ${booking.date} <br>
-                    <strong>Tid:</strong> ${booking.timeSlot.label} <br>
-                    <strong>Notering:</strong> ${booking.notes || "-"}
-                </div>
-                <div>
-                    <button onclick="deleteBooking(${booking.id})" style="background-color: #c0392b;">Ta bort</button>
-                    <button onclick="editBooking(${booking.id})" style="background-color: #0097b2;">Ändra</button>
-                </div>
-                `;
-                bookingsContainer.appendChild(bookingCard);
-            });
-
-          })
-          .catch(error => {
-            alert(error.message);
-          });
-
-}
-
-// function deleteBooking(id) {
-//   //document.getElementById()
-// }
-//
-// function editBooking(id) {
-//   alert("Redigering är inte aktiverad i testläget.");
-// }
-
-document.addEventListener("DOMContentLoaded", loadMyBookings);
-
-  
-
-
-
-  
-  // Ta bort bokning
-  function deleteBooking(id) {
-    //if (!confirm("Är du säker på att du vill ta bort bokningen?")) return;
-    fetch(`/u/laundry-booking/bookings/delete/${id}`, { method: "DELETE" })
       .then(res => {
-        if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
-        res.json();
-        loadMyBookings();
+        if (!res.ok) throw new Error("Booking failed");
+        return res.json();
       })
-      .catch(err => alert("Fel vid borttagning: " + err.message));
-  }
-  
-  // Ändra bokning (endast notering)
-  function editBooking(id) {
-    const newNote = prompt("Ange ny notering:");
-    if (newNote === null) return;
-    fetch(`/u/laundry-booking/update`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ id, notes: newNote })
-    })
+      .then(data => {
+        document.getElementById("slotsContainer").innerHTML = `<h3>Din bokning på ${date} är bekräftad</h3>`;
+        setTimeout(() => window.location.href = data.url, 2000);
+      })
+      .catch(err => alert(err.message));
+    }
+
+    function loadMyBookings() {
+      fetch("/u/laundry-booking/bookings", {
+        method: "GET",
+        credentials: "include"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Booking failed");
+        return res.json();
+      })
+      .then(bookings => {
+        const container = document.getElementById("myBookings");
+        container.innerHTML = '';
+
+        if (bookings.length === 0) {
+          container.innerHTML = "<p>Du har inga bokningar ännu.</p>";
+          return;
+        }
+
+        bookings.forEach(booking => {
+          const card = document.createElement("div");
+          card.className = "time-slot";
+          card.innerHTML = `
+            <div>
+              <strong>Datum:</strong> ${booking.date}<br>
+              <strong>Tid:</strong> ${booking.timeSlot.label}<br>
+              <strong>Notering:</strong> ${booking.notes || "-"}
+            </div>
+            <div>
+              <button onclick="deleteBooking(${booking.id})" style="background-color: #c0392b;">Ta bort</button>
+              <button onclick="editBooking(${booking.id})" style="background-color: #0097b2;">Ändra</button>
+            </div>`;
+          container.appendChild(card);
+        });
+      })
+      .catch(err => alert("Fel vid hämtning: " + err.message));
+    }
+
+    function deleteBooking(id) {
+      fetch(`/u/laundry-booking/bookings/delete/${id}`, { method: "DELETE" })
+        .then(res => {
+          if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
+          return res.json();
+        })
+        .then(() => loadMyBookings())
+        .catch(err => alert("Fel vid borttagning: " + err.message));
+    }
+
+    function editBooking(id) {
+      const newNote = prompt("Ange ny notering:");
+      if (newNote === null) return;
+
+      fetch(`/u/laundry-booking/update`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ id, notes: newNote })
+      })
       .then(res => {
         if (!res.ok) throw new Error("Kunde inte uppdatera bokningen");
         loadMyBookings();
       })
       .catch(err => alert("Fel vid uppdatering: " + err.message));
-  }
-  
-  // Ladda bokningar när sidan öppnas
-  document.addEventListener("DOMContentLoaded", loadMyBookings);
+    }
   </script>
-
 </body>
 </html>
