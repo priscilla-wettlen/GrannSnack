@@ -21,29 +21,94 @@
       font-family:'Inter',sans-serif;
       background-color: #ffffff;
       color: #144953;
-      padding: 20px;
+      padding: 0;
+      margin: 0;
       line-height: 1.6;
     }
 
-    h1, h2 {
-      text-align: center;
-      font-family: 'Quicksand', 'Inter', sans-serif;
-      margin-top: 40px;
-      margin-bottom: 24px;
-      color: #144953;
-      
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #d9d9d9;
     }
+
+    logo {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #2694aa, #144953);
+      background-clip: text;
+      color: transparent;
+    }
+
+    .logo-link {
+      text-decoration: none;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 16px;
+      color: #1a202c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .nav-link.logout {
+      color: #ff4d4f;
+    }
+
+    .nav-link.logout:hover {
+      color: #d9363e;
+    }
+
+    .main-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .booking-left,
+    .booking-right {
+      flex: 1 1 500px;
+    }
+
+    .booking-left h1,
+    .booking-right h2 {
+      text-align: left;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+
 
     input[type="date"] {
       padding: 12px;
-      border:  1px solid #a6a6a6;
+      border: 1px solid #a6a6a6;
       border-radius: 8px;
       font-size: 16px;
-      margin: 20px auto;
-      color: #000000;
       background-color: #ffffff;
-      display: block;
+      color: #000000;
       max-width: 300px;
+      display: block;
+      margin-bottom: 16px;
     }
 
     button {
@@ -56,43 +121,19 @@
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      display: block;
-      margin: 10px auto 30px;
+      margin-bottom: 24px;
     }
 
     button:hover {
       background-color: #0097b2;
     }
 
-    /*ul#savedDates {
-      list-style: none;
-      padding: 0;
-      width: 100%;
-      max-width: 400px;
-    }
-
-    ul#savedDates li {
-      background-color: #ffffff;
-      color: #000000;
-      padding: 10px 16px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      font-size: 15px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    input, button {
-      margin: 10px 0;
-    } */
-    
-  
-
     .time-slot {
       background-color: #f9f7fb;
       border: 1px solid #a6a6a6;
       padding: 16px;
       border-radius: 12px;
-      margin: 12px auto;
-      max-width: 700px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -115,27 +156,38 @@
       background-color: #0097b2;
     }
 
-    .legend {
-      max-width: 700px;
-      margin: 40px auto 20px;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #a6a6a6;
-      background-color: transparent;
+    .time-slot > div:last-child {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
- 
- 
- 
-    h1, h2 {
-     text-align: center;
-     margin-top: 40px;
-    margin-bottom: 24px;
+
+    @media (max-width: 768px) {
+      .main-section {
+        flex-direction: column;
+      }
+
+      .time-slot > div:last-child {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .time-slot > div:last-child button {
+        width: 100%;
+      }
     }
+
+ 
 
 /* Header style */
 
 header {
   display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, alpha);
   justify-content: space-between;
   align-items: center;
   padding: 10px;
@@ -200,6 +252,7 @@ header {
   color: #000000;
 }
 
+
 .time-slot button {
   background-color: #144953;
   color: white;
@@ -222,6 +275,28 @@ header {
   flex-wrap: wrap;
   justify-content: flex-end;
 }
+
+
+.main-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.booking-left,
+.booking-right {
+  flex: 1 1 500px;
+}
+
+.booking-left h1,
+.booking-right h2 {
+  text-align: left;
+}
+
 
 /* Responsiv stil för små skärmar */
 @media (max-width: 600px) {
@@ -276,6 +351,9 @@ header {
   
 
 <!--The box containing color-coded keys for the time booking-->
+<div class="main-section">
+
+  <div class="booking-left">
 <h1>Välja tvättid</h1>
 
 <!--Calendar input with a label that deactivates past dates-->
@@ -286,6 +364,7 @@ header {
 <div id="slotsContainer"></div>
 <!--Booking confirmation message to the user-->
 <h3 id="booking-confirmation"></h3>
+</div>
 <!--A list of a specific user bookings. Currently not in use-->
 <ul id="savedDates"></ul>
 <script>
@@ -426,9 +505,11 @@ header {
 </script>
 
 <!-- Mina Bokningar Sektion -->
+<div class="booking-right">
 <h2 style="margin-top: 60px; font-size: 24px; color: #144953;">Mina bokningar</h2>
 <div id="myBookings" style="max-width: 700px; width: 100%; margin-top: 20px;"></div>
-
+</div>
+</div>
 
 <script> // Hämta användarens bokningar
   function loadMyBookings() {
