@@ -177,10 +177,10 @@
           <label for="unit">Förening</label>
           <select name="unit" id="unit" class="selectbox" onChange="check(this);">
             <option disabled selected value> -- Välj förening -- </option>
-            <option value="1">Förening 1</option>
-            <option value="2">Förening 2</option>
-            <option value="3">Förening 3</option>
-            <option value="4">Förening 4</option>
+            <option value="1">Ekbacken</option>
+            <option value="2">Rönnegården</option>
+            <option value="3">LMK</option>
+            <option value="4">Pansarvägen</option>
           </select>
         </div>
         <div class="form-group">
@@ -197,7 +197,7 @@
       <script>
         
         document.addEventListener('DOMContentLoaded', function() {
-          const msg = document.getElementById('falseMessage');
+          const msg = document.getapartmentCodeElementById('falseMessage');
           const form = document.querySelector('form');
           
           if (window.location.search === '?error=true') {
@@ -237,37 +237,37 @@
           hiddenSelectBox.style.display = "inline";
       
           if (elem.value == '1') {
-            apartmentSelect.innerHTML = `
-              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
-              <option>1101</option>
-              <option>1102</option>
-              <option>1103</option>
-              <option>1104</option>
-            `;
+            let options = '<option disable selected value> -- Välj lägenhetsnummer -- </option>';
+
+            for(let i = 0; i < 10; i++) {
+              options +=`<option value="${110+i}">${110+i}</option>`
+            }
+
+            apartmentSelect.innerHTML = options;
           } else if (elem.value == '2') {
-            apartmentSelect.innerHTML = `
-              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
-              <option>1201</option>
-              <option>1202</option>
-              <option>1203</option>
-              <option>1204</option>
-            `;
+            let options = '<option disable selected value> -- Välj lägenhetsnummer -- </option>';
+
+            for(let i = 0; i < 10; i++) {
+              options +=`<option value="${110+i}">${110+i}</option>`
+            }
+
+            apartmentSelect.innerHTML = options;
           } else if (elem.value == '3') {
-            apartmentSelect.innerHTML = `
-              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
-              <option>1301</option>
-              <option>1302</option>
-              <option>1303</option>
-              <option>1304</option>
-            `;
+            let options = '<option disable selected value> -- Välj lägenhetsnummer -- </option>';
+
+            for(let i = 0; i < 10; i++) {
+              options +=`<option value="${110+i}">${110+i}</option>`
+            }
+
+            apartmentSelect.innerHTML = options;
           } else if (elem.value == '4') {
-            apartmentSelect.innerHTML = `
-              <option disabled selected value> -- Välj lägenhetsnummer -- </option>
-              <option>1401</option>
-              <option>1402</option>
-              <option>1403</option>
-              <option>1404</option>
-            `;
+            let options = '<option disable selected value> -- Välj lägenhetsnummer -- </option>';
+
+            for(let i = 0; i < 10; i++) {
+              options +=`<option value="${110+i}">${110+i}</option>`
+            }
+
+            apartmentSelect.innerHTML = options;
           } else {
             hiddenSelectBox.style.display = 'none';
           }

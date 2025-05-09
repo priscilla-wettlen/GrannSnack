@@ -2,7 +2,6 @@ package com.grannsnack.GrannSnack.Model;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
 @Table(name = "USER")
@@ -13,14 +12,14 @@ public class MyUser {
     private Integer id;
     @Nonnull
     private String userName;
-
     @Nonnull
     private String email;
-
     @Nonnull
     private String password;
     @Nonnull
     private String apartmentCode;
+    @Nonnull
+    private String association;
     @Nonnull
     private String role;
 
@@ -64,6 +63,15 @@ public class MyUser {
 
     public void setApartmentCode(@Nonnull String apartmentCode) {
         this.apartmentCode = apartmentCode;
+    }
+
+    @Nonnull
+    public String getAssociation() {
+        return association;
+    }
+
+    public void setAssociation(@Nonnull String association) {
+        this.association = association;
     }
 
     @Nonnull
