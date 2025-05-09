@@ -328,8 +328,9 @@
     <header>
         <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
         <nav class="nav">
+          <i class="fa-regular fa-lightbulb" style="color: #000000; cursor:pointer;" onclick="toggleDarkMode()"></i>
           <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
-          <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #f38183;"></i></i></a>
+          <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #ff4d4f;"></i></i></a>
         </nav>
     </header>
   <div class="container">
@@ -524,6 +525,9 @@
       showPopup('Något gick fel, prova igen senare')
     })
   }
+  function toggleDarkMode() {
+    document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
+}
 </script>
 <div id="popup-posted"></div>
 </body>
