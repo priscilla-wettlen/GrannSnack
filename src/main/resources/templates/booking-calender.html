@@ -97,7 +97,15 @@
       font-size: 24px;
       color: #144953;
       text-align: left;
+    }
+    .booking-left,
+    .booking-right {
+      background-color: #f8fcfd;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
 }
+
 
 
     input[type="date"] {
@@ -140,6 +148,7 @@
       align-items: center;
       color: #000000;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      font-size: 15px;
     }
 
     .time-slot button {
@@ -152,6 +161,13 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
+    .time-slot:hover {
+      background-color: #eef9fc;
+      transform: translateY(-2px);
+      transition: all 0.3s ease;
+    }
+
 
     .time-slot button:hover {
       background-color: #0097b2;
@@ -172,6 +188,10 @@
       .time-slot > div:last-child {
         flex-direction: column;
         align-items: stretch;
+      }
+      .booking-left,
+      .booking-right {
+        margin-bottom: 20px;
       }
 
       .time-slot > div:last-child button {
@@ -195,7 +215,7 @@
 
   <div class="main-section">
     <div class="booking-left">
-      <h1 class="section-title">Välja tvättid</h1>
+      <h1 class="section-title"><i class="fa-solid fa-calendar-check"></i> Välja tvättid</h1>
       <input type="date" id="datePicker" onfocus="disablePastDates()" />
       <button type="button" id="selectDate"></button>
       <div id="slotsContainer"></div>
@@ -205,7 +225,7 @@
     <ul id="savedDates"></ul>
 
     <div class="booking-right">
-      <h2 class="section-title">Mina bokningar</h2>
+      <h2 class="section-title" ><i class="fa-solid fa-list-check"></i> Mina bokningar</h2>
       <div id="myBookings" style="max-width: 700px; width: 100%; margin-top: 20px;"></div>
     </div>
   </div>
