@@ -70,4 +70,14 @@ public class LaundryRestController {
         return dbLaundryService.getAllBookingsByUserId(userId);
     }
 
+    @DeleteMapping("/bookings/delete/{id}")
+    public ResponseEntity<String> deleteBooking(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails) {
+        int userId = myUserDetailsService.getUserIdByEmail(userDetails.getUsername());
+        Booking bookingIdToDelete = dbLaundryService.deleteBooking(id, userId);
+        if (bookingIdToDelete == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok("Bokning med id " + id + " har avbokats.");
+    }
+
 }

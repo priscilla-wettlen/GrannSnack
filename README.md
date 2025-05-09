@@ -66,7 +66,7 @@ Om meddelandet säger följande är du redo att prova programmet:
 
 ## Inlogg
 För att sedan komma kunna logga in används:  
-Användarnamn - user  
+Användarnamn - user@test.com  
 Lösenord - 1234
 
 ## Lämna feedback

@@ -435,7 +435,7 @@
         console.log("Post ID:", post.postId, "isUsers value:", dto.isUsers);
 
         const isUserPost = dto.isUsers !== undefined ? dto.isUsers : dto.users;
-
+        const username = user.userName ? user.userName : 'Anonym';
         const initial = user.userName ? user.userName.charAt(0) : '?';
 
         const postDate = new Date(dto.post.postDate);
@@ -456,7 +456,7 @@
                             <i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${post.postId})"
                             style="color:#ff4d4f; cursor:pointer;"></i>
                         ` : ''}
-                        <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;"></i>
+                        <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${post.postId})"></i>
                       </span>
                 </h2>
                 <p class="name-date">${user.userName} • ${formattedDate}</p>
@@ -493,6 +493,9 @@
       popup.style.display = 'none';
     }, 3000);
   };
+  window.reportPost = function(postId){
+    showPopup('Inlägget har rapporterats');
+  }
 
   window.deletePost = function(postId) {
     if(!confirm('Är du säker på att du vill ta bort detta inlägg?')) {
