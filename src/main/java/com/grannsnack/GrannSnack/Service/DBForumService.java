@@ -44,6 +44,7 @@ public class DBForumService {
         dbForumInterface.deleteById(id);
     }
 
+
     public List<ForumDTO> getRecentPosts(Timestamp dateAfter, Timestamp dateBefore) {
         List<ForumDTO> postsDTO = new ArrayList<>();
 
@@ -70,5 +71,17 @@ public class DBForumService {
 
     public Timestamp getDate() {
         return date = new Timestamp(System.currentTimeMillis());
+    }
+
+    public boolean reportPost(int postId) {
+        Optional<Post> optionalPost = dbForumInterface.findById(postId);
+        if(optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            post.setReported(true);
+            dbForumInterface.save(post);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
