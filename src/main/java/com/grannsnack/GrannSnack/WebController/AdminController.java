@@ -54,6 +54,13 @@ public class AdminController {
         return ResponseEntity.ok("User with id " + id + " deleted successfully.");
     }
 
+    @GetMapping("/posts")
+    public List<Post> getAllReportedPosts() {
+        List<Post> posts;
+        posts = dbForumService.findPostsByReported(false);
+        return posts;
+    }
+
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<String> deletePost (@PathVariable Integer postId){
        Post postToDelete = dbForumService.getPostById(postId);

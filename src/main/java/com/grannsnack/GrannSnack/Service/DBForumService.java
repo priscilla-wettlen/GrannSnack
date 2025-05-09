@@ -23,12 +23,13 @@ public class DBForumService {
 
     private Timestamp date;
 
-    public boolean createPost(String title, String content, MyUser user) {
+    public boolean createPost(String title, String content, MyUser user, boolean isReported) {
         Post post = new Post();
         post.setPostTitle(title);
         post.setPostContent(content);
         post.setPostAuthorID(user.getId());
         post.setPostDate(date = new Timestamp(System.currentTimeMillis()));
+        post.setReported(isReported);
 
         dbForumInterface.save(post);
         Optional<Post> newPost = Optional.ofNullable(dbForumInterface.findPostById(post.getPostId()));
@@ -57,6 +58,10 @@ public class DBForumService {
         }
 
         return postsDTO;
+    }
+  
+    public List<Post> findPostsByReported(boolean reported) {
+        return dbForumInterface.findPostsByReported(reported);
     }
 
     public List<Post> findPostByPostAuthorID(int postAuthotID) {

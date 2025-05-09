@@ -214,11 +214,11 @@
         fetch("/a/home/users", {
           method: "GET",
           credentials: "include"
-        })
+        });
         .then(res => {
           if (!res.ok) throw new Error("Error: Användarlistan kunde inte hämtas.");
           return res.json();
-        })
+        });
         .then(users => {
           const userTableBody = document.getElementById("user-table-body");
           userTableBody.innerHTML = "";
@@ -236,14 +236,12 @@
             `;
             userTableBody.appendChild(row);
           });
-        })
         .catch(error => {
           console.error("Failed to fetch users:", error);
           const userTableBody = document.getElementById("user-table-body");
           userTableBody.innerHTML = `<tr><td colspan="7">Error loading users: ${error.message}</td></tr>`;
         });
       }
-
     function deleteUser(id) {
       fetch(`/a/home/delete-user/${id}`, {
         method: "DELETE",
