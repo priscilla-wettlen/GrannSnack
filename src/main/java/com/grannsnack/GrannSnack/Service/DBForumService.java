@@ -59,6 +59,10 @@ public class DBForumService {
         return postsDTO;
     }
 
+    public List<Post> findPostByPostAuthorID(int postAuthotID) {
+        return dbForumInterface.findPostsByPostAuthorID(postAuthotID);
+    }
+
     public Timestamp getDate() {
         return date = new Timestamp(System.currentTimeMillis());
     }
