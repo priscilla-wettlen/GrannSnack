@@ -2,9 +2,8 @@ package com.grannsnack.GrannSnack.Model;
 
 import jakarta.persistence.*;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Date;
+
 @Entity
 @Table(name="POST")
 public class Post {
@@ -23,9 +22,8 @@ public class Post {
     private String postContent;
     @Column(name = "post_image", columnDefinition = "VARCHAR(255)")
     private String postImage;
-
     @Column(name = "is_reported", columnDefinition = "BOOLEAN")
-    private boolean reported;
+    private boolean reported = false;
 
     public int getPostId() {
         return id;

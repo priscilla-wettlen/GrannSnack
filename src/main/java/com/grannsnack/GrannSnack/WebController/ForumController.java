@@ -35,16 +35,22 @@ public class ForumController {
     }
 
     @PostMapping("/u/forum/create")
+    @ResponseBody
     public ResponseEntity<String> posting(@RequestBody Post post , @AuthenticationPrincipal UserDetails userDetails) {
-        String userEmail = userDetails.getUsername();
-        MyUser user = dbUserService.getUserByEmail(userEmail);
-        boolean ok = dbForumService.createPost(post.getPostTitle(), post.getPostContent(), user);
+        try {
+            String userEmail = userDetails.getUsername();
+            MyUser user = dbUserService.getUserByEmail(userEmail);
+            boolean ok = dbForumService.createPost(post.getPostTitle(), post.getPostContent(), user, false);
 
-        if(ok) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Post successful");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post failed");
+            if(ok) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Post successful");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post failed");
+            }
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating post: " + e.getMessage());
         }
+
     }
 
     @DeleteMapping("/u/forum/delete")
