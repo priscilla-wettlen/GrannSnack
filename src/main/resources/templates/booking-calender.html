@@ -17,31 +17,33 @@
    
     
     body {
+
       font-family:'Inter',sans-serif;
       background-color: #ffffff;
-      color: #0097b2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-      min-height: 100vh;
+      color: #144953;
+      padding: 20px;
+      line-height: 1.6;
     }
 
-    h1 {
-      font-size: 28px;
-      margin-bottom: 20px;
-      font-family: 'Quicksand', 'Inter',sans-serif;
+    h1, h2 {
+      text-align: center;
+      font-family: 'Quicksand', 'Inter', sans-serif;
+      margin-top: 40px;
+      margin-bottom: 24px;
+      color: #144953;
+      
     }
 
     input[type="date"] {
       padding: 12px;
-      border: none;
+      border:  1px solid #a6a6a6;
       border-radius: 8px;
       font-size: 16px;
-      margin-bottom: 20px;
-      color: #ffffff;
-      background-color: #0097b2;
-      font-family: inherit;
+      margin: 20px auto;
+      color: #000000;
+      background-color: #ffffff;
+      display: block;
+      max-width: 300px;
     }
 
     button {
@@ -54,14 +56,15 @@
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      margin-bottom: 30px;
+      display: block;
+      margin: 10px auto 30px;
     }
 
     button:hover {
-      background-color: #0d3a3d;
+      background-color: #0097b2;
     }
 
-    ul#savedDates {
+    /*ul#savedDates {
       list-style: none;
       padding: 0;
       width: 100%;
@@ -79,49 +82,22 @@
     }
     input, button {
       margin: 10px 0;
-    }
-    .legend {
-      max-width: 700px;
-      margin: 40px auto 20px;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #a6a6a6;
-      background-color: transparent;
-    }
-
-    .legend-items {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .color-box {
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
-    }
-
-    .gron { background-color: #61d26c; }
-    .rod { background-color: #c0392b; }
-    .bla { background-color: #0097b2; }
-    .gra { background-color: #a6a6a6; }
+    } */
+    
+  
 
     .time-slot {
+      background-color: #f9f7fb;
       border: 1px solid #a6a6a6;
+      padding: 16px;
       border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
+      margin: 12px auto;
+      max-width: 700px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: #f9f7fb;
+      color: #000000;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
 
     .time-slot button {
@@ -147,15 +123,25 @@
       border: 1px solid #a6a6a6;
       background-color: transparent;
     }
+ 
+ 
+ 
+    h1, h2 {
+     text-align: center;
+     margin-top: 40px;
+    margin-bottom: 24px;
+    }
+
 /* Header style */
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 38px;
+  padding: 10px;
   background: #fff;
   border-bottom: 1px solid #d9d9d9;
+  
 }
 
 .logo {
@@ -163,7 +149,7 @@ header {
   font-weight: bold;
   letter-spacing: -0.5px;
   text-decoration: none;
-  background: linear-gradient(90deg, #10B781, #0D9688);
+  background: linear-gradient(90deg, #2694aa, #144953);
   background-clip: text;
   color: transparent;
   cursor: pointer;
@@ -229,6 +215,46 @@ header {
 .time-slot button:hover {
   background-color: #0097b2;
 }
+/* Styla knapparna i Mina bokningar */
+.time-slot > div:last-child {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Responsiv stil för små skärmar */
+@media (max-width: 600px) {
+  .time-slot > div:last-child {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .time-slot > div:last-child button {
+    width: 100%;
+  }
+}
+
+/* Styla knapparna i Mina bokningar */
+.time-slot > div:last-child {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Responsiv stil för små skärmar */
+@media (max-width: 600px) {
+  .time-slot > div:last-child {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .time-slot > div:last-child button {
+    width: 100%;
+  }
+}
+
 
     
 
@@ -238,7 +264,7 @@ header {
 </head>
 <body>
   <header>
-    <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack.</div></a>
     <nav class="nav">
       <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
       <a th:href="@{/logout}" class="nav-link logout">
@@ -251,13 +277,6 @@ header {
 
 <!--The box containing color-coded keys for the time booking-->
 <h1>Välja tvättid</h1>
-<div class="legend">
-    <div class="legend-items">
-      <div class="legend-item"><div class="color-box gron"></div><span>Ledig</span></div>
-      <div class="legend-item"><div class="color-box rod"></div><span>Upptaget</span></div>
-      <div class="legend-item"><div class="color-box bla"></div><span>Egen tid</span></div>
-    </div>
-</div>
 
 <!--Calendar input with a label that deactivates past dates-->
 <input type="date" id="datePicker" onfocus="disablePastDates()" />
