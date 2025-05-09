@@ -211,37 +211,39 @@
     });
 
     function getAllUsers() {
-        fetch("/a/home/users", {
-          method: "GET",
-          credentials: "include"
-        });
-        .then(res => {
-          if (!res.ok) throw new Error("Error: Användarlistan kunde inte hämtas.");
-          return res.json();
-        });
-        .then(users => {
-          const userTableBody = document.getElementById("user-table-body");
-          userTableBody.innerHTML = "";
-      
-          users.forEach(user => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-              <td>${user.id}</td>
-              <td>${user.association}</td>
-              <td>${user.apartmentCode}</td>
-              <td>${user.userEmail}</td>
-              <td>${user.role}</td>
-              <td>${user.userName}</td>
-              <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
-            `;
-            userTableBody.appendChild(row);
-          });
-        .catch(error => {
-          console.error("Failed to fetch users:", error);
-          const userTableBody = document.getElementById("user-table-body");
-          userTableBody.innerHTML = `<tr><td colspan="7">Error loading users: ${error.message}</td></tr>`;
-        });
-      }
+      fetch("/a/home/users", {
+        method: "GET",
+        credentials: "include"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Error: Användarlistan kunde inte hämtas.");
+        return res.json();
+      })
+      .then(users => {
+        const userTableBody = document.getElementById("user-table-body");
+        userTableBody.innerHTML = "";
+
+        users.forEach(user => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.association}</td>
+            <td>${user.apartmentCode}</td>
+            <td>${user.userEmail}</td>
+            <td>${user.role}</td>
+            <td>${user.userName}</td>
+            <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
+          `;
+          userTableBody.appendChild(row);
+        })
+      })
+      .catch(error => {
+        console.error("Failed to fetch users:", error);
+        const userTableBody = document.getElementById("user-table-body");
+        userTableBody.innerHTML = `<tr><td colspan="7">Error loading users: ${error.message}</td></tr>`;
+      });
+    }
+
     function deleteUser(id) {
       fetch(`/a/home/delete-user/${id}`, {
         method: "DELETE",
