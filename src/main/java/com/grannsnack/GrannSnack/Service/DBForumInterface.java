@@ -18,4 +18,6 @@ public interface DBForumInterface extends JpaRepository<Post, Integer> {
     List<Post> findPostsByPostAuthorID(int postAuthorID);
 
     List<Post> findPostsByPostDateBetween(Date postDateAfter, Date postDateBefore);
+
+    //List<Post> findPostsBy
 }
