@@ -24,7 +24,7 @@
     });
 
     function getAllUsers(){
-        fetch("http://127.0.0.1:8080/a/home/users", {
+        fetch("/a/home/users", {
             method: "GET",
             credentials: "include"
         })
@@ -86,7 +86,7 @@
 
 
     function getAllPosts(){
-        fetch("http://127.0.0.1:8080/u/forum/posts", {
+        fetch("/u/forum/posts", {
             method: "GET",
             credentials: "include"
         })

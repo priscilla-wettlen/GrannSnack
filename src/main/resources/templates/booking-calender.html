@@ -17,7 +17,8 @@
    
     
     body {
-      font-family: 'Inter', sans-serif;
+
+      font-family:'Inter',sans-serif;
       background-color: #ffffff;
       color: #144953;
       padding: 0;
@@ -391,7 +392,7 @@ header {
     if (!selectedDate) return alert("Please select a date");
 
     //API call to availability endpoint to check the available times on that specific date
-    fetch(`http://127.0.0.1:8080/u/laundry-booking/availability?date=${selectedDate}`)
+    fetch(`/u/laundry-booking/availability?date=${selectedDate}`)
             .then(res => {
               if (!res.ok) throw new Error("Network error");
 
@@ -520,7 +521,7 @@ header {
   displayBookings(testBookings);
 }
 
-function displayBookings(bookingsArray) {
+function displayBookings() {
   fetch("/u/laundry-booking/bookings", {
     method: "GET",
     credentials: "include"
@@ -543,7 +544,7 @@ function displayBookings(bookingsArray) {
               bookingCard.innerHTML = `
                 <div>
                     <strong>Datum:</strong> ${booking.date} <br>
-                    <strong>Tid:</strong> ${booking.label} <br>
+                    <strong>Tid:</strong> ${booking.timeSlot.label} <br>
                     <strong>Notering:</strong> ${booking.notes || "-"}
                 </div>
                 <div>
@@ -561,13 +562,13 @@ function displayBookings(bookingsArray) {
 
 }
 
-function deleteBooking(id) {
-  //document.getElementById()
-}
-
-function editBooking(id) {
-  alert("Redigering är inte aktiverad i testläget.");
-}
+// function deleteBooking(id) {
+//   //document.getElementById()
+// }
+//
+// function editBooking(id) {
+//   alert("Redigering är inte aktiverad i testläget.");
+// }
 
 document.addEventListener("DOMContentLoaded", loadMyBookings);
 
@@ -578,10 +579,11 @@ document.addEventListener("DOMContentLoaded", loadMyBookings);
   
   // Ta bort bokning
   function deleteBooking(id) {
-    if (!confirm("Är du säker på att du vill ta bort bokningen?")) return;
-    fetch(`/u/laundry-booking/delete?id=${id}`, { method: "DELETE" })
+    //if (!confirm("Är du säker på att du vill ta bort bokningen?")) return;
+    fetch(`/u/laundry-booking/bookings/delete/${id}`, { method: "DELETE" })
       .then(res => {
         if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
+        res.json();
         loadMyBookings();
       })
       .catch(err => alert("Fel vid borttagning: " + err.message));
