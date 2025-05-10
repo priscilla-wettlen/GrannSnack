@@ -6,6 +6,7 @@ import com.grannsnack.GrannSnack.Model.TimeSlots;
 import com.grannsnack.GrannSnack.Service.DBLaundryService;
 import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -71,13 +72,19 @@ public class LaundryRestController {
     }
 
     @DeleteMapping("/bookings/delete/{id}")
-    public ResponseEntity<String> deleteBooking(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> deleteBooking(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails) {
         int userId = myUserDetailsService.getUserIdByEmail(userDetails.getUsername());
-        Booking bookingIdToDelete = dbLaundryService.deleteBooking(id, userId);
-        if (bookingIdToDelete == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            Booking bookingIdToDelete = dbLaundryService.deleteBooking(id, userId);
+            if (bookingIdToDelete == null) {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", e.getMessage()));
         }
-        return ResponseEntity.ok("Bokning med id " + id + " har avbokats.");
+        return ResponseEntity.ok().build();
     }
 
 }
+
