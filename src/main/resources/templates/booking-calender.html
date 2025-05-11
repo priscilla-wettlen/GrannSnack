@@ -138,6 +138,23 @@
       background-color: #0097b2;
     }
 
+    .main-btn {
+      background-color: #144953;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 24px;
+    }
+
+    .main-btn:hover {
+      background-color: #0097b2;
+    }
+
     .time-slot {
       background-color: #f9f7fb;
       border: 1px solid #e0e0e0;
@@ -223,8 +240,6 @@
       <h3 id="booking-confirmation"></h3>
     </div>
 
-    <ul id="savedDates"></ul>
-
     <div class="booking-right">
       <h2 class="section-title" ><i class="fa-solid fa-list-check"></i> Mina bokningar</h2>
       <div id="myBookings" style="max-width: 700px; width: 100%; margin-top: 20px;"></div>
@@ -235,7 +250,10 @@
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("selectDate").innerText = "Välj datum";
       document.getElementById("selectDate").addEventListener("click", checkAvailability);
-      loadMyBookings();
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadMyBookings()
     });
 
     function disablePastDates() {
@@ -252,134 +270,174 @@
       if (!selectedDate) return alert("Please select a date");
 
       fetch(`/u/laundry-booking/availability?date=${selectedDate}`)
-        .then(res => {
-          if (!res.ok) throw new Error("Network error");
-          return res.json();
-        })
-        .then(slots => {
-          const container = document.getElementById("slotsContainer");
-          const now = new Date();
-          const todayStr = now.toISOString().split("T")[0];
-          container.innerHTML = "<h3>Lediga tider:</h3>";
+              .then(res => {
+                if (!res.ok) throw new Error("Network error");
+                return res.json();
+              })
+              .then(slots => {
+                const container = document.getElementById("slotsContainer");
+                const now = new Date();
+                const todayStr = now.toISOString().split("T")[0];
+                container.innerHTML = "<h3>Lediga tider:</h3>";
 
-          const filteredSlots = slots.filter(slot => {
-            if (selectedDate === todayStr) {
-              const [endHour, endMinute] = slot.endTime.split(":" ).map(Number);
-              const slotTime = new Date();
-              slotTime.setHours(endHour, endMinute, 0, 0);
-              if (slotTime <= now) return false;
-            }
-            return true;
-          });
+                const filteredSlots = slots.filter(slot => {
+                  if (selectedDate === todayStr) {
+                    const [endHour, endMinute] = slot.endTime.split(":").map(Number);
+                    const slotTime = new Date();
+                    slotTime.setHours(endHour, endMinute, 0, 0);
+                    if (slotTime <= now) return false;
+                  }
+                  return true;
+                });
 
-          if (filteredSlots.length === 0) {
-            container.innerHTML += "<p>Inga lediga tider</p>";
-            return;
-          }
+                if (filteredSlots.length === 0) {
+                  container.innerHTML += "<p>Inga lediga tider</p>";
+                  return;
+                }
 
-          filteredSlots.forEach(slot => {
-            const timeSlot = document.createElement("div");
-            timeSlot.className = "time-slot";
-            timeSlot.textContent = `${slot.label}`;
+                filteredSlots.forEach(slot => {
+                  const timeSlot = document.createElement("div");
+                  timeSlot.className = "time-slot";
+                  timeSlot.textContent = `${slot.label}`;
 
-            const btn = document.createElement("button");
-            btn.innerText = "Boka";
-            btn.addEventListener("click", () => createBooking(slot.id));
+                  const chooseBtn = document.createElement("button");
+                  chooseBtn.innerText = "Välj";
 
-            timeSlot.appendChild(btn);
-            container.appendChild(timeSlot);
-          });
-        })
-        .catch(err => console.error("Error checking availability:", err));
+                  chooseBtn.addEventListener("click", () => {
+                    chooseBtn.remove()
+                    const controlDiv = document.createElement("div");
+                    controlDiv.id = "booking-controls";
+
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.placeholder = "Noteringar";
+                    input.id = "notes";
+                    input.style.borderRadius = "10px";
+
+                    const submit = document.createElement("input");
+                    submit.type = "submit";
+                    submit.className = "main-btn";
+                    submit.value = "Bekräfta";
+
+                    const cancel = document.createElement("button");
+                    cancel.innerText = "Avbryt";
+                    cancel.style.backgroundColor = "#c0392b";
+
+                    controlDiv.appendChild(input);
+                    controlDiv.appendChild(submit);
+                    controlDiv.appendChild(cancel);
+                    timeSlot.appendChild(controlDiv);
+
+                    submit.addEventListener("click", () => {
+                      const notes = input.value;
+                      createBooking(slot.id, notes);
+                    });
+
+                    cancel.addEventListener("click", () => {
+                      controlDiv.remove();
+                      timeSlot.appendChild(chooseBtn);
+                    });
+                  });
+
+                  timeSlot.appendChild(chooseBtn);
+                  container.appendChild(timeSlot);
+                });
+              })
+              .catch(err => console.error("Error checking availability:", err));
     }
 
-    function createBooking(slotId) {
-      const date = document.getElementById("datePicker").value;
-      const notes = prompt("Enter notes for your booking (optional):") || "";
 
-      const params = new URLSearchParams();
-      params.append("date", date);
-      params.append("time_slot", slotId);
-      params.append("notes", notes);
+    function createBooking(slotId, notes) {
+        const date = document.getElementById("datePicker").value;
 
-      fetch("/u/laundry-booking/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params
-      })
-      .then(res => {
-        if (!res.ok) throw new Error("Booking failed");
-        return res.json();
-      })
-      .then(data => {
-        document.getElementById("slotsContainer").innerHTML = `<h3>Din bokning på ${date} är bekräftad</h3>`;
-        setTimeout(() => window.location.href = data.url, 2000);
-      })
-      .catch(err => alert(err.message));
-    }
+        const params = new URLSearchParams();
+        params.append("date", date);
+        params.append("time_slot", slotId);
+        params.append("notes", notes || "");
+
+        fetch("/u/laundry-booking/create", {
+          method: "POST",
+          headers: {"Content-Type": "application/x-www-form-urlencoded"},
+          body: params
+        })
+                .then(res => {
+                  if (!res.ok) throw new Error("Booking failed");
+                  return res.json();
+                })
+                .then(data => {
+                  loadMyBookings();
+                  checkAvailability();
+                })
+                .catch(err => alert(err.message));
+      }
+
 
     function loadMyBookings() {
       fetch("/u/laundry-booking/bookings", {
         method: "GET",
         credentials: "include"
       })
-      .then(res => {
-        if (!res.ok) throw new Error("Booking failed");
-        return res.json();
-      })
-      .then(bookings => {
-        const container = document.getElementById("myBookings");
-        container.innerHTML = '';
+              .then(res => {
+                if (!res.ok) throw new Error("Booking failed");
+                return res.json();
+              })
+              .then(bookings => {
+                const container = document.getElementById("myBookings");
+                container.innerHTML = '';
 
-        if (bookings.length === 0) {
-          container.innerHTML = "<p>Du har inga bokningar ännu.</p>";
-          return;
-        }
+                if (bookings.length === 0) {
+                  container.innerHTML = "<p>Du har inga bokningar ännu.</p>";
+                  return;
+                }
 
-        bookings.forEach(booking => {
-          const card = document.createElement("div");
-          card.className = "time-slot";
-          card.innerHTML = `
-            <div>
-              <strong>Datum:</strong> ${booking.date}<br>
-              <strong>Tid:</strong> ${booking.timeSlot.label}<br>
-              <strong>Notering:</strong> ${booking.notes || "-"}
-            </div>
-            <div>
-              <button onclick="deleteBooking(${booking.id})" style="background-color: #c0392b;">Ta bort</button>
-              <button onclick="editBooking(${booking.id})" style="background-color: #0097b2;">Ändra</button>
-            </div>`;
-          container.appendChild(card);
-        });
-      })
-      .catch(err => alert("Fel vid hämtning: " + err.message));
+                bookings.forEach(booking => {
+                  const card = document.createElement("div");
+                  card.className = "time-slot";
+
+                  card.innerHTML = `
+          <div>
+            <strong>Datum:</strong> ${booking.date}<br>
+            <strong>Tid:</strong> ${booking.timeSlot.label}<br>
+            <strong>Notering:</strong> ${booking.notes || "-"}
+          </div>`;
+
+                  const deleteBtn = document.createElement("button");
+                  deleteBtn.innerText = "Ta bort";
+                  deleteBtn.style.backgroundColor = "#c0392b";
+
+                  deleteBtn.addEventListener("click", () => {
+                    deleteBooking(booking.id);
+                  });
+
+                  card.appendChild(deleteBtn);
+                  container.appendChild(card);
+                });
+              })
+              .catch(err => alert("Fel vid hämtning: " + err.message));
     }
+
 
     function deleteBooking(id) {
-      fetch(`/u/laundry-booking/bookings/delete/${id}`, { method: "DELETE" })
-        .then(res => {
-          if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
-          return res.json();
-        })
-        .then(() => loadMyBookings())
-        .catch(err => alert("Fel vid borttagning: " + err.message));
+      fetch(`/u/laundry-booking/bookings/delete/${id}`, {
+        method: "DELETE",
+        credentials: "include"
+      })
+              .then(res => {
+                if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
+
+                const contentType = res.headers.get("content-type") || "";
+
+                if (contentType.includes("application/json")) {
+                  return res.json();
+                }
+
+                return Promise.resolve(); // No JSON to parse
+              })
+              .then(() => loadMyBookings())
+              .then(() => checkAvailability())
+              .catch(err => alert("Fel vid borttagning: " + err.message));
     }
 
-    function editBooking(id) {
-      const newNote = prompt("Ange ny notering:");
-      if (newNote === null) return;
-
-      fetch(`/u/laundry-booking/update`, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ id, notes: newNote })
-      })
-      .then(res => {
-        if (!res.ok) throw new Error("Kunde inte uppdatera bokningen");
-        loadMyBookings();
-      })
-      .catch(err => alert("Fel vid uppdatering: " + err.message));
-    }
   </script>
 </body>
 </html>
