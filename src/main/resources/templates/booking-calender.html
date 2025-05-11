@@ -138,6 +138,23 @@
       background-color: #0097b2;
     }
 
+    .main-btn {
+      background-color: #144953;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 24px;
+    }
+
+    .main-btn:hover {
+      background-color: #0097b2;
+    }
+
     .time-slot {
       background-color: #f9f7fb;
       border: 1px solid #e0e0e0;
@@ -283,10 +300,11 @@
                   timeSlot.className = "time-slot";
                   timeSlot.textContent = `${slot.label}`;
 
-                  const btn = document.createElement("button");
-                  btn.innerText = "Välj";
+                  const chooseBtn = document.createElement("button");
+                  chooseBtn.innerText = "Välj";
 
-                  btn.addEventListener("click", () => {
+                  chooseBtn.addEventListener("click", () => {
+                    chooseBtn.remove()
                     const controlDiv = document.createElement("div");
                     controlDiv.id = "booking-controls";
 
@@ -294,13 +312,16 @@
                     input.type = "text";
                     input.placeholder = "Noteringar";
                     input.id = "notes";
+                    input.style.borderRadius = "10px";
 
                     const submit = document.createElement("input");
                     submit.type = "submit";
+                    submit.className = "main-btn";
                     submit.value = "Bekräfta";
 
                     const cancel = document.createElement("button");
                     cancel.innerText = "Avbryt";
+                    cancel.style.backgroundColor = "#c0392b";
 
                     controlDiv.appendChild(input);
                     controlDiv.appendChild(submit);
@@ -314,10 +335,11 @@
 
                     cancel.addEventListener("click", () => {
                       controlDiv.remove();
+                      timeSlot.appendChild(chooseBtn);
                     });
                   });
 
-                  timeSlot.appendChild(btn);
+                  timeSlot.appendChild(chooseBtn);
                   container.appendChild(timeSlot);
                 });
               })
