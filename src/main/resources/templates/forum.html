@@ -349,6 +349,7 @@
             <script>
               document.getElementById('postForm').addEventListener('submit', function(e) {
                 e.preventDefault();
+                document.querySelector('#postForm input[type="submit"]').disabled = true;
 
                 const title = document.getElementById('postTitle').value;
                 const content = document.getElementById('postContent').value;
