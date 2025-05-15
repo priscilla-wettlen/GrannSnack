@@ -1,5 +1,6 @@
 package com.grannsnack.GrannSnack.Service;
 
+import com.grannsnack.GrannSnack.Model.Comment;
 import com.grannsnack.GrannSnack.Model.ForumDTO;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
@@ -17,9 +18,10 @@ public class DBForumService {
 
     @Autowired
     private  DBForumInterface dbForumInterface;
-
     @Autowired
     private  DBUserService dbUserService;
+    @Autowired
+    private  DBCommentInterface dbCommentInterface;
 
     private Timestamp date;
 
@@ -55,10 +57,23 @@ public class DBForumService {
         posts.sort((p1, p2) -> p2.getPostDate().compareTo(p1.getPostDate()));
 
         for(Post post : posts) {
-            postsDTO.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID())));
+            postsDTO.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID()), dbCommentInterface.findCommentsByPostID(post.getPostId())));
         }
 
         return postsDTO;
+    }
+
+    public boolean updatePost(int postId, String title, String content) {
+        Optional<Post> optionalPost = dbForumInterface.findById(postId);
+        if(optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            post.setPostTitle(title);
+            post.setPostContent(content);
+            dbForumInterface.save(post);
+            return true;
+        } else {
+            return false;
+        }
     }
   
     public List<Post> findPostsByReported(boolean reported) {
@@ -83,5 +98,13 @@ public class DBForumService {
         } else {
             return false;
         }
+    }
+
+    public boolean createComment(String commentContent, int commentAurthorID, int postID) {
+        Comment comment = new Comment(commentContent, commentAurthorID, postID);
+        dbCommentInterface.save(comment);
+
+        Optional<Comment> newComment = Optional.ofNullable(dbCommentInterface.findCommentById(comment.getCommentID()));
+        return newComment.isPresent();
     }
 }

@@ -1,5 +1,6 @@
 package com.grannsnack.GrannSnack.Service;
 
+import com.grannsnack.GrannSnack.Model.Comment;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import org.springframework.cglib.core.Local;
@@ -20,4 +21,5 @@ public interface DBForumInterface extends JpaRepository<Post, Integer> {
     List<Post> findPostsByPostDateBetween(Date postDateAfter, Date postDateBefore);
 
     List<Post> findPostsByReported(boolean reported);
+
 }
