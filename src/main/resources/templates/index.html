@@ -83,7 +83,7 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .loginbtn{
+    .registerbtn{
       background: #f4f6f8;
       border:1px solid #10B781;
       color: #10B781;
@@ -170,7 +170,7 @@
 </head>
 <body>
   <header>
-    <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <a th:href="@{/home}" class="logo-link"><div class="logo">GrannSnack</div></a>
   </header>
 
     <main>
@@ -182,7 +182,7 @@
         </div>
         <div class="btngroup">
           <a href="#functions"><button class="btn">Utforska funktioner</button></a>
-          <a th:href="@{/login}"><button class="btn loginbtn">Logga in</button></a>
+          <a th:href="@{/register}"><button class="btn registerbtn">Registrera</button></a>
         </div>
         <div class="mini-links">
           <span>✔ Enkel tvättbokning</span>
