@@ -1,5 +1,6 @@
 package com.grannsnack.GrannSnack.WebController;
 
+import com.grannsnack.GrannSnack.Model.Comment;
 import com.grannsnack.GrannSnack.Model.ForumDTO;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
@@ -35,7 +36,6 @@ public class ForumController {
     }
 
     @PostMapping("/u/forum/create")
-    @ResponseBody
     public ResponseEntity<String> posting(@RequestBody Post post , @AuthenticationPrincipal UserDetails userDetails) {
         try {
             String userEmail = userDetails.getUsername();
@@ -54,7 +54,7 @@ public class ForumController {
     }
 
     @DeleteMapping("/u/forum/delete")
-    public ResponseEntity<String> deleting(@RequestBody Post post, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<String> deleting(@RequestBody Post post) {
         Post newPost = dbForumService.getPostById(post.getPostId());
 
         if(newPost == null) {
@@ -66,7 +66,6 @@ public class ForumController {
     }
 
     @GetMapping("/u/forum/posts")
-    @ResponseBody
     public ResponseEntity<List<ForumDTO>> fetchPosts(@RequestParam(required = false) Timestamp fromDate,
                                                      @RequestParam(required = false) Timestamp toDate,
                                                      Authentication authentication) {
@@ -114,6 +113,16 @@ public class ForumController {
         }
     }
 
+    @PostMapping("/u/forum/edit-post")
+    public ResponseEntity<String> editPost(@RequestBody Post post) {
+        boolean ok = dbForumService.updatePost(post.getPostId(), post.getPostTitle(), post.getPostContent());
+        if(ok) {
+            return ResponseEntity.status(HttpStatus.OK).body("Post edited");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post not found");
+        }
+    }
+
     @PostMapping("/u/forum/report")
     public ResponseEntity<String> report(@RequestParam("postId") int postId) {
         int newId = postId;
@@ -123,6 +132,23 @@ public class ForumController {
             return ResponseEntity.status(HttpStatus.OK).body("Post reported");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post not found");
+        }
+    }
+
+    @PostMapping("/u/forum/comment")
+    public ResponseEntity<String> comment(@RequestParam("postId") int postId,
+                                          @RequestParam("comment") String comment,
+                                          @AuthenticationPrincipal UserDetails userDetails) {
+
+        String userEmail = userDetails.getUsername();
+        MyUser user = dbUserService.getUserByEmail(userEmail);
+
+        boolean ok = dbForumService.createComment(comment, user.getId(), postId);
+
+        if(ok) {
+            return ResponseEntity.status(HttpStatus.CREATED).body("Comment successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Comment failed");
         }
     }
 
