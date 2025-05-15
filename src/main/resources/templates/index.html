@@ -83,10 +83,19 @@
       font-weight: 600;
       cursor: pointer;
     }
+    .btn:hover{
+      color:#1ec98b;
+      background-color: white;
+      outline: #1ec98b 1px solid;
+    }
     .registerbtn{
       background: #f4f6f8;
       border:1px solid #10B781;
       color: #10B781;
+    }
+    .registerbtn:hover{
+      color: white;
+      background: #1ec98b;
     }
     .mini-links{
       margin: 10px 0 30px 0;
@@ -171,6 +180,7 @@
 <body>
   <header>
     <a th:href="@{/home}" class="logo-link"><div class="logo">GrannSnack</div></a>
+    <a th:href="@{/login}"><button class="btn">Logga in</button></a>
   </header>
 
     <main>
