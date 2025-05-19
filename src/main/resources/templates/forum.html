@@ -123,7 +123,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    .post-btns input[type="submit"], .post-btns button{
+    .post-btns input[type="submit"]{
         background: #10B781;
         color: white;
         padding:10px 20px;
@@ -132,8 +132,9 @@
         width: 150px;
         cursor: pointer;
     }
-    .post-btns input[type="submit"]:hover, .post-btns button:hover{
+    .post-btns input[type="submit"]:hover{
       background: #82cab4;
+
     }
     .upload-btn{
         padding:10px 20px;
@@ -237,62 +238,20 @@
       gap: 14px;
       margin-bottom:20px;
     }
-    .comments-container {
-      max-height: 300px;
-      overflow-y: auto;
-      margin-top: 10px;
-    }
-    .comment-section {
-      display: flex;
-      word-break: break-word;
-      margin-bottom: 12px;
-    }
     .comment-section .information{
       width:80%;
       padding: 8px 12px;
       border-radius: 8px;
       font-size: 12px;
       background: #f0f4fa;
-      color:#333;
+      color:#a2aab9;
     }
     .comment-section .information p{
       margin-top:10px;
-      color: #333;
     }
-    .post-actions {
+    .comment-section{
       display: flex;
-      gap: 8px;
-    }
-    .post-actions i {
-      cursor: pointer;
-    }
-    .edit-form {
-      display: none;
-      margin-top: 15px;
-    }
-    .edit-buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .edit-buttons button {
-      padding: 8px 16px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-    }
-    .save-edit {
-      background: #10B781;
-      color: white;
-    }
-    .cancel-edit {
-      background: #f0f0f0;
-      color: #333;
-    }
-    .comment-date {
-      font-size: 12px;
-      color: #8f9bb3;
+      word-break: break-word;
     }
     @media (max-width: 1200px) {
       .container {
@@ -343,7 +302,6 @@
       border-radius: 10px;
       font-size: 18px;
       box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.15);
-      z-index: 1000;
     }
 
     @media (max-width: 600px) {
@@ -388,6 +346,40 @@
             <input type="text" name="postTitle" id="postTitle" placeholder="Titel" required>
             <textarea class="post-textarea" id="postContent" placeholder="Skriv in ditt inlägg..." required></textarea>
           </div>
+            <script>
+              document.getElementById('postForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                document.querySelector('#postForm input[type="submit"]').disabled = true;
+
+                const title = document.getElementById('postTitle').value;
+                const content = document.getElementById('postContent').value;
+
+                fetch('/u/forum/create', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    postTitle: title,
+                    postContent: content
+                  })
+                })
+                        .then(res => {
+                          if(res.status === 201) {
+                            document.getElementById('postForm').reset();
+                            showPopup('Inlägget har publicerats');
+                            setTimeout(() => window.location.reload(), 1500);
+                          } else {
+                            alert('Något gick fel!');
+                          }
+                        })
+                        .catch(err => {
+                          console.log(err);
+                        })
+              })
+            </script>
+
+          
           <div class="post-btns">
             <input type="file" id="imageUpload" accept="image/*" style="display:none;">
             <label for="imageUpload" class="upload-btn">Ladda bild</label>
@@ -411,172 +403,30 @@
   </div>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+
     fetchPosts();
 
-    // Add event listener for the post form
-    document.getElementById('postForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      document.querySelector('#postForm input[type="submit"]').disabled = true;
-
-      const title = document.getElementById('postTitle').value;
-      const content = document.getElementById('postContent').value;
-
-      try {
-        // Create a mock postId for local usage
-        const mockPostId = Date.now();
-        
-        // Create post element immediately
-        const postContainer = document.getElementById('posts');
-        const userInitial = 'U'; // Default user initial
-        const username = 'User'; // Default username
-        const postDate = new Date();
-        const formattedDate = postDate.toLocaleDateString('sv-SE') + ' • ' +
-                          postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
-        
-        const postElement = document.createElement('div');
-        postElement.className = 'post';
-        postElement.id = `post-${mockPostId}`;
-        postElement.innerHTML = `
-          <div class="top-header">
-              <div class="avatar">
-                  <p style="font-weight:bold">${userInitial}</p>
-              </div>
-              <div class="information">
-                  <h2 class="title">
-                    <span class="post-title-text">${title}</span>
-                    <span class="post-actions">
-                        <i class="fa-regular fa-pen-to-square fa-xs" onclick="editPost(${mockPostId})"
-                        style="color:#10B781; cursor:pointer; margin-right: 10px;"></i>
-                        <i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${mockPostId})"
-                        style="color:#ff4d4f; cursor:pointer; margin-right: 10px;"></i>
-                        <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${mockPostId})"></i>
-                    </span>
-                  </h2>
-                  <p class="name-date">${username} • ${formattedDate}</p>
-              </div>
-          </div>
-          <div class="content post-content-${mockPostId}">${content}</div>
-          
-          <!-- Edit form for the post -->
-          <div class="edit-form" id="edit-form-${mockPostId}">
-            <input type="text" class="edit-title" id="edit-title-${mockPostId}" value="${title}" 
-                  style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #e5e7eb;">
-            <textarea class="post-textarea edit-content" id="edit-content-${mockPostId}">${content}</textarea>
-            <div class="edit-buttons">
-              <button class="cancel-edit" onclick="cancelEdit(${mockPostId})">Avbryt</button>
-              <button class="save-edit" onclick="saveEdit(${mockPostId})">Spara</button>
-            </div>
-          </div>
-          
-          <hr style="margin:20px 0px; color:#D3D3D3; border-top:none;">
-
-          <div class="comment-buttons">            
-            <input type="text" name="comment" id="comment-input-${mockPostId}" placeholder="Skriv en kommentar...">
-            <input type="submit" value="Kommentera" onclick="addComment(${mockPostId})">
-          </div>
-          
-          <div class="comments-container" id="comments-container-${mockPostId}">
-          </div>
-        `;
-        
-        // Insert at the beginning of the posts container
-        if (postContainer.firstChild) {
-          postContainer.insertBefore(postElement, postContainer.firstChild);
-        } else {
-          postContainer.appendChild(postElement);
-        }
-        
-        // Reset form and show success message
-        document.getElementById('postForm').reset();
-        document.querySelector('#postForm input[type="submit"]').disabled = false;
-        showPopup('Inlägget har publicerats');
-        
-        // Try to send to server in the background
-        fetch('/u/forum/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            postTitle: title,
-            postContent: content
-          })
-        }).catch(err => {
-          console.log('Post created locally but server sync failed:', err);
-        });
-      } catch(err) {
-        console.error('Error creating post:', err);
-        document.querySelector('#postForm input[type="submit"]').disabled = false;
-      }
-    });
-
     function fetchPosts() {
-      // Mock data for local testing
-      const mockData = [
-        {
-          post: {
-            postId: 1,
-            postTitle: "Välkommen till forumet",
-            postContent: "Detta är ett exempel på ett inlägg i forumet.",
-            postDate: new Date().toISOString(),
-            postImage: null
-          },
-          myUser: {
-            userName: "ExempelAnvändare"
-          },
-          isUsers: true,
-          comments: [
-            {
-              commentId: 1,
-              commentContent: "Detta är en exempelkommentar!",
-              commentDate: new Date().toISOString(),
-              user: "GrannUser"
-            }
-          ]
-        },
-        {
-          post: {
-            postId: 2,
-            postTitle: "Fråga om parkering",
-            postContent: "Vet någon om det finns lediga parkeringsplatser i område B?",
-            postDate: new Date(Date.now() - 86400000).toISOString(),
-            postImage: null
-          },
-          myUser: {
-            userName: "NyGranne"
-          },
-          isUsers: false,
-          comments: []
+      fetch('/u/forum/posts')
+      .then(res => {
+        if(res.status === 204) {
+          document.getElementById('posts').innerHTML = '<div class="post"><p>Inga inlägg att visa.</p></div>';
+          return null;
         }
-      ];
-      
-      try {
-        // Try the actual fetch first
-        fetch('/u/forum/posts')
-        .then(res => {
-          if(res.status === 204) {
-            document.getElementById('posts').innerHTML = '<div class="post"><p>Inga inlägg att visa.</p></div>';
-            return null;
-          }
-          if(!res.ok) {
-            throw new Error('Error fetching posts');
-          }
-          return res.json();
-        })
-        .then(data => {
-          if(data && data.length > 0) {
-            renderPosts(data);
-          }
-        })
-        .catch(err => {
-          // If fetch fails, use mock data instead
-          console.log('Using mock data due to fetch error:', err);
-          renderPosts(mockData);
-        });
-      } catch(err) {
-        console.error('Error in fetchPosts function: ', err);
-        renderPosts(mockData);
-      }
+        if(!res.ok) {
+          throw new Error('Error fetching posts');
+        }
+        return res.json();
+      })
+      .then(data => {
+        if(data && data.length > 0) {
+          renderPosts(data);
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching posts: ', err);
+        document.getElementById('posts').innerHTML = '<div class="post"><p>Kunde inte hämta inlägg. Försök igen senare.</p></div>\n'
+      });
     }
 
     function renderPosts(forumDTOs) {
@@ -587,7 +437,8 @@
         const post = dto.post;
         const user = dto.myUser;
         const isUsers = dto.isUsers;
-        const comments = dto.comments || [];
+
+        console.log("Post ID:", post.postId, "isUsers value:", dto.isUsers);
 
         const isUserPost = dto.isUsers !== undefined ? dto.isUsers : dto.users;
         const username = user.userName ? user.userName : 'Anonym';
@@ -595,95 +446,52 @@
 
         const postDate = new Date(dto.post.postDate);
         const formattedDate = postDate.toLocaleDateString('sv-SE') + ' • ' +
-                            postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+                              postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
 
         const postElement = document.createElement('div');
         postElement.className = 'post';
-        postElement.id = `post-${post.postId}`;
-        
-        // Create post HTML structure
         postElement.innerHTML = `
-          <div class="top-header">
-              <div class="avatar">
-                  <p style="font-weight:bold">${initial}</p>
-              </div>
-              <div class="information">
-                  <h2 class="title">
-                    <span class="post-title-text">${post.postTitle}</span>
-                    <span class="post-actions">
-                        ${isUserPost === true ? `
-                            <i class="fa-regular fa-pen-to-square fa-xs" onclick="editPost(${post.postId})"
-                            style="color:#10B781; cursor:pointer; margin-right: 10px;"></i>
-                            <i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${post.postId})"
-                            style="color:#ff4d4f; cursor:pointer; margin-right: 10px;"></i>
-                        ` : ''}
-                        <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${post.postId})"></i>
-                    </span>
-                  </h2>
-                  <p class="name-date">${username} • ${formattedDate}</p>
-              </div>
-          </div>
-          <div class="content post-content-${post.postId}">${post.postContent}</div>
-          
-          <!-- Edit form for the post -->
-          <div class="edit-form" id="edit-form-${post.postId}">
-            <input type="text" class="edit-title" id="edit-title-${post.postId}" value="${post.postTitle}" 
-                   style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #e5e7eb;">
-            <textarea class="post-textarea edit-content" id="edit-content-${post.postId}">${post.postContent}</textarea>
-            <div class="edit-buttons">
-              <button class="cancel-edit" onclick="cancelEdit(${post.postId})">Avbryt</button>
-              <button class="save-edit" onclick="saveEdit(${post.postId})">Spara</button>
-            </div>
-          </div>
-          
-          <hr style="margin:20px 0px; color:#D3D3D3; border-top:none;">
-
-          <div class="comment-buttons">            
-            <input type="text" name="comment" id="comment-input-${post.postId}" placeholder="Skriv en kommentar...">
-            <input type="submit" value="Kommentera" onclick="addComment(${post.postId})">
-          </div>
-          
-          <div class="comments-container" id="comments-container-${post.postId}">
-            ${comments.length > 0 ? renderComments(comments, initial, username) : ''}
-          </div>
-          
-          ${post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}
-        `;
-        
-        postContainer.appendChild(postElement);
-      });
-    }
-
-    function renderComments(comments, userInitial, username) {
-      let commentsHTML = '';
-      
-      comments.forEach(comment => {
-        const commentDate = new Date(comment.commentDate);
-        const formattedCommentDate = commentDate.toLocaleDateString('sv-SE') + ' • ' +
-                                   commentDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
-        
-        commentsHTML += `
-          <div class="comment-section">
-            <div class="avatar" style="height:30px; width:30px; font-size:11px;">
-                <p>${comment.user ? comment.user.charAt(0) : userInitial}</p>
+        <div class="top-header">
+            <div class="avatar">
+                <p style="font-weight:bold">${initial}</p>
             </div>
             <div class="information">
-              <div class="name-date">
-                <span style="font-size:14px; color:black;">${comment.user || username}</span>
-                <span class="comment-date"> • ${formattedCommentDate}</span>
-              </div>
-              <p>${comment.commentContent}</p>
+                <h2 class="title">${dto.post.postTitle}
+                    <span style="display: flex; gap: 8px;">
+                        ${isUserPost === true ? `
+                            <i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${post.postId})"
+                            style="color:#ff4d4f; cursor:pointer;"></i>
+                        ` : ''}
+                        <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${post.postId})"></i>
+                      </span>
+                </h2>
+                <p class="name-date">${user.userName} • ${formattedDate}</p>
             </div>
+        </div>
+        <div class="content">${post.postContent}</div>
+        
+        <hr style="margin:20px 0px; color:#D3D3D3; border-top:none;">
+
+        <div class="comment-buttons">            
+          <input type="text" name="comment" id="comment" placeholder="Skriv en kommentar...">
+          <input type="submit" name="send-comment" id="send-comment">
+        </div>
+        <div class="comment-section">
+          <div class="avatar" style="height:30px; width:30px; font-size:11px;">
+              <p>${initial}</p>
           </div>
+          <div class="information"><div class="name-date"><span class="name-date" style="font-size:14px; color:black;">${username} • ${formattedDate}</span></div><p>${post.postContent}</p>
+        </div>
+        </div>
+        ${post.postImage ? <div class="post-image"><img src="${post.postImage}" alt="Postbild"></div> : ''}
         `;
+        postContainer.appendChild(postElement);
       });
-      
-      return commentsHTML;
     }
   });
 
   window.showPopup = function(message) {
-    const popup = document.getElementById('popup-posted') || createPopupElement();
+    const popup = document.getElementById('popup-posted');
     popup.textContent = message;
     popup.style.display = 'block';
 
@@ -692,138 +500,24 @@
     }, 3000);
   }
 
-  function createPopupElement() {
-    const popup = document.createElement('div');
-    popup.id = 'popup-posted';
-    document.body.appendChild(popup);
-    return popup;
-  }
-
-  window.editPost = function(postId) {
-    // Show edit form and hide content
-    document.querySelector(`.post-content-${postId}`).style.display = 'none';
-    document.querySelector(`#edit-form-${postId}`).style.display = 'block';
-  }
-
-  window.cancelEdit = function(postId) {
-    // Hide edit form and show content
-    document.querySelector(`.post-content-${postId}`).style.display = 'block';
-    document.querySelector(`#edit-form-${postId}`).style.display = 'none';
-  }
-
-  window.saveEdit = function(postId) {
-    try {
-      const newTitle = document.querySelector(`#edit-title-${postId}`).value;
-      const newContent = document.querySelector(`#edit-content-${postId}`).value;
-      
-      // Update the DOM immediately without waiting for server response
-      document.querySelector(`.post-title-text`).textContent = newTitle;
-      document.querySelector(`.post-content-${postId}`).textContent = newContent;
-      
-      // Hide edit form and show content
-      document.querySelector(`.post-content-${postId}`).style.display = 'block';
-      document.querySelector(`#edit-form-${postId}`).style.display = 'none';
-      
-      showPopup('Inlägget har uppdaterats');
-      
-      // Try to update on the server in the background
-      fetch('/u/forum/edit', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          postId: postId,
-          postTitle: newTitle,
-          postContent: newContent
-        })
-      }).catch(err => {
-        console.log('Post updated locally but server sync failed:', err);
-      });
-    } catch(err) {
-      console.error('Error saving edit:', err);
-      showPopup('Inlägget har uppdaterats lokalt');
-    }
-  }
-
-  window.addComment = function(postId) {
-    const commentInput = document.querySelector(`#comment-input-${postId}`);
-    const commentContent = commentInput.value.trim();
-    
-    if (!commentContent) return;
-    
-    try {
-      // Create a new comment element directly without waiting for the server
-      // This ensures the comment appears even if the server request fails
-      const userInitial = document.querySelector(`#post-${postId} .avatar p`).textContent;
-      const username = document.querySelector(`#post-${postId} .name-date`).textContent.split(' • ')[0];
-      
-      const commentDate = new Date();
-      const formattedCommentDate = commentDate.toLocaleDateString('sv-SE') + ' • ' +
-                                commentDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
-      
-      const newComment = document.createElement('div');
-      newComment.className = 'comment-section';
-      newComment.innerHTML = `
-        <div class="avatar" style="height:30px; width:30px; font-size:11px;">
-          <p>${userInitial}</p>
-        </div>
-        <div class="information">
-          <div class="name-date">
-            <span style="font-size:14px; color:black;">${username}</span>
-            <span class="comment-date"> • ${formattedCommentDate}</span>
-          </div>
-          <p>${commentContent}</p>
-        </div>
-      `;
-      
-      // Add the comment to the comments container
-      const commentsContainer = document.querySelector(`#comments-container-${postId}`);
-      commentsContainer.appendChild(newComment);
-      
-      // Clear the input field
-      commentInput.value = '';
-      
-      showPopup('Kommentaren har lagts till');
-      
-      // Try to send to server in the background
-      fetch('/u/forum/comment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          postId: postId,
-          commentContent: commentContent
-        })
-      }).catch(err => {
-        console.log('Comment sent locally but server sync failed:', err);
-      });
-    } catch(err) {
-      console.error('Error adding comment:', err);
-      showPopup('Kommentaren har lagts till lokalt');
-    }
-  }
-
   window.reportPost = function(postId){
-    try {
-      showPopup('Inlägget har rapporterats');
-      
-      // Try to report on the server in the background
-      fetch('/u/forum/report', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          postId: postId
-        })
-      }).catch(err => {
-        console.log('Report submitted locally but server sync failed:', err);
-      });
-    } catch(err) {
-      console.error('Error reporting post:', err);
-    }
+    const formData = new FormData();
+    formData.append('postId', postId);
+
+    fetch(/u/forum/report, {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => {
+      if(res.ok) {
+        showPopup('Inlägget har rapporterats');
+        setTimeout(() => window.location.reload(), 1500);
+      }
+    })
+    .catch(err => {
+      showPopup("Något gick fel, prova igen senare")
+      console.log(err);
+    })
   }
 
   window.deletePost = function(postId) {
@@ -831,39 +525,31 @@
       return;
     }
 
-    try {
-      // Remove post from DOM immediately
-      const postElement = document.querySelector(`#post-${postId}`);
-      if (postElement) {
-        postElement.style.opacity = '0.5';
-        setTimeout(() => {
-          postElement.remove();
-        }, 500);
+    fetch(/u/forum/delete, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        postId: postId
+      })
+    })
+    .then(res => {
+      if(res.ok) {
+        showPopup('Inlägget har tagits bort');
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        showPopup('Något gick fel, prova igen senare')
       }
-      
-      showPopup('Inlägget har tagits bort');
-      
-      // Try to delete on the server in the background
-      fetch('/u/forum/delete', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          postId: postId
-        })
-      }).catch(err => {
-        console.log('Post deleted locally but server sync failed:', err);
-      });
-    } catch(err) {
-      console.error('Error deleting post:', err);
-      showPopup('Inlägget har tagits bort lokalt');
-    }
+    })
+    .catch(err => {
+      console.log(err);
+      showPopup('Något gick fel, prova igen senare')
+    })
   }
-  
   function toggleDarkMode() {
     document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
-  }
+}
 </script>
 <div id="popup-posted"></div>
 </body>
