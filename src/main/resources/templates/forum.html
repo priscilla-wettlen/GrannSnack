@@ -462,32 +462,20 @@
                             <i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${post.postId})"
                             style="color:#ff4d4f; cursor:pointer;"></i>
                         ` : ''}
-<i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${post.postId})" style="color:#ff4d4f; cursor:pointer;"></i>
-<i class="fa-regular fa-pen-to-square fa-xs" onclick="toggleEdit(${post.postId})" style="color:#0097b2; cursor:pointer;"></i> <!-- Nytt-Sham -->
+                        <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${post.postId})"></i>
                       </span>
                 </h2>
                 <p class="name-date">${user.userName} • ${formattedDate}</p>
             </div>
         </div>
         <div class="content">${post.postContent}</div>
-
-        <!-- Nytt-Sham: Redigeringsfältet, gömd först -->
-<div class="edit-section" id="edit-${post.postId}" style="display:none;">
-  <textarea id="edit-text-${post.postId}" style="width: 100%; padding: 10px;">${post.postContent}</textarea>
-  <button onclick="saveEdit(${post.postId})" style="background:#10B781;color:white;border:none;padding:6px 12px;margin-top:8px;border-radius:6px;">Spara</button>
-  <button onclick="cancelEdit(${post.postId})" style="background:#ccc;color:#000;border:none;padding:6px 12px;margin-left:8px;border-radius:6px;">Avbryt</button>
-</div>
-
-<!-- Nytt-Sham: Kommentarsfält -->
-<div class="comment-buttons">
-  <input type="text" name="comment" id="comment-${post.postId}" placeholder="Skriv en kommentar...">
-  <input type="submit" value="Kommentera" onclick="sendComment(${post.postId})">
-</div>
-
         
         <hr style="margin:20px 0px; color:#D3D3D3; border-top:none;">
 
-        
+        <div class="comment-buttons">            
+          <input type="text" name="comment" id="comment" placeholder="Skriv en kommentar...">
+          <input type="submit" name="send-comment" id="send-comment">
+        </div>
         <div class="comment-section">
           <div class="avatar" style="height:30px; width:30px; font-size:11px;">
               <p>${initial}</p>
@@ -562,67 +550,6 @@
   function toggleDarkMode() {
     document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
 }
-
-// Nytt-Sham: Visa redigeringsformulär
-function toggleEdit(postId) {
-  document.getElementById('edit-' + postId).style.display = 'block';
-  document.getElementById('content-' + postId).style.display = 'none';
-}
-
-// Nytt-Sham: Avbryt redigering
-function cancelEdit(postId) {
-  document.getElementById('edit-' + postId).style.display = 'none';
-  document.getElementById('content-' + postId).style.display = 'block';
-}
-
-// Nytt-Sham: Spara ändringar
-function saveEdit(postId) {
-  const newText = document.getElementById('edit-text-' + postId).value;
-
-  fetch('/u/forum/edit', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      postId: postId,
-      newContent: newText
-    })
-  })
-  .then(res => {
-    if(res.ok) {
-      showPopup('Inlägget har uppdaterats');
-      setTimeout(() => window.location.reload(), 1000);
-    } else {
-      alert('Något gick fel');
-    }
-  })
-}
-
-// Nytt-Sham: Skicka kommentar
-function sendComment(postId) {
-  const comment = document.getElementById('comment-' + postId).value;
-
-  fetch('/u/forum/comment', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      postId: postId,
-      comment: comment
-    })
-  })
-  .then(res => {
-    if(res.ok) {
-      showPopup('Kommentaren har skickats');
-      setTimeout(() => window.location.reload(), 1000);
-    } else {
-      alert('Kunde inte skicka kommentaren');
-    }
-  })
-}
-
 </script>
 <div id="popup-posted"></div>
 </body>
