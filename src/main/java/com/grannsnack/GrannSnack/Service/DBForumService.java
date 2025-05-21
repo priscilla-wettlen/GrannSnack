@@ -57,7 +57,9 @@ public class DBForumService {
         posts.sort((p1, p2) -> p2.getPostDate().compareTo(p1.getPostDate()));
 
         for(Post post : posts) {
-            postsDTO.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID()), dbCommentInterface.findCommentsByPostID(post.getPostId())));
+            List<Comment> comments = dbCommentInterface.findCommentsByPostID(post.getPostId());
+            comments.sort((c1, c2) -> c2.getCreatedAt().compareTo(c1.getCreatedAt()));
+            postsDTO.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID()), comments));
         }
 
         return postsDTO;
