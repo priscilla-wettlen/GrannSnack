@@ -535,7 +535,7 @@
         <div class="comment-form">
           <div class="comment-buttons">            
             <input type="text" name="comment" id="comment-input-${post.postId}" placeholder="Skriv en kommentar...">
-            <input type="submit" value="Skicka" onclick="addComment(${post.postId})">
+            <input type="submit" value="Skicka" id="comment-send-button" onclick="addComment(${post.postId})">
           </div>
         </div>
         
@@ -652,7 +652,10 @@
   
   // Funktion för att lägga till kommentar
   window.addComment = function(postId) {
+    const commentSend = document.getElementById(`comment-send-button`);
+    commentSend.disabled = true;
     const commentInput = document.getElementById(`comment-input-${postId}`);
+    commentInput.disabled = true;
     if(!commentInput) {
       showPopup('Ett fel uppstod, prova igen senare');
       return;
@@ -663,8 +666,6 @@
       showPopup('Kommentaren kan inte vara tomt.');
       return;
     }
-
-    commentInput.disabled = true;
 
     fetch(`/u/forum/comment`, {
       method: 'POST',
