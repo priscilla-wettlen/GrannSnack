@@ -104,6 +104,7 @@ public class DBForumService {
         comment.setCommentContent(commentContent);
         comment.setCommentAuthorName(commentAuthorName);
         comment.setPostID(postID);
+        comment.setCreatedAt(new Timestamp(System.currentTimeMillis()) );
         dbCommentInterface.save(comment);
 
         Optional<Comment> newComment = Optional.ofNullable(dbCommentInterface.findCommentById(comment.getId()));
