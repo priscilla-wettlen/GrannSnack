@@ -487,6 +487,7 @@
         const user = dto.myUser;
         const commentList = dto.commentList;
 
+        console.log("Rendering post with postid: ", post.postId)
 
         const isUserPost = dto.isUsers !== undefined ? dto.isUsers : dto.users;
         const username = user.userName || 'Anonym';
@@ -545,8 +546,7 @@
         ${post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}`;
         
         postContainer.appendChild(postElement);
-        
-        // Simulera att vi hämtar kommentarer vid rendering
+
         renderComments(post.postId, commentList);
       });
     }
@@ -558,6 +558,8 @@
     const commentsContainer = document.getElementById(`comments-${postId}`);
     if(!commentsContainer) return;
 
+    console.log("Rendering comments for postid: ", postId)
+
     commentsContainer.innerHTML = '';
 
     if (!commentList || commentList.length === 0) {
@@ -565,12 +567,12 @@
       return;
     }
 
-    comments.forEach(comment => {
+    commentList.forEach(comment => {
       const commentDate = new Date(comment.createdAt);
       const formattedDate = commentDate.toLocaleDateString('sv-SE') + ' • ' +
                           commentDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
 
-      const initial = comment.user.userName ? comment.user.userName.charAt(0) : '?';
+      const initial = comment.commentAuthorName ? comment.commentAuthorName.charAt(0) : '?';
 
       const commentElement = document.createElement('div');
       commentElement.className = 'comment-section';
@@ -664,7 +666,7 @@
     }
 
     commentInput.disabled = true;
-
+    console.log("Creating comment with postid: ", postId)
 
     fetch(`/u/forum/comment`, {
       method: 'POST',
@@ -673,7 +675,7 @@
       },
       body: JSON.stringify({
         commentContent: commentText,
-        postId: postId
+        postID: postId
       })
     })
     .then(res => {
