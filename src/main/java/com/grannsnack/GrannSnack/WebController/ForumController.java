@@ -6,6 +6,9 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import com.grannsnack.GrannSnack.Service.DBForumService;
 import com.grannsnack.GrannSnack.Service.DBUserService;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -140,7 +143,9 @@ public class ForumController {
                                           @AuthenticationPrincipal UserDetails userDetails) {
 
         String userEmail = userDetails.getUsername();
+        System.out.println(userEmail);
         MyUser user = dbUserService.getUserByEmail(userEmail);
+        System.out.println(user.getUserName());
 
         boolean ok = dbForumService.createComment(comment.getCommentContent(), user.getUserName(), comment.getPostID());
 
