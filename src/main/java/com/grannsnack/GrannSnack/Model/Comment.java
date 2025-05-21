@@ -12,17 +12,17 @@ public class Comment {
     @Column(name = "comment_content")
     @Lob
     private String commentContent;
-    @Column(name = "comment_author_id", nullable = false)
-    private int commentAuthorID;
+    @Column(name = "comment_author_name", nullable = false)
+    private String commentAuthorName;
     @Column(name = "created_at", columnDefinition = "DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp createdAt;
     @Column(name = "post_id", nullable = false)
     private int postID;
 
-    public Comment(String commentContent, int commentAuthorID, int postID) {
+    public Comment(String commentContent, String commentAuthorName, int postID) {
         this.commentContent = commentContent;
-        this.commentAuthorID = commentAuthorID;
+        this.commentAuthorName = commentAuthorName;
         this.postID = postID;
         this.createdAt = new Timestamp(System.currentTimeMillis());
     }
@@ -43,12 +43,12 @@ public class Comment {
         this.commentContent = commentContent;
     }
 
-    public int getCommentAuthorID() {
-        return commentAuthorID;
+    public String getCommentAuthorID() {
+        return commentAuthorName;
     }
 
-    public void setCommentAuthorID(int commentAuthorID) {
-        this.commentAuthorID = commentAuthorID;
+    public void setCommentAuthorID(String commentAuthorID) {
+        this.commentAuthorName = commentAuthorName;
     }
 
     public Timestamp getCreatedAt() {

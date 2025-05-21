@@ -113,9 +113,9 @@ public class ForumController {
         }
     }
 
-    @PostMapping("/u/forum/edit-post")
+    @PutMapping("/u/forum/edit-post")
     public ResponseEntity<String> editPost(@RequestBody Post post) {
-        boolean ok = dbForumService.updatePost(post.getPostId(), post.getPostTitle(), post.getPostContent());
+        boolean ok = dbForumService.updatePost(post.getPostId(), post.getPostContent());
         if(ok) {
             return ResponseEntity.status(HttpStatus.OK).body("Post edited");
         } else {
@@ -136,14 +136,13 @@ public class ForumController {
     }
 
     @PostMapping("/u/forum/comment")
-    public ResponseEntity<String> comment(@RequestParam("postId") int postId,
-                                          @RequestParam("comment") String comment,
+    public ResponseEntity<String> comment(@RequestBody Comment comment,
                                           @AuthenticationPrincipal UserDetails userDetails) {
 
         String userEmail = userDetails.getUsername();
         MyUser user = dbUserService.getUserByEmail(userEmail);
 
-        boolean ok = dbForumService.createComment(comment, user.getId(), postId);
+        boolean ok = dbForumService.createComment(comment.getCommentContent(), user.getUserName(), comment.getPostID());
 
         if(ok) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Comment successful");

@@ -63,11 +63,10 @@ public class DBForumService {
         return postsDTO;
     }
 
-    public boolean updatePost(int postId, String title, String content) {
+    public boolean updatePost(int postId, String content) {
         Optional<Post> optionalPost = dbForumInterface.findById(postId);
         if(optionalPost.isPresent()) {
             Post post = optionalPost.get();
-            post.setPostTitle(title);
             post.setPostContent(content);
             dbForumInterface.save(post);
             return true;
@@ -100,8 +99,8 @@ public class DBForumService {
         }
     }
 
-    public boolean createComment(String commentContent, int commentAurthorID, int postID) {
-        Comment comment = new Comment(commentContent, commentAurthorID, postID);
+    public boolean createComment(String commentContent, String commentAurthorName, int postID) {
+        Comment comment = new Comment(commentContent, commentAurthorName, postID);
         dbCommentInterface.save(comment);
 
         Optional<Comment> newComment = Optional.ofNullable(dbCommentInterface.findCommentById(comment.getCommentID()));
