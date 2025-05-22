@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil</title>
+</head>
+<body>
+<p>User profile</p>
+<!--Feel free to delete and re-do all of this. It's just for testing-->
+
+<p><strong>Name:</strong> <span th:text="${user.userName}">[Name]</span></p>
+<p><strong>Email:</strong> <span th:text="${user.userEmail}">[Email]</span></p>
+<p><strong>Apartment:</strong> <span th:text="${user.apartmentCode}">[Apartment]</span></p>
+<p><strong>Association:</strong> <span th:text="${user.association}">[Association]</span></p>
+
+
+
+</body>
+</html>
