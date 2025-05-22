@@ -6,9 +6,6 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import com.grannsnack.GrannSnack.Service.DBForumService;
 import com.grannsnack.GrannSnack.Service.DBUserService;
-import org.slf4j.ILoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -116,9 +113,9 @@ public class ForumController {
         }
     }
 
-    @PutMapping("/u/forum/edit-post")
+    @PostMapping("/u/forum/edit-post")
     public ResponseEntity<String> editPost(@RequestBody Post post) {
-        boolean ok = dbForumService.updatePost(post.getPostId(), post.getPostContent());
+        boolean ok = dbForumService.updatePost(post.getPostId(), post.getPostTitle(), post.getPostContent());
         if(ok) {
             return ResponseEntity.status(HttpStatus.OK).body("Post edited");
         } else {
@@ -139,15 +136,14 @@ public class ForumController {
     }
 
     @PostMapping("/u/forum/comment")
-    public ResponseEntity<String> comment(@RequestBody Comment comment,
+    public ResponseEntity<String> comment(@RequestParam("postId") int postId,
+                                          @RequestParam("comment") String comment,
                                           @AuthenticationPrincipal UserDetails userDetails) {
 
         String userEmail = userDetails.getUsername();
-        System.out.println(userEmail);
         MyUser user = dbUserService.getUserByEmail(userEmail);
-        System.out.println(user.getUserName());
 
-        boolean ok = dbForumService.createComment(comment.getCommentContent(), user.getUserName(), comment.getPostID());
+        boolean ok = dbForumService.createComment(comment, user.getId(), postId);
 
         if(ok) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Comment successful");

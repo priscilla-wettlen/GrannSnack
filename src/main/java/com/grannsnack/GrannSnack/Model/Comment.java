@@ -12,21 +12,27 @@ public class Comment {
     @Column(name = "comment_content")
     @Lob
     private String commentContent;
-    @Column(name = "comment_author_name", nullable = false)
-    private String commentAuthorName;
+    @Column(name = "comment_author_id", nullable = false)
+    private int commentAuthorID;
     @Column(name = "created_at", columnDefinition = "DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp createdAt;
     @Column(name = "post_id", nullable = false)
     private int postID;
 
+    public Comment(String commentContent, int commentAuthorID, int postID) {
+        this.commentContent = commentContent;
+        this.commentAuthorID = commentAuthorID;
+        this.postID = postID;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+    }
 
-    public int getId() {
+    public int getCommentID() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCommentID(int commentID) {
+        this.id = commentID;
     }
 
     public String getCommentContent() {
@@ -37,12 +43,12 @@ public class Comment {
         this.commentContent = commentContent;
     }
 
-    public String getCommentAuthorName() {
-        return commentAuthorName;
+    public int getCommentAuthorID() {
+        return commentAuthorID;
     }
 
-    public void setCommentAuthorName(String commentAuthorName) {
-        this.commentAuthorName = commentAuthorName;
+    public void setCommentAuthorID(int commentAuthorID) {
+        this.commentAuthorID = commentAuthorID;
     }
 
     public Timestamp getCreatedAt() {
