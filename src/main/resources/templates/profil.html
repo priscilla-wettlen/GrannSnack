@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Min Profil - GrannSnack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f4f6f8;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #1a202c;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    input:disabled {
+      background-color: #f0f0f0;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #10B781;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn:hover {
+      background-color: #0d9688;
+    }
+    #saveBtn {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Min Profil</h1>
+    <div class="form-group">
+      <label for="name">Namn</label>
+      <input type="text" id="name" value="Sham" class="editable" disabled>
+    </div>
+    <div class="form-group">
+      <label for="email">E-post</label>
+      <input type="email" id="email" value="sham@example.com" class="editable" disabled>
+    </div>
+    <div class="form-group">
+      <label for="unit">Förening</label>
+      <input type="text" id="unit" value="Ekbacken" disabled>
+    </div>
+    <div class="form-group">
+      <label for="apartment">Lägenhetsnummer</label>
+      <input type="text" id="apartment" value="12B" disabled>
+    </div>
+    <button class="btn" onclick="enableEdit()">Redigera</button>
+    <button class="btn" id="saveBtn" onclick="saveChanges()">Spara</button>
+  </div>
+
+  <script>
+    function enableEdit() {
+      document.querySelectorAll('.editable').forEach(input => input.removeAttribute('disabled'));
+      document.getElementById('saveBtn').style.display = 'inline-block';
+    }
+
+    function saveChanges() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      alert("Ändringar sparade för: " + name + " (" + email + ")");
+      document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
+      document.getElementById('saveBtn').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
