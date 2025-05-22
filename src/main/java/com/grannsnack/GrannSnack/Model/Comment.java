@@ -19,7 +19,7 @@ public class Comment {
     private Timestamp createdAt;
     @Column(name = "post_id", nullable = false)
     private int postID;
-
+    
 
     public int getId() {
         return id;
