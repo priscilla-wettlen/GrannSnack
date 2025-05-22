@@ -19,14 +19,20 @@ public class Comment {
     private Timestamp createdAt;
     @Column(name = "post_id", nullable = false)
     private int postID;
-    
 
-    public int getId() {
+    public Comment(String commentContent, String commentAuthorName, int postID) {
+        this.commentContent = commentContent;
+        this.commentAuthorName = commentAuthorName;
+        this.postID = postID;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+    }
+
+    public int getCommentID() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCommentID(int commentID) {
+        this.id = commentID;
     }
 
     public String getCommentContent() {
@@ -37,11 +43,11 @@ public class Comment {
         this.commentContent = commentContent;
     }
 
-    public String getCommentAuthorName() {
+    public String getCommentAuthorID() {
         return commentAuthorName;
     }
 
-    public void setCommentAuthorName(String commentAuthorName) {
+    public void setCommentAuthorID(String commentAuthorID) {
         this.commentAuthorName = commentAuthorName;
     }
 

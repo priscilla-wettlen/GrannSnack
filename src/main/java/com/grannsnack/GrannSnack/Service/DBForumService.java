@@ -99,14 +99,11 @@ public class DBForumService {
         }
     }
 
-    public boolean createComment(String commentContent, String commentAuthorName, int postID) {
-        Comment comment = new Comment();
-        comment.setCommentContent(commentContent);
-        comment.setCommentAuthorName(commentAuthorName);
-        comment.setPostID(postID);
+    public boolean createComment(String commentContent, String commentAurthorName, int postID) {
+        Comment comment = new Comment(commentContent, commentAurthorName, postID);
         dbCommentInterface.save(comment);
 
-        Optional<Comment> newComment = Optional.ofNullable(dbCommentInterface.findCommentById(comment.getId()));
+        Optional<Comment> newComment = Optional.ofNullable(dbCommentInterface.findCommentById(comment.getCommentID()));
         return newComment.isPresent();
     }
 }
