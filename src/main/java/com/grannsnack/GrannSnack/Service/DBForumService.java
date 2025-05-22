@@ -57,17 +57,18 @@ public class DBForumService {
         posts.sort((p1, p2) -> p2.getPostDate().compareTo(p1.getPostDate()));
 
         for(Post post : posts) {
-            postsDTO.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID()), dbCommentInterface.findCommentsByPostID(post.getPostId())));
+            List<Comment> comments = dbCommentInterface.findCommentsByPostID(post.getPostId());
+            comments.sort((c1, c2) -> c2.getCreatedAt().compareTo(c1.getCreatedAt()));
+            postsDTO.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID()), comments));
         }
 
         return postsDTO;
     }
 
-    public boolean updatePost(int postId, String title, String content) {
+    public boolean updatePost(int postId, String content) {
         Optional<Post> optionalPost = dbForumInterface.findById(postId);
         if(optionalPost.isPresent()) {
             Post post = optionalPost.get();
-            post.setPostTitle(title);
             post.setPostContent(content);
             dbForumInterface.save(post);
             return true;
@@ -100,11 +101,15 @@ public class DBForumService {
         }
     }
 
-    public boolean createComment(String commentContent, int commentAurthorID, int postID) {
-        Comment comment = new Comment(commentContent, commentAurthorID, postID);
+    public boolean createComment(String commentContent, String commentAuthorName, int postID) {
+        Comment comment = new Comment();
+        comment.setCommentContent(commentContent);
+        comment.setCommentAuthorName(commentAuthorName);
+        comment.setPostID(postID);
+        comment.setCreatedAt(new Timestamp(System.currentTimeMillis()) );
         dbCommentInterface.save(comment);
 
-        Optional<Comment> newComment = Optional.ofNullable(dbCommentInterface.findCommentById(comment.getCommentID()));
+        Optional<Comment> newComment = Optional.ofNullable(dbCommentInterface.findCommentById(comment.getId()));
         return newComment.isPresent();
     }
 }

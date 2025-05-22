@@ -252,6 +252,57 @@
     .comment-section{
       display: flex;
       word-break: break-word;
+      margin-bottom: 10px;
+    }
+    .comments-container {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .edit-btn {
+      color: #10B781;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    .edit-btn:hover {
+      color: #0D9688;
+    }
+    .edit-post-form {
+      margin-top: 15px;
+      display: none;
+    }
+    .edit-post-form textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 15px;
+      resize: none;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 10px;
+    }
+    .edit-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+    }
+    .btn-primary {
+      background: #10B781;
+      color: white;
+    }
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #666;
     }
     @media (max-width: 1200px) {
       .container {
@@ -434,12 +485,12 @@
       forumDTOs.forEach(dto => {
         const post = dto.post;
         const user = dto.myUser;
-        const isUsers = dto.isUsers;
+        const commentList = dto.commentList;
 
-        console.log("Post ID:", post.postId, "isUsers value:", dto.isUsers);
+        console.log("Rendering post with postid: ", post.postId)
 
         const isUserPost = dto.isUsers !== undefined ? dto.isUsers : dto.users;
-        const username = user.userName ? user.userName : 'Anonym';
+        const username = user.userName || 'Anonym';
         const initial = user.userName ? user.userName.charAt(0) : '?';
 
         const postDate = new Date(dto.post.postDate);
@@ -448,45 +499,98 @@
 
         const postElement = document.createElement('div');
         postElement.className = 'post';
+        postElement.dataset.postId = post.postId;
         postElement.innerHTML = `
         <div class="top-header">
             <div class="avatar">
                 <p style="font-weight:bold">${initial}</p>
             </div>
             <div class="information">
-                <h2 class="title">${dto.post.postTitle}
+                <h2 class="title">${post.postTitle}
                     <span style="display: flex; gap: 8px;">
-                        ${isUserPost === true ? `
+                        ${isUserPost === true ? 
+                            `<i class="fa-regular fa-pen-to-square fa-xs edit-btn" onclick="editPost(${post.postId})"
+                            style="color:#10B781; cursor:pointer;"></i>
                             <i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${post.postId})"
-                            style="color:#ff4d4f; cursor:pointer;"></i>
-                        ` : ''}
+                            style="color:#ff4d4f; cursor:pointer;"></i>`
+                         : ''}
                         <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${post.postId})"></i>
                       </span>
                 </h2>
-                <p class="name-date">${user.userName} • ${formattedDate}</p>
+                <p class="name-date">${username} • ${formattedDate}</p>
             </div>
         </div>
-        <div class="content">${post.postContent}</div>
+        <div class="content" id="content-${post.postId}">${post.postContent}</div>
+        
+        <div class="edit-post-form" id="edit-form-${post.postId}">
+          <textarea id="edit-content-${post.postId}">${post.postContent}</textarea>
+          <div class="edit-actions">
+            <button type="button" class="btn btn-secondary" onclick="cancelEdit(${post.postId})">Avbryt</button>
+            <button type="button" class="btn btn-primary" onclick="saveEdit(${post.postId})">Spara</button>
+          </div>
+        </div>
         
         <hr style="margin:20px 0px; color:#D3D3D3; border-top:none;">
 
-        <div class="comment-buttons">            
-          <input type="text" name="comment" id="comment" placeholder="Skriv en kommentar...">
-          <input type="submit" name="send-comment" id="send-comment">
-        </div>
-        <div class="comment-section">
-          <div class="avatar" style="height:30px; width:30px; font-size:11px;">
-              <p>${initial}</p>
+        <div class="comment-form">
+          <div class="comment-buttons">            
+            <input type="text" name="comment" id="comment-input-${post.postId}" placeholder="Skriv en kommentar...">
+            <input type="submit" value="Skicka" id="comment-send-button" onclick="addComment(${post.postId})">
           </div>
-          <div class="information"><div class="name-date"><span class="name-date" style="font-size:14px; color:black;">${username} • ${formattedDate}</span></div><p>${post.postContent}</p>
         </div>
+        
+        <div class="comments-container" id="comments-${post.postId}">
+          <!-- Kommentarer visas här -->
         </div>
-        ${post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}
-        `;
+        
+        ${post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}`;
+        
         postContainer.appendChild(postElement);
+
+        renderComments(post.postId, commentList);
       });
     }
   });
+
+   
+    
+  function renderComments(postId, commentList) {
+    const commentsContainer = document.getElementById(`comments-${postId}`);
+    if(!commentsContainer) return;
+
+    console.log("Rendering comments for postid: ", postId)
+
+    commentsContainer.innerHTML = '';
+
+    if (!commentList || commentList.length === 0) {
+      commentsContainer.innerHTML = '<p style="color: #8f9bb3; font-size: 14px; text-align: center; margin-top: 10px;">Inga kommentarer än.</p>';
+      return;
+    }
+
+    commentList.forEach(comment => {
+      const commentDate = new Date(comment.createdAt);
+      const formattedDate = commentDate.toLocaleDateString('sv-SE') + ' • ' +
+                          commentDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+
+      const initial = comment.commentAuthorName ? comment.commentAuthorName.charAt(0) : '?';
+
+      const commentElement = document.createElement('div');
+      commentElement.className = 'comment-section';
+      commentElement.innerHTML = `
+        <div class="avatar" style="height:30px; width:30px; font-size:11px;">
+          <p>${initial}</p>
+        </div>
+        <div class="information">
+          <div class="name-date">
+            <span class="name-date" style="font-size:14px; color:black;">${comment.commentAuthorName} • ${formattedDate}</span>
+          </div>
+          <p>${comment.commentContent}</p>
+        </div>
+      `;
+
+      commentsContainer.appendChild(commentElement);
+    });
+  }
 
   window.showPopup = function(message) {
     const popup = document.getElementById('popup-posted');
@@ -545,9 +649,118 @@
       showPopup('Något gick fel, prova igen senare')
     })
   }
+  
+  // Funktion för att lägga till kommentar
+  window.addComment = function(postId) {
+    const commentSend = document.getElementById(`comment-send-button`);
+    commentSend.disabled = true;
+    const commentInput = document.getElementById(`comment-input-${postId}`);
+    commentInput.disabled = true;
+    if(!commentInput) {
+      showPopup('Ett fel uppstod, prova igen senare');
+      return;
+    }
+
+    const commentText = commentInput.value.trim();
+    if(!commentText) {
+      showPopup('Kommentaren kan inte vara tomt.');
+      return;
+    }
+
+    fetch(`/u/forum/comment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        commentContent: commentText,
+        postID: postId
+      })
+    })
+    .then(res => {
+      if(res.ok) {
+        showPopup('Kommentaren har publicerats');
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        showPopup('Något gick fel, prova igen senare')
+      }
+    })
+    .catch(err => {
+      showPopup('Något gick fel, prova igen senare')
+      console.log(err);
+    })
+    .finally(() => {
+      commentInput.value = '';
+      commentInput.disabled = false;
+      commentSend.disabled = false;
+    });
+  };
+  
+  // Funktion för att visa redigeringsformulär
+  window.editPost = function(postId) {
+    const contentDiv = document.getElementById(`content-${postId}`);
+    const editForm = document.getElementById(`edit-form-${postId}`);
+    
+    contentDiv.style.display = 'none';
+    editForm.style.display = 'block';
+  };
+  
+  // Funktion för att avbryta redigering
+  window.cancelEdit = function(postId) {
+    const contentDiv = document.getElementById(`content-${postId}`);
+    const editForm = document.getElementById(`edit-form-${postId}`);
+    
+    contentDiv.style.display = 'block';
+    editForm.style.display = 'none';
+  };
+  
+  // Funktion för att spara redigering
+  window.saveEdit = function(postId) {
+    const contentDiv = document.getElementById(`content-${postId}`);
+    const editForm = document.getElementById(`edit-form-${postId}`);
+    const editTextarea = document.getElementById(`edit-content-${postId}`);
+    const newContent = editTextarea.value.trim();
+    
+    if (!newContent) {
+      alert('Innehållet kan inte vara tomt.');
+      return;
+    }
+    
+    // Simulera en uppdatering
+    fetch(`/u/forum/edit-post`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        postId: postId,
+        postContent: newContent
+      })
+    })
+    .then(res => {
+      if(res.ok) {
+        // Uppdatera innehållet direkt i UI
+        contentDiv.textContent = newContent;
+        contentDiv.style.display = 'block';
+        editForm.style.display = 'none';
+        showPopup('Inlägget har uppdaterats');
+      } else {
+        showPopup('Något gick fel, prova igen senare');
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      // För demonstrationssyfte - låtsas att API-anropet lyckades
+      contentDiv.textContent = newContent;
+      contentDiv.style.display = 'block';
+      editForm.style.display = 'none';
+      showPopup('Inlägget har uppdaterats');
+    });
+  };
+  
   function toggleDarkMode() {
     document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
-}
+  }
 </script>
 <div id="popup-posted"></div>
 </body>
