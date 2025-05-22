@@ -145,7 +145,6 @@ public class ForumController {
         String userEmail = userDetails.getUsername();
         System.out.println(userEmail);
         MyUser user = dbUserService.getUserByEmail(userEmail);
-        System.out.println(user.getUserName());
 
         boolean ok = dbForumService.createComment(comment.getCommentContent(), user.getUserName(), comment.getPostID());
 
