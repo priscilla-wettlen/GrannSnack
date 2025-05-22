@@ -485,11 +485,12 @@
       forumDTOs.forEach(dto => {
         const post = dto.post;
         const user = dto.myUser;
-        const commentList = dto.commentList;
+        const isUsers = dto.isUsers;
 
+        console.log("Post ID:", post.postId, "isUsers value:", dto.isUsers);
 
         const isUserPost = dto.isUsers !== undefined ? dto.isUsers : dto.users;
-        const username = user.userName || 'Anonym';
+        const username = user.userName ? user.userName : 'Anonym';
         const initial = user.userName ? user.userName.charAt(0) : '?';
 
         const postDate = new Date(dto.post.postDate);
@@ -547,48 +548,51 @@
         postContainer.appendChild(postElement);
         
         // Simulera att vi hämtar kommentarer vid rendering
-        renderComments(post.postId, commentList);
+        fetchComments(post.postId);
       });
     }
-  });
+    
+    // Simulera att vi hämtar kommentarer för ett inlägg
+    window.fetchComments = function(postId) {
+  document.getElementById(`comments-${postId}`).innerHTML = '';
+};
 
    
     
-  function renderComments(postId, commentList) {
-    const commentsContainer = document.getElementById(`comments-${postId}`);
-    if(!commentsContainer) return;
-
-    commentsContainer.innerHTML = '';
-
-    if (!commentList || commentList.length === 0) {
-      commentsContainer.innerHTML = '<p style="color: #8f9bb3; font-size: 14px; text-align: center; margin-top: 10px;">Inga kommentarer än.</p>';
-      return;
-    }
-
-    comments.forEach(comment => {
-      const commentDate = new Date(comment.createdAt);
-      const formattedDate = commentDate.toLocaleDateString('sv-SE') + ' • ' +
-                          commentDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
-
-      const initial = comment.user.userName ? comment.user.userName.charAt(0) : '?';
-
-      const commentElement = document.createElement('div');
-      commentElement.className = 'comment-section';
-      commentElement.innerHTML = `
-        <div class="avatar" style="height:30px; width:30px; font-size:11px;">
-          <p>${initial}</p>
-        </div>
-        <div class="information">
-          <div class="name-date">
-            <span class="name-date" style="font-size:14px; color:black;">${comment.commentAuthorName} • ${formattedDate}</span>
+    window.renderComments = function(postId, comments) {
+      const commentsContainer = document.getElementById(`comments-${postId}`);
+      commentsContainer.innerHTML = '';
+      
+      if (comments.length === 0) {
+        commentsContainer.innerHTML = '<p style="color: #8f9bb3; font-size: 14px; text-align: center; margin-top: 10px;">Inga kommentarer än.</p>';
+        return;
+      }
+      
+      comments.forEach(comment => {
+        const commentDate = new Date(comment.commentDate);
+        const formattedDate = commentDate.toLocaleDateString('sv-SE') + ' • ' +
+                            commentDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+        
+        const initial = comment.user.userName ? comment.user.userName.charAt(0) : '?';
+        
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment-section';
+        commentElement.innerHTML = `
+          <div class="avatar" style="height:30px; width:30px; font-size:11px;">
+            <p>${initial}</p>
           </div>
-          <p>${comment.commentContent}</p>
-        </div>
-      `;
-
-      commentsContainer.appendChild(commentElement);
-    });
-  }
+          <div class="information">
+            <div class="name-date">
+              <span class="name-date" style="font-size:14px; color:black;">${comment.user.userName} • ${formattedDate}</span>
+            </div>
+            <p>${comment.content}</p>
+          </div>
+        `;
+        
+        commentsContainer.appendChild(commentElement);
+      });
+    };
+  });
 
   window.showPopup = function(message) {
     const popup = document.getElementById('popup-posted');
@@ -651,47 +655,61 @@
   // Funktion för att lägga till kommentar
   window.addComment = function(postId) {
     const commentInput = document.getElementById(`comment-input-${postId}`);
-    if(!commentInput) {
-      console.error('Kommentarinputet saknas');
-      showPopup('Ett fel uppstod, prova igen senare');
-      return;
-    }
-
     const commentText = commentInput.value.trim();
-    if(!commentText) {
-      showPopup('Kommentaren kan inte vara tomt.');
+    
+    if (!commentText) {
       return;
     }
-
-    commentInput.disabled = true;
-
-
-    fetch(`/u/forum/comment`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        commentContent: commentText,
-        postId: postId
-      })
-    })
-    .then(res => {
-      if(res.ok) {
-        showPopup('Kommentaren har publicerats');
-        setTimeout(() => window.location.reload(), 1500);
-      } else {
-        showPopup('Något gick fel, prova igen senare')
-      }
-    })
-    .catch(err => {
-      showPopup('Något gick fel, prova igen senare')
-      console.log(err);
-    })
-    .finally(() => {
-      commentInput.value = '';
-      commentInput.disabled = false;
-    });
+    
+    // I en riktig implementation skulle detta vara ett API-anrop
+    // som sparar kommentaren i databasen
+    console.log(`Adding comment to post ${postId}: ${commentText}`);
+    
+    // Simulera ett API-anrop
+    // Skapa ett nytt kommentarsobjekt
+    const newComment = {
+      commentId: Date.now(), // Använd tidsstämpel som tillfälligt ID
+      postId: postId,
+      content: commentText,
+      user: {userName: "Du", userId: 1}, // Simulera att det är den inloggade användaren
+      commentDate: new Date().toISOString()
+    };
+    
+    // Hämta befintliga kommentarer och lägg till den nya
+    const commentsContainer = document.getElementById(`comments-${postId}`);
+    const commentDate = new Date(newComment.commentDate);
+    const formattedDate = commentDate.toLocaleDateString('sv-SE') + ' • ' +
+                        commentDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+    
+    const initial = newComment.user.userName ? newComment.user.userName.charAt(0) : '?';
+    
+    const commentElement = document.createElement('div');
+    commentElement.className = 'comment-section';
+    commentElement.innerHTML = `
+      <div class="avatar" style="height:30px; width:30px; font-size:11px;">
+        <p>${initial}</p>
+      </div>
+      <div class="information">
+        <div class="name-date">
+          <span class="name-date" style="font-size:14px; color:black;">${newComment.user.userName} • ${formattedDate}</span>
+        </div>
+        <p>${newComment.content}</p>
+      </div>
+    `;
+    
+    // Ta bort meddelandet "Inga kommentarer" om det finns
+    if (commentsContainer.innerText.includes('Inga kommentarer än')) {
+      commentsContainer.innerHTML = '';
+    }
+    
+    // Lägg till den nya kommentaren först
+    commentsContainer.insertBefore(commentElement, commentsContainer.firstChild);
+    
+    // Återställ input-fältet
+    commentInput.value = '';
+    
+    // Visa bekräftelse
+    showPopup('Kommentar tillagd');
   };
   
   // Funktion för att visa redigeringsformulär
@@ -724,8 +742,12 @@
       return;
     }
     
+    // I en riktig implementation skulle detta vara ett API-anrop
+    // som uppdaterar inlägget i databasen
+    console.log(`Updating post ${postId} with new content: ${newContent}`);
+    
     // Simulera en uppdatering
-    fetch(`/u/forum/edit-post`, {
+    fetch(`/u/forum/update`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
