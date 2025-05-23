@@ -43,6 +43,17 @@ public class HomeController {
         return "userhome";
     }
 
+    @GetMapping("/u/profile")
+    public String handleUserProfile(HttpServletRequest request, Model model) {
+        String name = request.getUserPrincipal().getName();
+        MyUser user = userDB.getUserByEmail(name); //because it's using the email as the name, for some weird reason
+        System.out.println("Logged-in user name: " + name);
+        System.out.println("Loaded user: " + user);
+        model.addAttribute("user", user);
+        return "userprofile";
+    }
+
+
     @GetMapping("/u/home/redirectToLaundry")
     public String redirectToLaundryBooking() {
         return "redirect:/u/laundry-booking";
