@@ -57,9 +57,10 @@ public class DBUserService {
         return user.orElse(null);
     }
 
-    public boolean createUser(String userName, String email, String password, String role, String asociation, String apartmentCode ) {
+    public boolean createUser(String userName, String email, String password, String role, String association, String apartmentCode ) {
         Optional<MyUser> existingUsers = dbUserInterface.findByUserName(userName);
         Optional<MyUser> existingEmails = dbUserInterface.findByEmail(email);
+
 
         if(existingUsers.isPresent()) {
             return false;
@@ -75,7 +76,7 @@ public class DBUserService {
         user.setPassword(password);
         user.setRole(role);
         user.setApartmentCode(apartmentCode);
-        user.setAssociation(asociation);
+        user.setAssociation(association);
 
         dbUserInterface.save(user);
         return true;
