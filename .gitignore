@@ -223,5 +223,5 @@ $RECYCLE.BIN/
 #För databas login
 *.env
 *.json
-application.properties
+src/main/resources/application.properties
 
