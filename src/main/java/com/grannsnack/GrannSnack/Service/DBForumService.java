@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,14 +24,13 @@ public class DBForumService {
     @Autowired
     private  DBCommentInterface dbCommentInterface;
 
-    private Timestamp date;
 
     public boolean createPost(String title, String content, MyUser user, boolean isReported) {
         Post post = new Post();
         post.setPostTitle(title);
         post.setPostContent(content);
         post.setPostAuthorID(user.getId());
-        post.setPostDate(date = new Timestamp(System.currentTimeMillis()));
+        post.setPostDate(new Timestamp(System.currentTimeMillis()));
         post.setReported(isReported);
 
         dbForumInterface.save(post);
@@ -47,13 +47,11 @@ public class DBForumService {
     }
 
 
-    public List<ForumDTO> getRecentPosts(Timestamp dateAfter, Timestamp dateBefore) {
+    public List<ForumDTO> getRecentPosts(int limit) {
         List<ForumDTO> postsDTO = new ArrayList<>();
 
-        Date after = Date.valueOf(dateAfter.toLocalDateTime().toLocalDate());
-        Date before = Date.valueOf(dateBefore.toLocalDateTime().toLocalDate());
 
-        List<Post> posts = dbForumInterface.findPostsByPostDateBetween(after, before);
+        List<Post> posts = dbForumInterface.findPostsByOrderByPostDateDesc(limit);
         posts.sort((p1, p2) -> p2.getPostDate().compareTo(p1.getPostDate()));
 
         for(Post post : posts) {
@@ -76,6 +74,12 @@ public class DBForumService {
             return false;
         }
     }
+
+    public Timestamp findLatestPostDate(){
+        Post post = dbForumInterface.findTopByOrderByPostDateDesc();
+        System.out.println(post.getPostDate());
+        return post.getPostDate();
+    }
   
     public List<Post> findPostsByReported(boolean reported) {
         return dbForumInterface.findPostsByReported(reported);
@@ -83,10 +87,6 @@ public class DBForumService {
 
     public List<Post> findPostByPostAuthorID(int postAuthotID) {
         return dbForumInterface.findPostsByPostAuthorID(postAuthotID);
-    }
-
-    public Timestamp getDate() {
-        return date = new Timestamp(System.currentTimeMillis());
     }
 
     public boolean reportPost(int postId) {

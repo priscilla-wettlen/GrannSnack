@@ -5,6 +5,8 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -18,8 +20,11 @@ public interface DBForumInterface extends JpaRepository<Post, Integer> {
 
     List<Post> findPostsByPostAuthorID(int postAuthorID);
 
-    List<Post> findPostsByPostDateBetween(Date postDateAfter, Date postDateBefore);
+    @Query(value = "SELECT p FROM Post p ORDER BY p.postDate DESC LIMIT :limit")
+    List<Post> findPostsByOrderByPostDateDesc(@Param("limit") int limit);
 
     List<Post> findPostsByReported(boolean reported);
+
+    Post findTopByOrderByPostDateDesc();
 
 }
