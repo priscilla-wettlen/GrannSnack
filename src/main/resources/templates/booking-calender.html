@@ -189,6 +189,41 @@
       flex-wrap: wrap;
       justify-content: flex-end;
     }
+        .tooltip{
+      position: relative;
+    }
+    .tooltip .tooltiptext{
+      visibility: hidden;
+      width: max-content;
+      max-width: 180px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 7px 12px;
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      font-size: 13px;
+    }
+    .tooltip:hover .tooltiptext{
+      visibility: visible;
+      opacity: 1;
+    }
+    #popup-posted{
+      display: none;
+      position: fixed;
+      top: 32px;
+      right: 32px;
+      background: #10B781;
+      color: #fff;
+      padding: 18px 32px;
+      border-radius: 10px;
+      font-size: 18px;
+      box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.15);
+    }
 
     @media (max-width: 768px) {
       .main-section {
@@ -216,9 +251,15 @@
     <header>
         <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
         <nav class="nav">
-          <i class="fa-regular fa-lightbulb" style="color: #000000; cursor:pointer;" onclick="toggleDarkMode()"></i>
-          <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
-          <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #ff4d4f;"></i></i></a>
+          <span class="tooltip"><i class="fa-regular fa-lightbulb" style="color: #000000; cursor:pointer;" onclick="toggleDarkMode()"></i>
+            <span class="tooltiptext">Mörkt läge</span>
+          </span>
+          <span class="tooltip"><a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
+            <span class="tooltiptext">Profil</span>
+          </span>
+          <span class="tooltip"><a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #ff4d4f;"></i></i></a>
+            <span class="tooltiptext">Logga ut</span>
+          </span>
         </nav>
     </header>
 
@@ -258,7 +299,7 @@
 
     function checkAvailability() {
       const selectedDate = document.getElementById("datePicker").value;
-      if (!selectedDate) return alert("Please select a date");
+      if (!selectedDate) return showPopup("Vänligen välj ett dartum");
 
       fetch(`/u/laundry-booking/availability?date=${selectedDate}`)
               .then(res => {
@@ -429,9 +470,20 @@
               .catch(err => alert("Fel vid borttagning: " + err.message));
     }
 
+    window.showPopup = function(message) {
+    const popup = document.getElementById('popup-posted');
+    popup.textContent = message;
+    popup.style.display = 'block';
+
+    setTimeout(() => {
+      popup.style.display = 'none';
+    }, 3000);
+  }
+
       function toggleDarkMode() {
     document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
   }
   </script>
+<div id="popup-posted"></div>
 </body>
 </html>
