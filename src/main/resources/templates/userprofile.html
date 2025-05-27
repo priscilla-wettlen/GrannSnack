@@ -156,24 +156,32 @@
     </header>
   <div class="container">
     <h1>Min Profil</h1>
-    <div class="form-group">
+
+    <form th:action="@{/u/profile/update}" method="post">
+
+        <div class="form-group">
         <label for="name">Namn</label>
-        <input type="text" id="name" th:value="${user.userName}" class="editable" disabled>
+        <input type="text" id="name" name="userName" th:value="${user.userName}" class="editable" disabled>
       </div>
+
       <div class="form-group">
         <label for="email">E-post</label>
-        <input type="email" id="email" th:value="${user.userEmail}" class="editable" disabled>
-      </div>      
-    <div class="form-group">
-      <label for="unit">Förening</label>
-      <input type="text" id="unit" value="Ekbacken" disabled>
-    </div>
-    <div class="form-group">
-      <label for="apartment">Lägenhetsnummer</label>
-      <input type="text" id="apartment" value="12B" disabled>
-    </div>
-    <button class="btn" onclick="enableEdit()">Redigera</button>
-    <button class="btn" id="saveBtn" onclick="saveChanges()">Spara</button>
+        <input type="email" id="email" name="userEmail" th:value="${user.userEmail}" class="editable" disabled>
+      </div>    
+
+      <div class="form-group">
+        <label for="unit">Förening</label>
+        <input type="text" id="unit" name="unit" value="Ekbacken" class="editable" disabled>
+      </div>
+
+      <div class="form-group">
+        <label for="apartment">Lägenhetsnummer</label>
+        <input type="text" id="apartment" name="apartment" value="12B" class="editable" disabled>
+      </div>
+      
+      <button class="btn" onclick="enableEdit()">Redigera</button>
+      <button type="submit" class="btn" id="saveBtn">Spara</button>
+    </form>
   </div>
 
   <script>
@@ -185,10 +193,15 @@
     function saveChanges() {
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
-      alert("Ändringar sparade för: " + name + " (" + email + ")");
-      document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
-      document.getElementById('saveBtn').style.display = 'none';
-    }
+      const unit = document.getElementById('unit').value;
+      const apartment = document.getElementById('apartment').value;
+      alert("Ändringar sparade för: " + name + " (" + email + "), Lägenhet: " + apartment);
+  
+  document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
+  document.getElementById('saveBtn').style.display = 'none';
+}
+   
+    
   </script>
 </body>
 </html>
