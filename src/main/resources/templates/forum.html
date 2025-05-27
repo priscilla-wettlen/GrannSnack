@@ -93,7 +93,7 @@
       letter-spacing: -0.5px;
     }
     .box p{
-        color:#666565;
+      color:#666565;
     }
     .input-fields{
       display: flex;
@@ -124,24 +124,58 @@
       align-items: center;
     }
     .post-btns input[type="submit"]{
-        background: #10B781;
-        color: white;
-        padding:10px 20px;
-        border:none;
-        border-radius: 10px;
-        width: 150px;
-        cursor: pointer;
+      background: #10B781;
+      color: white;
+      padding:10px 20px;
+      border:none;
+      border-radius: 10px;
+      width: 150px;
+      cursor: pointer;
     }
     .post-btns input[type="submit"]:hover{
       background: #82cab4;
 
     }
     .upload-btn{
-        padding:10px 20px;
-        border:1px solid #d8d8d8;
-        border-radius: 10px;
-        cursor: pointer;
+      padding:10px 20px;
+      border:1px solid #d8d8d8;
+      border-radius: 10px;
+      cursor: pointer;
     }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .center-button-container {
+      width: 100%;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    #load-more-btn {
+      background-color: #10B781;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #load-more-btn:hover {
+      background-color: #0D9688;
+    }
+
+    #load-more-btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+
     .info-box{
       background: #fffbe6;
       border: 1.5px solid #ffe58f;
@@ -163,7 +197,7 @@
       margin-bottom: 8px;
     }
     #posts{
-        width: 100%;
+      width: 100%;
     }
     .post{
       background: #fff;
@@ -223,7 +257,7 @@
       outline: none;
     }
     .comment-buttons input[type="submit"]{
-    	width:20%;
+      width:20%;
       background: #10B781;
       color: white;
       border:none;
@@ -426,66 +460,94 @@
             <input type="text" name="postTitle" id="postTitle" placeholder="Titel" required>
             <textarea class="post-textarea" id="postContent" placeholder="Skriv in ditt inlägg..." required></textarea>
           </div>
-            <script>
-              document.getElementById('postForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                document.querySelector('#postForm input[type="submit"]').disabled = true;
+          <script>
+            document.getElementById('postForm').addEventListener('submit', function(e) {
+              e.preventDefault();
+              document.querySelector('#postForm input[type="submit"]').disabled = true;
 
-                const title = document.getElementById('postTitle').value;
-                const content = document.getElementById('postContent').value;
+              const title = document.getElementById('postTitle').value;
+              const content = document.getElementById('postContent').value;
 
-                fetch('/u/forum/create', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    postTitle: title,
-                    postContent: content
-                  })
+              fetch('/u/forum/create', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  postTitle: title,
+                  postContent: content
                 })
-                        .then(res => {
-                          if(res.status === 201) {
-                            document.getElementById('postForm').reset();
-                            showPopup('Inlägget har publicerats');
-                            setTimeout(() => window.location.reload(), 1500);
-                          } else {
-                            showPopup('Något gick fel!');
-                          }
-                        })
-                        .catch(err => {
-                          console.log(err);
-                        })
-              })
-            </script>
+                .then(res => {
+                  if(res.status === 201) {
+                    document.getElementById('postForm').reset();
+                    showPopup('Inlägget har publicerats');
+                    setTimeout(() => window.location.reload(), 1500);
+                  } else {
+                    alert('Något gick fel!');
+                  }
+                })
+                .catch(err => {
+                  console.log(err);
+                })
+            })
+          </script>
           <div class="post-btns">
             <input type="file" id="imageUpload" accept="image/*" style="display:none;">
             <label for="imageUpload" class="upload-btn">Ladda bild</label>
             <input type="submit" value="Publicera">
           </div>
         </form>
-        </div>
-        <div class="box">
-          <div class="box-title">Regler för forumet</div>
-          <div class="info-box">Håll dig till ämnet och var trevlig mot andra medlemmar.</div>
-          <ol>
-            <li>Håll en god ton i diskussioner</li>
-            <li>Respektera andras åsikter</li>
-            <li>Dela inte känslig information</li>
-            <li>Anmäl olämpligt innehåll till styrelsen</li>
-          </ol>
-        </div>
-      </aside>
-    </div>
-    <div id="posts"></div>
+      </div>
+      <div class="box">
+        <div class="box-title">Regler för forumet</div>
+        <div class="info-box">Håll dig till ämnet och var trevlig mot andra medlemmar.</div>
+        <ol>
+          <li>Håll en god ton i diskussioner</li>
+          <li>Respektera andras åsikter</li>
+          <li>Dela inte känslig information</li>
+          <li>Anmäl olämpligt innehåll till styrelsen</li>
+        </ol>
+      </div>
+    </aside>
   </div>
+
+  <div class="main-content">
+    <div id="posts">
+      <!-- Displays Posts -->
+    </div>
+
+    <div class="center-button-container">
+      <button id="load-more-btn" class="btn">Ladda fler inlägg</button>
+      <div id="no-more-posts" style="display: none; margin-top: 10px;">
+        Inga fler inlägg att visa
+      </div>
+    </div>
+  </div>
+
+</div>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    let currentPage = 0;
+    const postsPerPage = 20;
+    let hasMorePosts = true;
+    let allLoadedPosts = [];
 
-    fetchPosts();
+    const loadMoreBtn = document.getElementById('load-more-btn');
 
-    function fetchPosts() {
-      fetch('/u/forum/posts')
+    fetchPosts(currentPage, postsPerPage);
+
+    loadMoreBtn.addEventListener('click', function() {
+      if(hasMorePosts) {
+        currentPage++;
+        fetchPosts(currentPage, postsPerPage);
+      }
+    })
+
+    function fetchPosts(page, size) {
+      loadMoreBtn.textContent = 'Laddar...'
+      loadMoreBtn.disabled = true;
+
+      fetch(`/u/forum/posts?page=${page}&size=${size}`)
       .then(res => {
         if(res.status === 204) {
           document.getElementById('posts').innerHTML = '<div class="post"><p>Inga inlägg att visa.</p></div>';
@@ -499,6 +561,10 @@
       .then(data => {
         if(data && data.length > 0) {
           renderPosts(data);
+          const newArray = allLoadedPosts.concat(data);
+
+          loadMoreBtn.textContent = 'Ladda fler inlägg'
+          loadMoreBtn.disabled = false;
         }
       })
       .catch(err => {
@@ -524,7 +590,7 @@
 
         const postDate = new Date(dto.post.postDate);
         const formattedDate = postDate.toLocaleDateString('sv-SE') + ' • ' +
-                              postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+                postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
 
         const postElement = document.createElement('div');
         postElement.className = 'post';
@@ -555,7 +621,7 @@
             </div>
         </div>
         <div class="content" id="content-${post.postId}">${post.postContent}</div>
-        
+
         <div class="edit-post-form" id="edit-form-${post.postId}">
           <textarea id="edit-content-${post.postId}">${post.postContent}</textarea>
           <div class="edit-actions">
@@ -563,31 +629,28 @@
             <button type="button" class="btn btn-primary" onclick="saveEdit(${post.postId})">Spara</button>
           </div>
         </div>
-        
+
         <hr style="margin:20px 0px; color:#D3D3D3; border-top:none;">
 
         <div class="comment-form">
-          <div class="comment-buttons">            
+          <div class="comment-buttons">
             <input type="text" name="comment" id="comment-input-${post.postId}" placeholder="Skriv en kommentar...">
             <input type="submit" value="Skicka" id="comment-send-button" onclick="addComment(${post.postId})">
           </div>
         </div>
-        
+
         <div class="comments-container" id="comments-${post.postId}">
           <!-- Kommentarer visas här -->
         </div>
-        
+
         ${post.postImage ? `<div class="post-image"><img src="${post.postImage}" alt="Postbild"></div>` : ''}`;
-        
+
         postContainer.appendChild(postElement);
 
         renderComments(post.postId, commentList);
       });
     }
   });
-
-   
-    
   function renderComments(postId, commentList) {
     const commentsContainer = document.getElementById(`comments-${postId}`);
     if(!commentsContainer) return;
@@ -604,7 +667,7 @@
     commentList.forEach(comment => {
       const commentDate = new Date(comment.createdAt);
       const formattedDate = commentDate.toLocaleDateString('sv-SE') + ' • ' +
-                          commentDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+              commentDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
 
       const initial = comment.commentAuthorName ? comment.commentAuthorName.charAt(0) : '?';
 
@@ -644,16 +707,16 @@
       method: 'POST',
       body: formData
     })
-    .then(res => {
-      if(res.ok) {
-        showPopup('Inlägget har rapporterats');
-        setTimeout(() => window.location.reload(), 1500);
-      }
-    })
-    .catch(err => {
-      showPopup("Något gick fel, prova igen senare")
-      console.log(err);
-    })
+            .then(res => {
+              if(res.ok) {
+                showPopup('Inlägget har rapporterats');
+                setTimeout(() => window.location.reload(), 1500);
+              }
+            })
+            .catch(err => {
+              showPopup("Något gick fel, prova igen senare")
+              console.log(err);
+            })
   }
 
   window.deletePost = function(postId) {
@@ -670,20 +733,20 @@
         postId: postId
       })
     })
-    .then(res => {
-      if(res.ok) {
-        showPopup('Inlägget har tagits bort');
-        setTimeout(() => window.location.reload(), 1500);
-      } else {
-        showPopup('Något gick fel, prova igen senare')
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      showPopup('Något gick fel, prova igen senare')
-    })
+            .then(res => {
+              if(res.ok) {
+                showPopup('Inlägget har tagits bort');
+                setTimeout(() => window.location.reload(), 1500);
+              } else {
+                showPopup('Något gick fel, prova igen senare')
+              }
+            })
+            .catch(err => {
+              console.log(err);
+              showPopup('Något gick fel, prova igen senare')
+            })
   }
-  
+
   // Funktion för att lägga till kommentar
   window.addComment = function(postId) {
     const commentSend = document.getElementById(`comment-send-button`);
@@ -729,38 +792,37 @@
       commentSend.disabled = false;
     });
   };
-  
+
   // Funktion för att visa redigeringsformulär
   window.editPost = function(postId) {
     const contentDiv = document.getElementById(`content-${postId}`);
     const editForm = document.getElementById(`edit-form-${postId}`);
-    
+
     contentDiv.style.display = 'none';
     editForm.style.display = 'block';
   };
-  
+
   // Funktion för att avbryta redigering
   window.cancelEdit = function(postId) {
     const contentDiv = document.getElementById(`content-${postId}`);
     const editForm = document.getElementById(`edit-form-${postId}`);
-    
+
     contentDiv.style.display = 'block';
     editForm.style.display = 'none';
   };
-  
+
   // Funktion för att spara redigering
   window.saveEdit = function(postId) {
     const contentDiv = document.getElementById(`content-${postId}`);
     const editForm = document.getElementById(`edit-form-${postId}`);
     const editTextarea = document.getElementById(`edit-content-${postId}`);
     const newContent = editTextarea.value.trim();
-    
+
     if (!newContent) {
       showPopup('Innehållet kan inte vara tomt.');
       return;
     }
-    
-    // Simulera en uppdatering
+
     fetch(`/u/forum/edit-post`, {
       method: 'PUT',
       headers: {
@@ -791,7 +853,7 @@
       showPopup('Inlägget har uppdaterats');
     });
   };
-  
+
   function toggleDarkMode() {
     document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
   }

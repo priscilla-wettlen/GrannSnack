@@ -69,30 +69,20 @@ public class ForumController {
     }
 
     @GetMapping("/u/forum/posts")
-    public ResponseEntity<List<ForumDTO>> fetchPosts(@RequestParam(required = false) Timestamp fromDate,
-                                                     @RequestParam(required = false) Timestamp toDate,
-                                                     Authentication authentication) {
+    public ResponseEntity<List<ForumDTO>> fetchPosts(@RequestParam(required = false) Integer page,
+                                                      @RequestParam(required = false) Integer size,
+                                                      Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new AccessDeniedException("User is not authenticated");
         }
 
-        if(fromDate == null || toDate == null) {
-            if(fromDate == null && toDate == null) {
-                Timestamp now = new Timestamp(System.currentTimeMillis());
+        int currentPage = (page != null) ? page : 0;
+        int pageSize = (size != null) ? size : 20;
 
-                fromDate = now;
+        int limit = pageSize * (currentPage + 1);
 
-                toDate = Timestamp.valueOf(now.toLocalDateTime().plusWeeks(1));
-            }
-            if(fromDate == null) {
-                fromDate = Timestamp.valueOf(toDate.toLocalDateTime().minusWeeks(1));
-            } else {
-                toDate = Timestamp.valueOf(fromDate.toLocalDateTime().plusWeeks(1));
-            }
-        }
-
-        List<ForumDTO> posts = dbForumService.getRecentPosts(fromDate, toDate);
+        List<ForumDTO> posts = dbForumService.getRecentPosts(limit);
 
         //String UserEmail = authentication.getName();
         String userEmail = null;
