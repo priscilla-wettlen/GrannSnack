@@ -1,19 +1,194 @@
 <!DOCTYPE html>
-<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <title>Profil</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Min Profil - GrannSnack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/40282c7580.js" crossorigin="anonymous"></script>
+
+  <style>
+
+* {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+
+      background: #f7fafd;
+      font-family: 'Inter', sans-serif;
+      color: #1a202c;
+      
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 38px 14px 38px;
+      background: #fff;
+      border-bottom: 1px solid #d9d9d9;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      background: linear-gradient(90deg, #10B781, #0D9688);
+      background-clip: text;
+      color: transparent;
+      cursor: pointer;
+    }
+    .logo-link{
+      text-decoration: none;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 16px;
+      color: #1a202c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .nav-link.logout {
+      color: #ff4d4f;
+      font-weight: 500;
+      gap: 7px;
+    }
+    .nav-link.logout:hover {
+      color: #d9363e;
+      cursor: pointer;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-top: 100px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    input:disabled {
+      background-color: #f0f0f0;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #10B781;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn:hover {
+      background-color: #0d9688;
+    }
+    #saveBtn {
+      display: none;
+    }
+    .tooltip{
+      position: relative;
+    }
+    .tooltip .tooltiptext{
+      visibility: hidden;
+      width: max-content;
+      max-width: 180px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 7px 12px;
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      font-size: 13px;
+    }
+    .tooltip:hover .tooltiptext{
+      visibility: visible;
+      opacity: 1;
+      font-weight:normal;
+    }
+  </style>
 </head>
 <body>
-<p>User profile</p>
-<!--Feel free to delete and re-do all of this. It's just for testing-->
+    <header>
+        <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
+        <nav class="nav">
+          <span class="tooltip"><i class="fa-regular fa-lightbulb" style="color: #000000; cursor:pointer;" onclick="toggleDarkMode()"></i>
+            <span class="tooltiptext">Mörkt läge</span>
+          </span>
+          <span class="tooltip"><a th:href="@{/u/profile}"  class="nav-link"><i class="fa-regular fa-user"></i></a>
+            <span class="tooltiptext">Profil</span>
+          </span>
+          <span class="tooltip"><a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #ff4d4f;"></i></i></a>
+            <span class="tooltiptext">Logga ut</span>
+          </span>
+        </nav>
+    </header>
+  <div class="container">
+    <h1>Min Profil</h1>
+    <div class="form-group">
+      <label for="name">Namn</label>
+      <input type="text" id="name" value="Sham" class="editable" disabled>
+    </div>
+    <div class="form-group">
+      <label for="email">E-post</label>
+      <input type="email" id="email" value="sham@example.com" class="editable" disabled>
+    </div>
+    <div class="form-group">
+      <label for="unit">Förening</label>
+      <input type="text" id="unit" value="Ekbacken" disabled>
+    </div>
+    <div class="form-group">
+      <label for="apartment">Lägenhetsnummer</label>
+      <input type="text" id="apartment" value="12B" disabled>
+    </div>
+    <button class="btn" onclick="enableEdit()">Redigera</button>
+    <button class="btn" id="saveBtn" onclick="saveChanges()">Spara</button>
+  </div>
 
-<p><strong>Name:</strong> <span th:text="${user.userName}">[Name]</span></p>
-<p><strong>Email:</strong> <span th:text="${user.userEmail}">[Email]</span></p>
-<p><strong>Apartment:</strong> <span th:text="${user.apartmentCode}">[Apartment]</span></p>
-<p><strong>Association:</strong> <span th:text="${user.association}">[Association]</span></p>
+  <script>
+    function enableEdit() {
+      document.querySelectorAll('.editable').forEach(input => input.removeAttribute('disabled'));
+      document.getElementById('saveBtn').style.display = 'inline-block';
+    }
 
-
-
+    function saveChanges() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      alert("Ändringar sparade för: " + name + " (" + email + ")");
+      document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
+      document.getElementById('saveBtn').style.display = 'none';
+    }
+  </script>
 </body>
 </html>
