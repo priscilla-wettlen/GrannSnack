@@ -297,7 +297,6 @@
     .edit-btn {
       color: #10B781;
       cursor: pointer;
-      margin-right: 10px;
     }
     .edit-btn:hover {
       color: #0D9688;
@@ -388,6 +387,30 @@
       font-size: 18px;
       box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.15);
     }
+    .tooltip{
+      position: relative;
+    }
+    .tooltip .tooltiptext{
+      visibility: hidden;
+      width: max-content;
+      max-width: 180px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 7px 12px;
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      font-size: 13px;
+    }
+    .tooltip:hover .tooltiptext{
+      visibility: visible;
+      opacity: 1;
+      font-weight:normal;
+    }
 
     @media (max-width: 600px) {
       .container {
@@ -412,21 +435,27 @@
   </style>
 </head>
 <body>
-<header>
-  <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
-  <nav class="nav">
-    <i class="fa-regular fa-lightbulb" style="color: #000000; cursor:pointer;" onclick="toggleDarkMode()"></i>
-    <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
-    <a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #ff4d4f;"></i></i></a>
-  </nav>
-</header>
-<div class="container">
-  <div class="aside-row">
-    <aside>
-      <div class="box">
-        <div class="box-title">Skapa inlägg</div>
-        <p>Dela information eller ställ en fråga till dina grannar</p>
-        <form id="postForm">
+    <header>
+        <a th:href="@{/default}" class="logo-link"><div class="logo">GrannSnack</div></a>
+        <nav class="nav">
+          <span class="tooltip"><i class="fa-regular fa-lightbulb" style="color: #000000; cursor:pointer;" onclick="toggleDarkMode()"></i>
+            <span class="tooltiptext">Mörkt läge</span>
+          </span>
+          <span class="tooltip"><a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
+            <span class="tooltiptext">Profil</span>
+          </span>
+          <span class="tooltip"><a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #ff4d4f;"></i></i></a>
+            <span class="tooltiptext">Logga ut</span>
+          </span>
+        </nav>
+    </header>
+  <div class="container">
+    <div class="aside-row">
+      <aside>
+        <div class="box">
+          <div class="box-title">Skapa inlägg</div>
+          <p>Dela information eller ställ en fråga till dina grannar</p>
+          <form id="postForm">
           <div class="input-fields">
             <input type="text" name="postTitle" id="postTitle" placeholder="Titel" required>
             <textarea class="post-textarea" id="postContent" placeholder="Skriv in ditt inlägg..." required></textarea>
@@ -448,19 +477,18 @@
                   postTitle: title,
                   postContent: content
                 })
-              })
-                      .then(res => {
-                        if(res.status === 201) {
-                          document.getElementById('postForm').reset();
-                          showPopup('Inlägget har publicerats');
-                          setTimeout(() => window.location.reload(), 1500);
-                        } else {
-                          alert('Något gick fel!');
-                        }
-                      })
-                      .catch(err => {
-                        console.log(err);
-                      })
+                .then(res => {
+                  if(res.status === 201) {
+                    document.getElementById('postForm').reset();
+                    showPopup('Inlägget har publicerats');
+                    setTimeout(() => window.location.reload(), 1500);
+                  } else {
+                    alert('Något gick fel!');
+                  }
+                })
+                .catch(err => {
+                  console.log(err);
+                })
             })
           </script>
           <div class="post-btns">
@@ -574,14 +602,19 @@
             </div>
             <div class="information">
                 <h2 class="title">${post.postTitle}
-                    <span style="display: flex; gap: 8px;">
-                        ${isUserPost === true ?
-                `<i class="fa-regular fa-pen-to-square fa-xs edit-btn" onclick="editPost(${post.postId})"
-                            style="color:#10B781; cursor:pointer;"></i>
-                            <i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${post.postId})"
-                            style="color:#ff4d4f; cursor:pointer;"></i>`
-                : ''}
-                        <i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${post.postId})"></i>
+                    <span style="display: flex; gap: 15px;">
+                        ${isUserPost === true ? 
+                            `<span class="tooltip"><i class="fa-regular fa-pen-to-square fa-xs edit-btn" onclick="editPost(${post.postId})"
+                            style="color:#10B781; cursor:pointer;"></i><span class="tooltiptext">Redigera</span>
+                             </span>
+                             <span class="tooltip"><i class="fa-regular fa-trash-can fa-xs" onclick="deletePost(${post.postId})"
+                                style="color:#ff4d4f; cursor:pointer;"></i>
+                                <span class="tooltiptext">Radera</span>
+                             </span>`
+                         : ''}
+                          <span class="tooltip"><i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${post.postId})"></i>
+                            <span class="tooltiptext">Rapportera</span>
+                          </span>
                       </span>
                 </h2>
                 <p class="name-date">${username} • ${formattedDate}</p>
@@ -786,7 +819,7 @@
     const newContent = editTextarea.value.trim();
 
     if (!newContent) {
-      alert('Innehållet kan inte vara tomt.');
+      showPopup('Innehållet kan inte vara tomt.');
       return;
     }
 
