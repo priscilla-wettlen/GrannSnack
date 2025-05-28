@@ -387,17 +387,16 @@
           headers: {"Content-Type": "application/x-www-form-urlencoded"},
           body: params
         })
-                .then(res => {
-                  if (!res.ok) throw new Error("Booking failed");
-                  return res.json();
-                })
-                .then(data => {
-                  loadMyBookings();
-                  checkAvailability();
-                })
-                .catch(err => alert(err.message));
+        .then(res => {
+          if (!res.ok) throw new Error("Booking failed");
+          return res.json();
+        })
+        .then(data => {
+          loadMyBookings();
+          checkAvailability();
+        })
+        .catch(err => alert(err.message));
       }
-
 
     function loadMyBookings() {
       fetch("/u/laundry-booking/bookings", {
