@@ -276,7 +276,7 @@
             <td>${user.role}</td>
             <td>${user.userName}</td>
             <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
-            <td><input type="checkbox" id="create_admin" name="admin" value="admin" onclick="make_admin()"></td>
+            <td><input type="checkbox" id="create_admin" name="admin" value="admin" onclick="make_admin(${user.id})"></td>
           `;
           userTableBody.appendChild(row);
         })
@@ -303,10 +303,29 @@
         alert(`Error deleting user: ${error.message}`);
       });
     }
-    function make_admin(){
+    function make_admin(userId){
+      let isAdmin;
         if (document.getElementById('create_admin').checked == 1){
-          return alert('Den är checkad')
+          isAdmin = true
         }
+        else{
+          isAdmin = false
+        }
+        const formdata = new FormData()
+        formdata.append('userId', userId)
+        formdata.append('isAdmin', isAdmin)
+        fetch('/a/home/changeAdmin' ,{
+          method: "POST",
+          body: formdata
+        })
+        .then(res =>{
+          if(res.ok){
+            alert("Nice, it went good!")
+          }
+          else{
+            alert("Something went wrong, try again")
+          }
+        })
     }
     window.showPopup = function(message) {
     const popup = document.getElementById('popup-posted');
