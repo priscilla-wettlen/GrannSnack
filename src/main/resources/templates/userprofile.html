@@ -195,15 +195,18 @@
     function saveChanges() {
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
+
       const unit = document.getElementById('unit').value;
       const apartment = document.getElementById('apartment').value;
       alert("Ändringar sparade för: " + name + " (" + email + "), Lägenhet: " + apartment);
   
-  document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
-  document.getElementById('saveBtn').style.display = 'none';
+     document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
+     document.getElementById('saveBtn').style.display = 'none';
+     function toggleDarkMode() {
+     document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
 }
    
-    
+   
   </script>
 </body>
 </html>

@@ -80,4 +80,26 @@ public class DBUserService {
         dbUserInterface.save(user);
         return true;
     }
+
+    public boolean updateUser(String userName, String email) {
+        Optional<MyUser> existingUsers = dbUserInterface.findByUserName(userName);
+        Optional<MyUser> existingEmails = dbUserInterface.findByEmail(email);
+
+        if(existingUsers.isPresent()) {
+            MyUser user = existingUsers.get();
+            user.setUserName(userName);
+            dbUserInterface.save(user);
+            return true;
+        }
+        if(existingEmails.isPresent()) {
+            MyUser user = existingEmails.get();
+            user.setUserEmail(email);
+            dbUserInterface.save(user);
+            return true;
+        }
+
+        return false;
+    }
+
+
 }
