@@ -2,6 +2,10 @@ package com.grannsnack.GrannSnack.Model;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Entity
 @Table(name = "USER")
