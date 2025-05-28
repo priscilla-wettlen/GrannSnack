@@ -154,7 +154,7 @@
       .table tr:last-child {
         border-bottom: none;
       }
-    #popup-posted{
+      #popup-posted{
       display: none;
       position: fixed;
       top: 32px;
@@ -280,6 +280,7 @@
 
         users.forEach(user => {
           const row = document.createElement("tr");
+          const isUser = user.id === user.id;
           row.innerHTML = `
             <td>${user.id}</td>
             <td>${user.association}</td>
@@ -289,13 +290,12 @@
             <td>${user.userName}</td>
             <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
             <td><input type="checkbox" name="admin" value="admin" onclick="make_admin(${user.id}, this)" ${user.role.includes('ADMIN') ? 'checked' : ''}></td>
-
           `;
           userTableBody.appendChild(row);
         })
       })
       .catch(error => {
-        console.error("Failed to fetch users:", error);
+        console.error("Fel med att fetcha användare:", error);
         const userTableBody = document.getElementById("user-table-body");
         userTableBody.innerHTML = `<tr><td colspan="7">Error loading users: ${error.message}</td></tr>`;
       });
@@ -306,32 +306,32 @@
         method: "GET",
         credentials: "include"
       })
-              .then(res => {
-                if (!res.ok) throw new Error("Kunde inte hämta användarinformation");
-                return res.json();
-              })
-              .then(user => {
-                if (user.role === "ADMIN") {
-                  showPopup("Error: Användare med rollen ADMIN kan inte raderas", "error");
-                  throw new Error("Prevented deletion of admin user.");
-                }
+      .then(res => {
+        if (!res.ok) throw new Error("Kunde inte hämta användarinformation");
+        return res.json();
+      })
+      .then(user => {
+        if (user.role === "ADMIN,USER") {
+          showPopup("Error: Användare med rollen ADMIN kan inte raderas", "error");
+          throw new Error("Prevented deletion of admin user.");
+        }
 
-                return fetch(`/a/home/delete-user/${id}`, {
-                  method: "DELETE",
-                  credentials: "include"
-                });
-              })
-              .then(res => {
-                if (!res.ok) throw new Error("Kunde inte radera användaren");
-                showPopup("Användaren har tagits bort!");
-                getAllUsers();
-              })
-              .catch(error => {
-                console.error("Failed to delete user:", error);
-                if (error.message !== "Prevented deletion of admin user.") {
-                  showErrorPopup("Ett fel uppstod vid borttagning av användaren");
-                }
-              });
+        return fetch(`/a/home/delete-user/${id}`, {
+          method: "DELETE",
+          credentials: "include"
+        });
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Kunde inte radera användaren");
+        showPopup("Användaren har tagits bort!");
+        getAllUsers();
+      })
+      .catch(error => {
+        console.error("Gick inte att ta bort användare:", error);
+        if (error.message !== "Prevented deletion of admin user.") {
+          showErrorPopup("Ett fel uppstod vid borttagning av användaren");
+        }
+      });
     }
 
     window.showPopup = function(message, type = "success") {
@@ -343,7 +343,7 @@
 
       setTimeout(() => {
         popup.style.display = 'none';
-      }, 3000);
+      }, 800);
     }
     function make_admin(userId, checkbox){
       let isAdmin = checkbox.checked ? "True" : "False";
@@ -359,11 +359,11 @@
       })
       .then(res =>{
         if(res.ok){
-          alert("Nice, it went good!")
-          window.location.reload();
+          showPopup("Användaren har tilldelats ADMIN rollen")
+            setTimeout(() => window.location.reload(), 800);
         }
         else{
-          alert("Something went wrong, try again")
+          showPopup("Något gick fel, testa igen")
         }
       });
     }
