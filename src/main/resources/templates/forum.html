@@ -596,6 +596,8 @@
         const postElement = document.createElement('div');
         postElement.className = 'post';
         postElement.dataset.postId = post.postId;
+        const reportedPosts = JSON.parse(localStorage.getItem('reportedPosts') || '[]');
+        const isReported = reportedPosts.includes(post.postId);
         postElement.innerHTML = `
         <div class="top-header">
             <div class="avatar">
@@ -613,9 +615,10 @@
                                 <span class="tooltiptext">Radera</span>
                              </span>`
                          : ''}
-                          <span class="tooltip"><i class="fa-regular fa-flag fa-xs" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${post.postId})"></i>
-                            <span class="tooltiptext">Rapportera</span>
-                          </span>
+                             <span class="tooltip">
+                                 <i id="report-icon-${post.postId}" class="fa-flag fa-xs ${isReported ? 'fa-solid' : 'fa-regular'}" style="color:#ff4d4f; cursor:pointer;" onclick="reportPost(${post.postId})"></i>
+                                 <span class="tooltiptext">Rapportera</span>
+                             </span>
                       </span>
                 </h2>
                 <p class="name-date">${username} • ${formattedDate}</p>
@@ -700,25 +703,39 @@
     }, 3000);
   }
 
-  window.reportPost = function(postId){
-    const formData = new FormData();
-    formData.append('postId', postId);
+window.reportPost = function(postId){
+  const reportedPosts = JSON.parse(localStorage.getItem('reportedPosts') || '[]');
 
-    fetch(`/u/forum/report`, {
-      method: 'POST',
-      body: formData
-    })
-            .then(res => {
-              if(res.ok) {
-                showPopup('Inlägget har rapporterats');
-                setTimeout(() => window.location.reload(), 1500);
-              }
-            })
-            .catch(err => {
-              showPopup("Något gick fel, prova igen senare")
-              console.log(err);
-            })
+  if(reportedPosts.includes(postId)) {
+    showPopup('Du har redan rapporterat detta inlägg');
+    return;
   }
+
+  const formData = new FormData();
+  formData.append('postId', postId);
+
+  fetch(`/u/forum/report`, {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => {
+    if(res.ok) {
+      showPopup('Inlägget har rapporterats');
+      reportedPosts.push(postId);
+      localStorage.setItem('reportedPosts', JSON.stringify(reportedPosts));
+
+      const icon = document.getElementById(`report-icon-${postId}`);
+      if(icon) {
+        icon.classList.remove('fa-regular');
+        icon.classList.add('fa-solid');
+      }
+    }
+  })
+  .catch(err => {
+    showPopup("Något gick fel, prova igen senare");
+    console.log(err);
+  })
+}
 
   window.deletePost = function(postId) {
     if(!confirm('Är du säker på att du vill ta bort detta inlägg?')) {
