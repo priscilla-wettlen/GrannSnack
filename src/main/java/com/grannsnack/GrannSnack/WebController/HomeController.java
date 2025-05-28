@@ -60,9 +60,14 @@ public class HomeController {
     }
 
     @PostMapping("/u/profile/edit")
-    public ResponseEntity<String> editProfile(@RequestParam String userName, String email, @AuthenticationPrincipal UserDetails userDetails) {
-        boolean success = userDB.updateUser(userName, email);
-        if (success) {
+    public ResponseEntity<String> editProfile(@RequestParam String name, @RequestParam String email, @AuthenticationPrincipal UserDetails userDetails) {
+        String oldemail = userDetails.getUsername();
+        MyUser user = userDB.getUserByEmail(oldemail);
+        user.setUserName(name);
+        user.setUserEmail(email);
+        MyUser editedUser = userDB.saveUser(user);
+        System.out.println(name + " " + email);
+        if (userDB.userIsPresent(editedUser)) {
             return ResponseEntity.status(HttpStatus.OK).body("User profile successfully edited");
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User name or email not found");

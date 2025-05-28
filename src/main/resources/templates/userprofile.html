@@ -152,7 +152,7 @@
   <div class="container">
     <h1>Min Profil</h1>
 
-    <form th:action="@{/u/profile/update}" method="post">
+    <form th:action="@{/u/profile/edit}" method="post">
 
         <div class="form-group">
         <label for="name">Namn</label>
@@ -161,7 +161,7 @@
 
       <div class="form-group">
         <label for="email">E-post</label>
-        <input type="email" id="email" name="userEmail" th:value="${user.userEmail}" class="editable" disabled>
+        <input type="email" id="email" name="email" th:value="${user.userEmail}" class="editable" disabled>
       </div>    
 
       <div class="form-group">
@@ -177,7 +177,12 @@
       
       <button type="button" class="btn" onclick="enableEdit()">Redigera</button>
 
-      <button type="submit" class="btn" id="saveBtn">Spara</button>
+      <button type="button" class="btn" id="saveBtn" onclick="saveChanges()">Spara</button>
+
+      <div id="successMessage" style="display: none; color: green; margin-top: 10px; text-align:center;">
+        Ändringarna har sparats!
+      </div>
+      
     </form>
   </div>
 
@@ -190,16 +195,27 @@
     function saveChanges() {
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
+      const params = new URLSearchParams;
+      console.log(name, email);
+      params.append('name', name);
+      params.append('email', email);
 
-      const unit = document.getElementById('unit').value;
-      const apartment = document.getElementById('apartment').value;
-      alert("Ändringar sparade för: " + name + " (" + email + "), Lägenhet: " + apartment);
+
+    fetch("/u/profile/edit", {
+      method: "POST",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: params
+    })
+    .then(response => {
+      if (response.ok) {
+        document.getElementById("successMessage").style.display = "block";
+        document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
+        document.getElementById('saveBtn').style.display = 'none';
+      } else {
+        alert("Något gick fel vid uppdatering.");
+      }
+    });
   
-     document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
-     document.getElementById('saveBtn').style.display = 'none';
-     function toggleDarkMode() {
-     document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
-     }
 }
    
    
