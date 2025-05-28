@@ -12,6 +12,8 @@ public class DBUserService {
     @Autowired
     private DBUserInterface dbUserInterface;
 
+    private MyUser myUser;
+
     public DBUserService(DBUserInterface dbUserInterface) {
         this.dbUserInterface = dbUserInterface;
     }
@@ -28,6 +30,8 @@ public class DBUserService {
         return dbUserInterface.save(myUser);
     }
 
+    public MyUser getUserByRole(String role) {return dbUserInterface.findByRole(role).get();}
+
     public MyUser getUserByName(String name) {
         Optional<MyUser> user;
         if(name == null) {
@@ -39,6 +43,12 @@ public class DBUserService {
     }
 
     public MyUser removeUser(Integer id) {
+        myUser = dbUserInterface.findById(id).get();
+        if(myUser.getId().equals(id) && myUser.getRole().equals("ADMIN")) {
+            System.out.println("Error: Admin cannot be removed");
+            return myUser;
+        }
+
         if(!dbUserInterface.existsById(id)) {
             return null;
         }
