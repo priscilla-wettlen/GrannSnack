@@ -295,7 +295,7 @@
         })
       })
       .catch(error => {
-        console.error("Failed to fetch users:", error);
+        console.error("Fel med att fetcha användare:", error);
         const userTableBody = document.getElementById("user-table-body");
         userTableBody.innerHTML = `<tr><td colspan="7">Error loading users: ${error.message}</td></tr>`;
       });
@@ -327,7 +327,7 @@
         getAllUsers();
       })
       .catch(error => {
-        console.error("Failed to delete user:", error);
+        console.error("Gick inte att ta bort användare:", error);
         if (error.message !== "Prevented deletion of admin user.") {
           showErrorPopup("Ett fel uppstod vid borttagning av användaren");
         }
@@ -343,7 +343,7 @@
 
       setTimeout(() => {
         popup.style.display = 'none';
-      }, 3000);
+      }, 800);
     }
     function make_admin(userId, checkbox){
       let isAdmin = checkbox.checked ? "True" : "False";
@@ -359,11 +359,11 @@
       })
       .then(res =>{
         if(res.ok){
-          alert("Nice, it went good!")
-          window.location.reload();
+          showPopup("Användaren har tilldelats ADMIN rollen")
+            setTimeout(() => window.location.reload(), 800);
         }
         else{
-          alert("Something went wrong, try again")
+          showPopup("Något gick fel, testa igen")
         }
       });
     }
