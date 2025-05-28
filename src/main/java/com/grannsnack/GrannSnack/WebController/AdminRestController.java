@@ -62,13 +62,12 @@ public class AdminRestController {
 
     @PostMapping("/changeAdmin")
     public ResponseEntity<String> makeAdmin(@RequestParam int userId, @RequestParam boolean isAdmin) {
-        System.out.println(userId + "test" + isAdmin);
         MyUser user = dbUserService.getUserById(userId);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
         if(isAdmin) {
-            user.setRole("ADMIN, USER");
+            user.setRole("ADMIN,USER");
             dbUserService.saveUser(user);
             return ResponseEntity.ok("Admin status changed successfully.");
         } else {
