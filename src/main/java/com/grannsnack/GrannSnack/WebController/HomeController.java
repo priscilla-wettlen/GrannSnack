@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,16 +69,10 @@ public class HomeController {
         }
     }
 
-
-    @GetMapping("/u/home/redirectToLaundry")
-    public String redirectToLaundryBooking() {
-        return "redirect:/u/laundry-booking";
+    @GetMapping("/u/laundry-booking")
+    @CrossOrigin(origins = "http://127.0.0.1:8080")
+    public String showBookingCalendar() {
+        return "booking-calender";
     }
-
-    @GetMapping("/u/home/redirectToForum")
-    public String redirectToForum() {
-        return "redirect:/u/forum";
-    }
-
 
 }

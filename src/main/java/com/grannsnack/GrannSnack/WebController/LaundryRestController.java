@@ -4,6 +4,7 @@ import com.grannsnack.GrannSnack.Model.Booking;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.TimeSlots;
 import com.grannsnack.GrannSnack.Service.DBLaundryService;
+import com.grannsnack.GrannSnack.Service.DBUserService;
 import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,9 @@ public class LaundryRestController {
     @Autowired
     private MyUserDetailsService myUserDetailsService;
 
+    @Autowired
+    private DBUserService dbUserService;
+
     /*
      * Check available time slots
      * */
@@ -48,16 +52,18 @@ public class LaundryRestController {
         @RequestParam(value = "notes", required = false) String notes,
         @AuthenticationPrincipal UserDetails userDetails) {
 
+        Map<String, String> response = new HashMap<>();
+
         String userEmail = userDetails.getUsername();
         int userId = dbLaundryService.getUserIdByEmail(userEmail);
+        MyUser user = dbUserService.getUserById(userId);
         dbLaundryService.createBooking(date, timeSlot, notes, userId);
+        //user.setBookedTimes(user.getBookedTimes() + 1);
 
-        Map<String, String> response = new HashMap<>();
         response.put("message", "Booking successful");
         response.put("url", "/u/laundry-booking");
 
         return ResponseEntity.ok(response);
-
     }
 
     /*
@@ -74,6 +80,7 @@ public class LaundryRestController {
     @DeleteMapping("/bookings/delete/{id}")
     public ResponseEntity<?> deleteBooking(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails) {
         int userId = myUserDetailsService.getUserIdByEmail(userDetails.getUsername());
+        MyUser user = dbUserService.getUserById(userId);
         try {
             Booking bookingIdToDelete = dbLaundryService.deleteBooking(id, userId);
             if (bookingIdToDelete == null) {
@@ -83,6 +90,7 @@ public class LaundryRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", e.getMessage()));
         }
+        //user.setBookedTimes(user.getBookedTimes() - 1);
         return ResponseEntity.ok().build();
     }
 

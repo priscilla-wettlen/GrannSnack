@@ -1,4 +1,5 @@
 package com.grannsnack.GrannSnack.WebController;
+import com.grannsnack.GrannSnack.Model.ForumDTO;
 import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import com.grannsnack.GrannSnack.Service.DBForumService;
@@ -50,14 +51,30 @@ public class AdminRestController {
         return ResponseEntity.ok("User with id " + id + " deleted successfully.");
     }
 
+    @PostMapping("/changeAdmin")
+    public ResponseEntity<String> makeAdmin(Integer userId, boolean adminStatus) {
+        MyUser user = dbUserService.getUserById(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if(adminStatus) {
+            user.setRole("ADMIN, USER");
+            return ResponseEntity.ok("Admin status changed successfully.");
+        } else {
+            user.setRole("USER");
+            return ResponseEntity.ok("User status changed successfully.");
+        }
+    }
+
     @GetMapping("/posts")
-    public List<Post> getAllReportedPosts() {
+    public List<ForumDTO> getAllReportedPosts() {
+        List<ForumDTO> postDTOs= new ArrayList<>();
         List<Post> posts;
         posts = dbForumService.findPostsByReported(true);
-        if(posts == null) {
-            return new ArrayList<>();
+        for(Post post : posts) {
+            postDTOs.add(new ForumDTO(post, dbUserService.getUserById(post.getPostAuthorID()), null ));
         }
-        return posts;
+        return postDTOs;
     }
 
     @DeleteMapping("/delete-post/{postId}")
