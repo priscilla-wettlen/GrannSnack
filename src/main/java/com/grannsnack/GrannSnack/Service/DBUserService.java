@@ -111,5 +111,14 @@ public class DBUserService {
         return false;
     }
 
+    public boolean userIsPresent(MyUser user) {
+        Optional<MyUser> olduser = dbUserInterface.findByUserName(user.getUserName());
+        if(olduser.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 }
