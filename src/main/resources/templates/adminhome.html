@@ -219,7 +219,8 @@
       <a href="#" class="nav-link"><i class="fa-regular fa-user"></i></a>
       <span class="tooltip"><a th:href="@{/logout}" class="nav-link logout"><i class="fa-solid fa-right-from-bracket" style="color: #ff4d4f;"></i></i></a>
         <span class="tooltiptext">Logga ut</span>
-      </span>    </nav>
+      </span>    
+    </nav>
   </header>
 
   <div class="wrapper">
@@ -227,8 +228,8 @@
       <div class="links">
         <a th:href="@{/a/home}" id="selected"><i class="fa-regular fa-user" style="color: #fff;"></i>Användare</a>
         <a th:href="@{/a/forum}"><i class="fa-regular fa-message" style="color: #4a4a4a;"></i>Forum</a>
-        <a href="#"><i class="fa-regular fa-calendar" style="color: #4a4a4a;"></i>Tvättbokning</a>
-        <a href="#"><i class="fa-regular fa-star" style="color: #4a4a4a;"></i>Meddelande</a>
+        <a href="adminlaudry.html"><i class="fa-regular fa-calendar" style="color: #4a4a4a;"></i>Tvättbokning</a>
+        <a href="adminmessage.html"><i class="fa-regular fa-star" style="color: #4a4a4a;"></i>Meddelande</a>
       </div>
     </div>
     <div class="main">
@@ -250,6 +251,7 @@
               <th>Roll</th>
               <th>Användarnamn</th>
               <th>Radera</th>
+              <th>Admin</th>
             </tr>
           </thead>
           <tbody id="user-table-body"></tbody>
@@ -286,6 +288,7 @@
             <td>${user.role}</td>
             <td>${user.userName}</td>
             <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
+            <td><input type="checkbox" id="create_admin" name="admin" value="admin" onclick="make_admin(${user.id})"></td>
           `;
           userTableBody.appendChild(row);
         })
@@ -341,6 +344,34 @@
         popup.style.display = 'none';
       }, 3000);
     }
+    function make_admin(userId){
+      let isAdmin;
+        if (document.getElementById('create_admin').checked == 1){
+          isAdmin = true
+        }
+        else{
+          isAdmin = false
+        }
+        const formdata = new FormData()
+        formdata.append('userId', userId)
+        formdata.append('isAdmin', isAdmin)
+        fetch('/a/home/changeAdmin' ,{
+          method: "POST",
+          body: formdata
+        })
+        .then(res =>{
+          if(res.ok){
+            alert("Nice, it went good!")
+          }
+          else{
+            alert("Something went wrong, try again")
+          }
+        })
+    }
+    window.showPopup = function(message) {
+    const popup = document.getElementById('popup-posted');
+    popup.textContent = message;
+    popup.style.display = 'block';
 
   </script>
 <div id="popup-posted"></div>

@@ -246,15 +246,17 @@
         if (!res.ok) throw new Error("Error: Postlistan kunde inte hämtas.");
         return res.json();
       })
-      .then(posts => {
+      .then(postDTOs => {
         const postTableBody = document.getElementById("post-table-body");
         postTableBody.innerHTML = "";
 
-        posts.forEach(post => {
+        postDTOs.forEach(postDTO => {
+          const post = postDTO.post;
+          const user = postDTO.myUser;
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>${post.postId}</td>
-            <td>${post.postAuthorID}</td>
+            <td>${user.userName}</td>
             <td>${post.postDate}</td>
             <td>${post.postTitle}</td>
             <td>${post.postContent}</td>
