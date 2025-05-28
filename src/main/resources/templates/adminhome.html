@@ -159,7 +159,19 @@
       position: fixed;
       top: 32px;
       right: 32px;
-      background: #10B781;
+      /*background: #10B781;*/
+      color: #fff;
+      padding: 18px 32px;
+      border-radius: 10px;
+      font-size: 18px;
+      box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.15);
+    }
+    #popup-error{
+      display: none;
+      position: fixed;
+      top: 32px;
+      right: 32px;
+      background: #d9363e;
       color: #fff;
       padding: 18px 32px;
       border-radius: 10px;
@@ -289,19 +301,48 @@
     }
 
     function deleteUser(id) {
-      fetch(`/a/home/delete-user/${id}`, {
-        method: "DELETE",
+      fetch(`/a/home/users/${id}`, {
+        method: "GET",
         credentials: "include"
       })
-      .then(res => {
-        if (!res.ok) throw new Error("Error: Användaren kunde inte raderas.");
-        showPopup('Användaren har tagits bort!');
-        getAllUsers();
-      })
-      .catch(error => {
-        console.error("Failed to delete user:", error);
-        alert(`Error deleting user: ${error.message}`);
-      });
+              .then(res => {
+                if (!res.ok) throw new Error("Kunde inte hämta användarinformation");
+                return res.json();
+              })
+              .then(user => {
+                if (user.role === "ADMIN") {
+                  showPopup("Error: Användare med rollen ADMIN kan inte raderas", "error");
+                  throw new Error("Prevented deletion of admin user.");
+                }
+
+                return fetch(`/a/home/delete-user/${id}`, {
+                  method: "DELETE",
+                  credentials: "include"
+                });
+              })
+              .then(res => {
+                if (!res.ok) throw new Error("Kunde inte radera användaren");
+                showPopup("Användaren har tagits bort!");
+                getAllUsers();
+              })
+              .catch(error => {
+                console.error("Failed to delete user:", error);
+                if (error.message !== "Prevented deletion of admin user.") {
+                  showErrorPopup("Ett fel uppstod vid borttagning av användaren");
+                }
+              });
+    }
+
+    window.showPopup = function(message, type = "success") {
+      const popup = document.getElementById('popup-posted');
+      popup.textContent = message;
+      popup.style.display = 'block';
+
+      popup.style.backgroundColor = type === "error" ? "#d9363e" : "#10B781";
+
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 3000);
     }
     function make_admin(userId){
       let isAdmin;
@@ -332,10 +373,6 @@
     popup.textContent = message;
     popup.style.display = 'block';
 
-    setTimeout(() => {
-      popup.style.display = 'none';
-    }, 3000);
-  }
   </script>
 <div id="popup-posted"></div>
 </body>

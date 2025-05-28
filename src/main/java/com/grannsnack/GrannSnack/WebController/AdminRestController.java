@@ -36,6 +36,15 @@ public class AdminRestController {
         return (List<MyUser>) dbUserService.getUsers();
     }
 
+    @GetMapping("/users/{id}")
+    public MyUser getUserById(@PathVariable Integer id) {
+        if (id != null) {
+            MyUser user = dbUserService.getUserById(id);
+
+        }
+        return dbUserService.getUserById(id);
+    }
+
 
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<String> deleteUser (@PathVariable Integer id){
