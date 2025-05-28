@@ -224,4 +224,7 @@ $RECYCLE.BIN/
 *.env
 *.json
 application.properties
+.properties
+
+src/main/resources/application.properties
 

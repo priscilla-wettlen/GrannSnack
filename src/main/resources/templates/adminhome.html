@@ -274,13 +274,14 @@
         if (!res.ok) throw new Error("Error: Användarlistan kunde inte hämtas.");
         return res.json();
       })
-      .then(users => {
+      .then(data => {
         const userTableBody = document.getElementById("user-table-body");
         userTableBody.innerHTML = "";
 
-        users.forEach(user => {
+        data.forEach(map => {
           const row = document.createElement("tr");
-          const isUser = user.id === user.id;
+          const isUser = map.isCurrentUser;
+          const user = map.user;
           row.innerHTML = `
             <td>${user.id}</td>
             <td>${user.association}</td>
@@ -288,8 +289,8 @@
             <td>${user.userEmail}</td>
             <td>${user.role}</td>
             <td>${user.userName}</td>
-            <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
-            <td><input type="checkbox" name="admin" value="admin" onclick="make_admin(${user.id}, this)" ${user.role.includes('ADMIN') ? 'checked' : ''}></td>
+            ${isUser === true ? `` : `<td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
+            <td><input type="checkbox" name="admin" value="admin" onclick="make_admin(${user.id}, this)" ${user.role.includes('ADMIN') ? 'checked' : ''}></td>`}
           `;
           userTableBody.appendChild(row);
         })

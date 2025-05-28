@@ -7,10 +7,14 @@ import com.grannsnack.GrannSnack.Service.DBUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/a/home")
@@ -25,15 +29,18 @@ public class AdminRestController {
     }
 
     @GetMapping("/users")
-    public List<MyUser> getAllUsers(Integer userId) {
-        List<MyUser> users = new ArrayList<>();
-        if (userId != null) {
-            MyUser user = dbUserService.getUserById(userId);
-            if (user != null && !user.getRole().equals("ADMIN")) {
-                users.add(user);
-            }
+    public List<Map<String, Object>> getAllUsers(@AuthenticationPrincipal UserDetails userDetails) {
+        MyUser currentUser = dbUserService.getUserByEmail(userDetails.getUsername());
+        List<MyUser> users = (List<MyUser>) dbUserService.getUsers();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for(MyUser user : users) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("user", user);
+            map.put("isCurrentUser", user.equals(currentUser));
+            result.add(map);
         }
-        return (List<MyUser>) dbUserService.getUsers();
+        return result;
     }
 
     @GetMapping("/users/{id}")
