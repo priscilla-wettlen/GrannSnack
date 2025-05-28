@@ -288,8 +288,9 @@
             <td>${user.userEmail}</td>
             <td>${user.role}</td>
             <td>${user.userName}</td>
-            <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
-            <td><input type="checkbox" name="admin" value="admin" onclick="make_admin(${user.id}, this)" ${user.role.includes('ADMIN') ? 'checked' : ''}></td>
+            ${!isUser ? `<td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
+            <td><input type="checkbox" name="admin" value="admin" onclick="make_admin(${user.id}, this)" ${user.role.includes('ADMIN') ? 'checked' : ''}></td>`
+          : ``}
           `;
           userTableBody.appendChild(row);
         })

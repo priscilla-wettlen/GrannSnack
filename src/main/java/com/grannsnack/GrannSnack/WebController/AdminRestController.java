@@ -7,6 +7,7 @@ import com.grannsnack.GrannSnack.Service.DBUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -25,15 +26,10 @@ public class AdminRestController {
     }
 
     @GetMapping("/users")
-    public List<MyUser> getAllUsers(Integer userId) {
-        List<MyUser> users = new ArrayList<>();
-        if (userId != null) {
-            MyUser user = dbUserService.getUserById(userId);
-            if (user != null && !user.getRole().equals("ADMIN")) {
-                users.add(user);
-            }
-        }
-        return (List<MyUser>) dbUserService.getUsers();
+    public List<MyUser> getAllUsers(@AuthenticationPrincipal MyUser currentUser) {
+        List<MyUser> users = (List<MyUser>) dbUserService.getUsers();
+        users.remove(currentUser);
+        return users;
     }
 
     @GetMapping("/users/{id}")
