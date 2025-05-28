@@ -288,7 +288,8 @@
             <td>${user.role}</td>
             <td>${user.userName}</td>
             <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deleteUser(${user.id})"></i></td>
-            <td><input type="checkbox" id="create_admin" name="admin" value="admin" onclick="make_admin(${user.id})"></td>
+            <td><input type="checkbox" name="admin" value="admin" onclick="make_admin(${user.id}, this)" ${user.role.includes('ADMIN') ? 'checked' : ''}></td>
+
           `;
           userTableBody.appendChild(row);
         })
@@ -344,30 +345,29 @@
         popup.style.display = 'none';
       }, 3000);
     }
-    function make_admin(userId){
-      let isAdmin;
-        if (document.getElementById('create_admin').checked == 1){
-          isAdmin = true
+    function make_admin(userId, checkbox){
+      let isAdmin = checkbox.checked ? "True" : "False";
+
+      const params = new URLSearchParams();
+      params.append("userId", userId);
+      params.append("isAdmin", isAdmin);
+
+      fetch("/a/home/changeAdmin", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: params
+      })
+      .then(res =>{
+        if(res.ok){
+          alert("Nice, it went good!")
+          window.location.reload();
         }
         else{
-          isAdmin = false
+          alert("Something went wrong, try again")
         }
-        const formdata = new FormData()
-        formdata.append('userId', userId)
-        formdata.append('isAdmin', isAdmin)
-        fetch('/a/home/changeAdmin' ,{
-          method: "POST",
-          body: formdata
-        })
-        .then(res =>{
-          if(res.ok){
-            alert("Nice, it went good!")
-          }
-          else{
-            alert("Something went wrong, try again")
-          }
-        })
+      });
     }
+
     window.showPopup = function(message) {
     const popup = document.getElementById('popup-posted');
     popup.textContent = message;
