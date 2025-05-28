@@ -343,7 +343,7 @@
 
       setTimeout(() => {
         popup.style.display = 'none';
-      }, 800);
+      }, 1500);
     }
     function make_admin(userId, checkbox){
       let isAdmin = checkbox.checked ? "True" : "False";
@@ -360,7 +360,7 @@
       .then(res =>{
         if(res.ok){
           showPopup("Användaren har tilldelats ADMIN rollen")
-            setTimeout(() => window.location.reload(), 800);
+            setTimeout(() => window.location.reload(), 1500);
         }
         else{
           showPopup("Något gick fel, testa igen")
