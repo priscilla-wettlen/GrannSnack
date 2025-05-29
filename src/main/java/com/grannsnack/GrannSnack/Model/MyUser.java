@@ -7,6 +7,21 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * This class represents a user in the system. It does this by using the Entity annotation. This makes the class
+ * work automatically with our database. Creating a table but also getting the user from the database as objects without
+ * the extra work of parsing.
+ *
+ * It does this by having annotations for every instance variable. The @Column annotation tells spring boot and jpa which
+ * column the information is part of.
+ *
+ * The @Id annotation tells spring that the value is to be treated as an Id, which is usually a primary key.
+ * The @GeneratedValue annotation makes sure that the value is ever-increasing.
+ *
+ * The @Nonnull annotation tells spring boot that this variable cannot be null. If one tries to make it null sping throws an exception.
+ *
+ * @Author Joel Seger
+ */
 @Entity
 @Table(name = "USER")
 public class MyUser {
