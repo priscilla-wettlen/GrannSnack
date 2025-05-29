@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * This class is responsible for handling all communication with the database. It does this with a package called JpaRepositories which
  * takes the method head of each method and creates a suitable sql query.
+ * @Author Joel Seger
  */
 public interface DBForumInterface extends JpaRepository<Post, Integer> {
 
@@ -48,8 +49,8 @@ public interface DBForumInterface extends JpaRepository<Post, Integer> {
     List<Post> findPostsByReported(boolean reported);
 
     /**
-     *
-     * @return
+     * This method returns the very latest post.
+     * @return a post.
      */
     Post findTopByOrderByPostDateDesc();
 
