@@ -6,9 +6,6 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import com.grannsnack.GrannSnack.Service.DBForumService;
 import com.grannsnack.GrannSnack.Service.DBUserService;
-import org.slf4j.ILoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,27 +13,18 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
-@Controller
-public class ForumController {
+@RestController
+public class ForumRestController {
 
     @Autowired
     private DBForumService dbForumService;
 
     @Autowired
     private DBUserService dbUserService;
-
-
-    @GetMapping("/u/forum")
-    public String forum() {
-        return "forum";
-    }
 
     @PostMapping("/u/forum/create")
     public ResponseEntity<String> posting(@RequestBody Post post , @AuthenticationPrincipal UserDetails userDetails) {
@@ -78,7 +66,7 @@ public class ForumController {
         }
 
         int currentPage = (page != null) ? page : 0;
-        int pageSize = (size != null) ? size : 20;
+        int pageSize = (size != null) ? size : 10;
 
         int limit = pageSize * (currentPage + 1);
 

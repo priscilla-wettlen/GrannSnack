@@ -5,7 +5,6 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.TimeSlots;
 import com.grannsnack.GrannSnack.Service.DBLaundryService;
 import com.grannsnack.GrannSnack.Service.DBUserService;
-import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,9 +24,6 @@ public class LaundryRestController {
 
     @Autowired
     private  DBLaundryService dbLaundryService;
-
-    @Autowired
-    private MyUserDetailsService myUserDetailsService;
 
     @Autowired
     private DBUserService dbUserService;
@@ -73,13 +69,13 @@ public class LaundryRestController {
     @GetMapping("/bookings")
     public List<Booking> getBookings(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
-        Integer userId = myUserDetailsService.getUserIdByEmail(email);
+        Integer userId = dbUserService.getUserIdByEmail(email);
         return dbLaundryService.getAllBookingsByUserId(userId);
     }
 
     @DeleteMapping("/bookings/delete/{id}")
     public ResponseEntity<?> deleteBooking(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        int userId = myUserDetailsService.getUserIdByEmail(userDetails.getUsername());
+        int userId = dbUserService.getUserIdByEmail(userDetails.getUsername());
         MyUser user = dbUserService.getUserById(userId);
         try {
             Booking bookingIdToDelete = dbLaundryService.deleteBooking(id, userId);

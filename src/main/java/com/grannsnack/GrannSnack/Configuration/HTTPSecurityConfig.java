@@ -1,6 +1,6 @@
 package com.grannsnack.GrannSnack.Configuration;
 
-import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
+import com.grannsnack.GrannSnack.Service.DBUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,7 +24,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class HTTPSecurityConfig{
 
     @Autowired
-    MyUserDetailsService userDetailsService;
+    DBUserService dbUserService;
 
     @Autowired CustomCorsConfig customCorsConfig;
 
@@ -64,15 +63,6 @@ public class HTTPSecurityConfig{
     }
 
     /**
-     * This method returns a userDetailsService for other classes to use.
-     * @return myUserDetailsService
-     */
-    @Bean
-    public MyUserDetailsService userDetailsService() {
-        return userDetailsService;
-    }
-
-    /**
      * This method provides the program with an authentication provider that is used by spring and spring security to
      * verify a user when logging in.
      * @return an authentication provider
@@ -80,7 +70,7 @@ public class HTTPSecurityConfig{
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService());
+        provider.setUserDetailsService(dbUserService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }

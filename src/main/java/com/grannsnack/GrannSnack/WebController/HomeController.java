@@ -123,4 +123,8 @@ public class HomeController {
         return "booking-calender";
     }
 
+    @GetMapping("/u/forum")
+    public String forum() {
+        return "forum";
+    }
 }
