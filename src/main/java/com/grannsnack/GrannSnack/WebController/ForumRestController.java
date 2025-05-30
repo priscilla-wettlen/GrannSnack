@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * This class handles all the REST endpoints for the user forum page. It handles the creation of posts, editing of posts, deleting of posts,
+ * also commenting and reporting posts.
+ * @Author Joel Seger, Priscilla Wettlén
+ */
 @RestController
 public class ForumRestController {
 
@@ -26,6 +31,13 @@ public class ForumRestController {
     @Autowired
     private DBUserService dbUserService;
 
+    /**
+     * This method handles the creation of a new post. It takes in a Post object and returns a response entity with the status code of the
+     * operation. If the operation was successful, it returns a CREATED status code, if not it returns a BAD_REQUEST status code.
+     * @param post The post object to be created. It contains the title and content of the post.
+     * @param userDetails The current user details from the system. It is used to get the user email and user id to create the post.
+     * @return A response entity with the status code of the operation.
+     */
     @PostMapping("/u/forum/create")
     public ResponseEntity<String> posting(@RequestBody Post post , @AuthenticationPrincipal UserDetails userDetails) {
         try {
@@ -44,6 +56,12 @@ public class ForumRestController {
 
     }
 
+    /**
+     * This method handles the deletion of a post. It takes in a Post object and returns a response entity with the status code of the
+     * operation. If the operation was successful, it returns a OK status code, if not it returns a BAD_REQUEST status code.
+     * @param post The post object to be deleted. It contains the post id of the post to be deleted. The post id is used to find the post in the database.
+     * @return A response entity with the status code of the operation.
+     */
     @DeleteMapping("/u/forum/delete")
     public ResponseEntity<String> deleting(@RequestBody Post post) {
         Post newPost = dbForumService.getPostById(post.getPostId());
@@ -56,6 +74,14 @@ public class ForumRestController {
         }
     }
 
+    /**
+     * This method handles the fetching of all posts. It takes in an optional page and size parameters and returns a response entity with the status code of the
+     * operation. If the operation was successful, it returns a OK status code, if not it returns a BAD_REQUEST status code.
+     * @param page The page number to be fetched.
+     * @param size The size of the page to be fetched.
+     * @param authentication The current authentication object from the system. It is used to get the user email to check if the user is logged in and if the user is an admin.
+     * @return A response entity with the status code of the operation.
+     */
     @GetMapping("/u/forum/posts")
     public ResponseEntity<List<ForumDTO>> fetchPosts(@RequestParam(required = false) Integer page,
                                                       @RequestParam(required = false) Integer size,
@@ -94,6 +120,12 @@ public class ForumRestController {
         }
     }
 
+    /**
+     * This method handles editing of a post. It takes in a Post object and returns a response entity with the status code of the
+     * operation. If the operation was successful, it returns a OK status code, if not it returns a BAD_REQUEST status code.
+     * @param post The post object to be edited. It contains the post id of the post to be edited and the new content of the post.
+     * @return A response entity with the status code of the operation.
+     */
     @PutMapping("/u/forum/edit-post")
     public ResponseEntity<String> editPost(@RequestBody Post post) {
         boolean ok = dbForumService.updatePost(post.getPostId(), post.getPostContent());
@@ -104,6 +136,12 @@ public class ForumRestController {
         }
     }
 
+    /**
+     * This method handles the reporting of a post. It takes in a post id and returns a response entity with the status code of the
+     * operation. If the operation was successful, it returns an OK status code, if not, it returns a BAD_REQUEST status code.
+     * @param postId The post id of the post to be reported. It is used to find the post in the database. The post id is used to find the post in the database.
+     * @return A response entity with the status code of the operation.
+     */
     @PostMapping("/u/forum/report")
     public ResponseEntity<String> report(@RequestParam("postId") int postId) {
         int newId = postId;
@@ -116,12 +154,17 @@ public class ForumRestController {
         }
     }
 
+    /**
+     * This method handles the commenting on a post. It takes in a Comment object and returns a response entity with the status code of the
+     * @param comment The comment object to be created. It contains the comment content and the post id of the post to which the comment is being made.
+     * @param userDetails The current user details from the system. It is used to get the user email to create the comment. The user email is used to find the user in the database.
+     * @return A response entity with the status code of the operation. If the operation was successful, it returns a CREATED status code, if not, it returns a BAD_REQUEST status code.
+     */
     @PostMapping("/u/forum/comment")
     public ResponseEntity<String> comment(@RequestBody Comment comment,
                                           @AuthenticationPrincipal UserDetails userDetails) {
 
         String userEmail = userDetails.getUsername();
-        System.out.println(userEmail);
         MyUser user = dbUserService.getUserByEmail(userEmail);
 
         boolean ok = dbForumService.createComment(comment.getCommentContent(), user.getUserName(), comment.getPostID());
