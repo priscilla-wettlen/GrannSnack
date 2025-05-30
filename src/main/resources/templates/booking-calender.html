@@ -388,10 +388,10 @@
           body: params
         })
         .then(res => {
-          if (!res.ok) throw new Error("Booking failed");
-          return res.json();
-        })
-        .then(data => {
+          if(res.status === 400) showPopup("För många bokningar!", true)
+          if(res.ok) showPopup("Bokningen har skapats!", false)
+          if(!res.ok && res.status !== 400) throw new Error("Kunde inte skapa bokningen");
+
           loadMyBookings();
           checkAvailability();
         })
@@ -448,26 +448,27 @@
         method: "DELETE",
         credentials: "include"
       })
-              .then(res => {
-                if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
+      .then(res => {
+        if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
 
-                const contentType = res.headers.get("content-type") || "";
+        const contentType = res.headers.get("content-type") || "";
 
-                if (contentType.includes("application/json")) {
-                  return res.json();
-                }
+        if (contentType.includes("application/json")) {
+          return res.json();
+        }
 
-                return Promise.resolve(); // No JSON to parse
-              })
-              .then(() => loadMyBookings())
-              .then(() => checkAvailability())
-              .catch(err => alert("Fel vid borttagning: " + err.message));
+        return Promise.resolve(); // No JSON to parse
+      })
+      .then(() => loadMyBookings())
+      .then(() => checkAvailability())
+      .catch(err => alert("Fel vid borttagning: " + err.message));
     }
 
-    window.showPopup = function(message) {
+    window.showPopup = function(message, error) {
     const popup = document.getElementById('popup-posted');
     popup.textContent = message;
     popup.style.display = 'block';
+    if(error) popup.style.backgroundColor = '#ff4d4f';
 
     setTimeout(() => {
       popup.style.display = 'none';
