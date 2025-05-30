@@ -53,8 +53,12 @@ public class LaundryRestController {
         String userEmail = userDetails.getUsername();
         int userId = dbLaundryService.getUserIdByEmail(userEmail);
         MyUser user = dbUserService.getUserById(userId);
+        if(dbLaundryService.getAllBookingsByUserId(user.getId()).size() >= 3) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "You have already made 3 bookings."));
+        }
+        System.out.println(dbLaundryService.getAllBookingsByUserId(user.getId()).size());
         dbLaundryService.createBooking(date, timeSlot, notes, userId);
-        //user.setBookedTimes(user.getBookedTimes() + 1);
+
 
         response.put("message", "Booking successful");
         response.put("url", "/u/laundry-booking");
@@ -86,7 +90,6 @@ public class LaundryRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", e.getMessage()));
         }
-        //user.setBookedTimes(user.getBookedTimes() - 1);
         return ResponseEntity.ok().build();
     }
 
