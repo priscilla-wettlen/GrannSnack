@@ -296,48 +296,6 @@
  
 }
 
-    // Profilbild Upload Funktionen
-    function handleImageUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const profileImage = document.getElementById('profileImage');
-          const profileImageText = document.getElementById('profileImageText');
-         
-          // Erstelle img Element falls noch nicht vorhanden
-          let img = profileImage.querySelector('img');
-          if (!img) {
-            img = document.createElement('img');
-            profileImage.appendChild(img);
-          }
-         
-          img.src = e.target.result;
-          profileImageText.style.display = 'none';
-         
-          // Hier können Sie den Upload zum Backend implementieren
-          // uploadImageToServer(file);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    // Funktion für Backend-Upload (für später)
-    function uploadImageToServer(file) {
-      // Hier würden Sie das Bild zum Server hochladen
-      const formData = new FormData();
-      formData.append('profileImage', file);
-     
-      // fetch('/u/profile/upload-image', {
-      //   method: 'POST',
-      //   body: formData
-      // })
-      // .then(response => response.json())
-      // .then(data => {
-      //   console.log('Bild hochgeladen:', data);
-      // });
-    }
-   
    
   </script>
 </body>
