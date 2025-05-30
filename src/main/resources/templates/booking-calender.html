@@ -356,6 +356,7 @@
                     timeSlot.appendChild(controlDiv);
 
                     submit.addEventListener("click", () => {
+                      submit.disabled = true;
                       const notes = input.value;
                       createBooking(slot.id, notes);
                     });
