@@ -5,7 +5,6 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.TimeSlots;
 import com.grannsnack.GrannSnack.Service.DBLaundryService;
 import com.grannsnack.GrannSnack.Service.DBUserService;
-import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,9 +24,6 @@ public class LaundryRestController {
 
     @Autowired
     private  DBLaundryService dbLaundryService;
-
-    @Autowired
-    private MyUserDetailsService myUserDetailsService;
 
     @Autowired
     private DBUserService dbUserService;
