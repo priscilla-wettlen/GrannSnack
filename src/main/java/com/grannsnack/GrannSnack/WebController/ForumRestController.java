@@ -121,13 +121,11 @@ public class ForumRestController {
     }
 
     /**
-     * This method handles the fetching of a specific post. It takes in a Post object and returns a response entity with the status code of the
+     * This method handles editing of a post. It takes in a Post object and returns a response entity with the status code of the
      * operation. If the operation was successful, it returns a OK status code, if not it returns a BAD_REQUEST status code.
-     * @param post The post object to be fetched. It contains the post id of the post to be fetched.
+     * @param post The post object to be edited. It contains the post id of the post to be edited and the new content of the post.
      * @return A response entity with the status code of the operation.
      */
-    @GetMapping("/u/forum/post")
-    public ResponseEntity<ForumDTO> fetchPost(@RequestBody Post post) {}
     @PutMapping("/u/forum/edit-post")
     public ResponseEntity<String> editPost(@RequestBody Post post) {
         boolean ok = dbForumService.updatePost(post.getPostId(), post.getPostContent());
@@ -140,7 +138,7 @@ public class ForumRestController {
 
     /**
      * This method handles the reporting of a post. It takes in a post id and returns a response entity with the status code of the
-     * operation. If the operation was successful, it returns a OK status code, if not it returns a BAD_REQUEST status code.
+     * operation. If the operation was successful, it returns an OK status code, if not, it returns a BAD_REQUEST status code.
      * @param postId The post id of the post to be reported. It is used to find the post in the database. The post id is used to find the post in the database.
      * @return A response entity with the status code of the operation.
      */
@@ -160,7 +158,7 @@ public class ForumRestController {
      * This method handles the commenting on a post. It takes in a Comment object and returns a response entity with the status code of the
      * @param comment The comment object to be created. It contains the comment content and the post id of the post to which the comment is being made.
      * @param userDetails The current user details from the system. It is used to get the user email to create the comment. The user email is used to find the user in the database.
-     * @return A response entity with the status code of the operation. If the operation was successful, it returns a CREATED status code, if not it returns a BAD_REQUEST status code.
+     * @return A response entity with the status code of the operation. If the operation was successful, it returns a CREATED status code, if not, it returns a BAD_REQUEST status code.
      */
     @PostMapping("/u/forum/comment")
     public ResponseEntity<String> comment(@RequestBody Comment comment,
