@@ -15,7 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-
+/**
+ * This class is responsible for handling the security layer of the web application. All requests to the backend go through this
+ * configuration. This is to make sure that only users get access to user information and not admin information. It's also used to
+ * change how we handle cors and csrf configurations.
+ * @Author Joel Seger och Priscilla Wettlén
+ */
 @Configuration
 @EnableWebSecurity
 public class HTTPSecurityConfig{
@@ -25,7 +30,12 @@ public class HTTPSecurityConfig{
 
     @Autowired CustomCorsConfig customCorsConfig;
 
-
+    /**
+     * This method is used to configure the security chain in our web application. The filter which every request to the backend goes through.
+     * @param httpSecurity this is the configuration file used to send back to spring boot.
+     * @return the HttpSecurity as a config for spring
+     * @throws Exception in case the rules are not followed an Exception is thrown.
+     */
     @Bean
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -54,6 +64,11 @@ public class HTTPSecurityConfig{
                 .build();
     }
 
+    /**
+     * This method provides the program with an authentication provider that is used by spring and spring security to
+     * verify a user when logging in.
+     * @return an authentication provider
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -62,11 +77,12 @@ public class HTTPSecurityConfig{
         return provider;
     }
 
+    /**
+     * This method returns a password encryption encoder. Spring uses this to encrypt the password of newly created users.
+     * @return a password encryption encoder.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
 }

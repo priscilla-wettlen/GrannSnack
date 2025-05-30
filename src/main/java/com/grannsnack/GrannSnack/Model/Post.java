@@ -4,6 +4,21 @@ import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 
+/**
+ * This class represents a post in the system. It does this by using the Entity annotation. This makes the class
+ * work automatically with our database. Creating a table but also getting the post from the database as objects without
+ * the extra work of parsing.
+ *
+ * It does this by having annotations for every instance variable. The @Column annotation tells spring boot and jpa which
+ * column the information is part of.
+ *
+ * The @Id annotation tells spring that the value is to be treated as an Id, which is usually a primary key.
+ * The @GeneratedValue annotation makes sure that the value is ever-increasing.
+ *
+ * The @Temporal annotation defines that the postDate variable is a timestamp.
+ *
+ * @Author Joel Seger
+ */
 @Entity
 @Table(name="POST")
 public class Post {
