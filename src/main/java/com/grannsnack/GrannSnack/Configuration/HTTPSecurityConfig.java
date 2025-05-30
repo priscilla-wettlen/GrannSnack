@@ -1,5 +1,6 @@
 package com.grannsnack.GrannSnack.Configuration;
 
+import com.grannsnack.GrannSnack.Service.DBUserService;
 import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class HTTPSecurityConfig{
 
     @Autowired
-    MyUserDetailsService userDetailsService;
+    DBUserService dbUserService;
 
     @Autowired CustomCorsConfig customCorsConfig;
 
@@ -54,14 +55,9 @@ public class HTTPSecurityConfig{
     }
 
     @Bean
-    public MyUserDetailsService userDetailsService() {
-        return userDetailsService;
-    }
-
-    @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService());
+        provider.setUserDetailsService(dbUserService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }

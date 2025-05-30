@@ -525,7 +525,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 0;
-    const postsPerPage = 20;
+    const postsPerPage = 10;
     let hasMorePosts = true;
     let allLoadedPosts = [];
 
@@ -748,18 +748,18 @@ window.reportPost = function(postId){
         postId: postId
       })
     })
-            .then(res => {
-              if(res.ok) {
-                showPopup('Inlägget har tagits bort');
-                setTimeout(() => window.location.reload(), 1500);
-              } else {
-                showPopup('Något gick fel, prova igen senare')
-              }
-            })
-            .catch(err => {
-              console.log(err);
-              showPopup('Något gick fel, prova igen senare')
-            })
+    .then(res => {
+      if(res.ok) {
+        showPopup('Inlägget har tagits bort');
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        showPopup('Något gick fel, prova igen senare')
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      showPopup('Något gick fel, prova igen senare')
+    })
   }
 
   // Funktion för att lägga till kommentar
