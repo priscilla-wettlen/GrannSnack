@@ -1,5 +1,21 @@
 package com.grannsnack.GrannSnack.Model;
 
+/**
+ * This class represents a comment in the system. It does this by using the Entity annotation. This makes the class
+ * work automatically with our database. Creating a table but also getting the comment from the database as objects without
+ * the extra work of parsing.
+ *
+ * It does this by having annotations for every instance variable. The @Column annotation tells spring boot and jpa which
+ * column the information is part of.
+ *
+ * The @Id annotation tells spring that the value is to be treated as an Id, which is usually a primary key.
+ * The @GeneratedValue annotation makes sure that the value is ever-increasing.
+ *
+ * The @Lob annotation meaning Large OBject. This is because SQL does not support Strings. Instead, it uses varchar, which is limited to 255
+ * characters. To not limit our comments to 255 characters we use the annotation @Lob which makes the variable a LONGTEXT in sql istead.
+ *
+ * @Author Joel Seger
+ */
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
