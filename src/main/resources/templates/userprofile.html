@@ -19,7 +19,7 @@
       background: #f7fafd;
       font-family: 'Inter', sans-serif;
       color: #1a202c;
-     
+      
     }
     header {
       display: flex;
@@ -60,7 +60,7 @@
       color: #d9363e;
       cursor: pointer;
     }
-   
+    
     .container {
       max-width: 500px;
       margin: auto;
@@ -74,70 +74,6 @@
       text-align: center;
       margin-bottom: 20px;
     }
-
-    /* Profilbild Styles */
-    .profile-section {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .profile-label {
-      font-weight: 600;
-      margin-bottom: 15px;
-      display: block;
-    }
-    .profile-image-container {
-      position: relative;
-      display: inline-block;
-      width: 120px;
-      height: 120px;
-      margin-bottom: 10px;
-    }
-    .profile-image {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background-color: #e5e5e5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: #666;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      overflow: hidden;
-      border: 3px solid #f0f0f0;
-    }
-    .profile-image:hover {
-      background-color: #d0d0d0;
-      border-color: #10B781;
-    }
-    .profile-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .profile-image-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      border-radius: 50%;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .profile-image-container:hover .profile-image-overlay {
-      display: flex;
-    }
-    .image-upload-input {
-      display: none;
-    }
-
     .form-group {
       margin-bottom: 16px;
     }
@@ -216,20 +152,6 @@
   <div class="container">
     <h1>Min Profil</h1>
 
-    <!-- Profilbild Sektion -->
-    <div class="profile-section">
-      <label class="profile-label"></label>
-      <div class="profile-image-container">
-        <div class="profile-image" id="profileImage" onclick="document.getElementById('imageUpload').click()">
-          <span id="profileImageText">Profilfoto</span>
-        </div>
-        <div class="profile-image-overlay">
-          <i class="fa-solid fa-camera"></i>
-        </div>
-        <input type="file" id="imageUpload" class="image-upload-input" accept="image/*" onchange="handleImageUpload(event)">
-      </div>
-    </div>
-
     <form th:action="@{/u/profile/edit}" method="post">
 
         <div class="form-group">
@@ -251,8 +173,8 @@
         <label for="apartment">Lägenhetsnummer</label>
         <input type="text" id="apartment" name="apartment" value="12B" class="editable" disabled>
       </div>
-     
-     
+      
+      
       <button type="button" class="btn" onclick="enableEdit()">Redigera</button>
 
       <button type="button" class="btn" id="saveBtn" onclick="saveChanges()">Spara</button>
@@ -260,7 +182,7 @@
       <div id="successMessage" style="display: none; color: green; margin-top: 10px; text-align:center;">
         Ändringarna har sparats!
       </div>
-     
+      
     </form>
   </div>
 
@@ -293,9 +215,9 @@
         alert("Något gick fel vid uppdatering.");
       }
     });
- 
+  
 }
-
+   
    
   </script>
 </body>
