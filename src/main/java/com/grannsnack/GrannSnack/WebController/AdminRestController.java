@@ -57,11 +57,11 @@ public class AdminRestController {
         MyUser userIdToDelete = dbUserService.removeUser(id);
         List<Post> userPosts = dbForumService.findPostByPostAuthorID(userIdToDelete.getId());
 
-        for(Post post : userPosts) {
-            dbForumService.deletePostById(post.getPostId());
-        }
         if (userIdToDelete == null) {
             return ResponseEntity.notFound().build();
+        }
+        for(Post post : userPosts) {
+            dbForumService.deletePostById(post.getPostId());
         }
         return ResponseEntity.ok("User with id " + id + " deleted successfully.");
     }
@@ -101,4 +101,3 @@ public class AdminRestController {
         return ResponseEntity.ok("Post with id " + postId + " deleted successfully.");
     }
 }
-

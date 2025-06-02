@@ -122,7 +122,6 @@ public class HomeController {
 
         currentUser.setUserName(name);
         currentUser.setUserEmail(email);
-        MyUser editedUser = userDB.saveUser(currentUser);
         return ResponseEntity.status(HttpStatus.OK).body("Användarprofil uppdaterad");
     }
 
