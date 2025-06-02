@@ -219,6 +219,9 @@
       font-size: 18px;
       box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.15);
     }
+    h3{
+      padding-bottom:10px;
+    }
 
     @media (max-width: 768px) {
       .main-section {
@@ -477,9 +480,18 @@
       }, 2000);
     }
 
-      function toggleDarkMode() {
-    document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
+  function toggleDarkMode() {
+    const isDarkMode = document.documentElement.style.filter ? '' : 'invert(1)';
+    document.documentElement.style.filter = isDarkMode;
+    
+    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
   }
+  document.addEventListener('DOMContentLoaded', function() {
+      const darkMode = localStorage.getItem('darkMode');
+
+      if (darkMode == 'enabled') {
+        document.documentElement.style.filter = 'invert(1)';
+      }})
   </script>
 <div id="popup-posted"></div>
 </body>
