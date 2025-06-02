@@ -103,27 +103,27 @@ public class HomeController {
         String oldemail = userDetails.getUsername();
         MyUser currentUser = userDB.getUserByEmail(oldemail);
         if (currentUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Current user not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nuvarande användare hittades inte");
         }
 
         if (!email.equals(currentUser.getUserEmail())) {
             MyUser existingEmail = userDB.getUserByEmail(email);
             if (existingEmail != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User email already exists");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Den email:en används inte");
             }
         }
 
         if (!name.equals(currentUser.getUserName())) {
             MyUser existingName = userDB.getUserByName(name);
             if (existingName != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User name already exists");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Det namnet används redan.");
             }
         }
 
         currentUser.setUserName(name);
         currentUser.setUserEmail(email);
         MyUser editedUser = userDB.saveUser(currentUser);
-        return ResponseEntity.status(HttpStatus.OK).body("User profile successfully edited");
+        return ResponseEntity.status(HttpStatus.OK).body("Användarprofil uppdaterad");
     }
 
 

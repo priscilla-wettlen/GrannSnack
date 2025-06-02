@@ -80,7 +80,6 @@ public class LaundryRestController {
     @DeleteMapping("/bookings/delete/{id}")
     public ResponseEntity<?> deleteBooking(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails) {
         int userId = dbUserService.getUserIdByEmail(userDetails.getUsername());
-        MyUser user = dbUserService.getUserById(userId);
         try {
             Booking bookingIdToDelete = dbLaundryService.deleteBooking(id, userId);
             if (bookingIdToDelete == null) {
