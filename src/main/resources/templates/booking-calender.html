@@ -298,7 +298,7 @@
 
       fetch(`/u/laundry-booking/availability?date=${selectedDate}`)
               .then(res => {
-                if (!res.ok) throw new Error("Network error");
+                if (!res.ok) throw new showPopup("Network error","error");
                 return res.json();
               })
               .then(slots => {
@@ -388,14 +388,14 @@
           body: params
         })
         .then(res => {
-          if (!res.ok) throw new Error("Booking failed");
+          if (!res.ok) throw new showPopup("Booking failed","error");
           return res.json();
         })
         .then(data => {
           loadMyBookings();
           checkAvailability();
         })
-        .catch(err => alert(err.message));
+        .catch(err => showPopup(err.message,"error"));
       }
 
     function loadMyBookings() {
@@ -439,7 +439,7 @@
                   container.appendChild(card);
                 });
               })
-              .catch(err => alert("Fel vid hämtning: " + err.message));
+              .catch(err => showPopup("Fel vid hämtning: " ,"error" + err.message));
     }
 
 
@@ -449,7 +449,7 @@
         credentials: "include"
       })
               .then(res => {
-                if (!res.ok) throw new Error("Kunde inte ta bort bokningen");
+                if (!res.ok) throw new showPopup("Kunde inte ta bort bokningen","error");
 
                 const contentType = res.headers.get("content-type") || "";
 
@@ -461,18 +461,20 @@
               })
               .then(() => loadMyBookings())
               .then(() => checkAvailability())
-              .catch(err => alert("Fel vid borttagning: " + err.message));
+              .catch(err => showPopup("Fel vid borttagning: " ,"error" + err.message));
     }
 
-    window.showPopup = function(message) {
-    const popup = document.getElementById('popup-posted');
-    popup.textContent = message;
-    popup.style.display = 'block';
+    window.showPopup = function(message, type = "success") {
+      const popup = document.getElementById('popup-posted');
+      popup.textContent = message;
+      popup.style.display = 'block';
 
-    setTimeout(() => {
-      popup.style.display = 'none';
-    }, 3000);
-  }
+      popup.style.backgroundColor = type === "error" ? "#d9363e" : "#10B781";
+
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 2000);
+    }
 
       function toggleDarkMode() {
     document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';

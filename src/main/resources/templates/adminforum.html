@@ -266,7 +266,7 @@
         });
       })
       .catch(error => {
-        console.error("Failed to fetch posts:", error);
+        showPopup("Lyckades inte hämta inlägg:", "error");
         const postTableBody = document.getElementById("post-table-body");
         postTableBody.innerHTML = `<tr><td colspan="6">Error loading posts: ${error.message}</td></tr>`;
       });
@@ -283,19 +283,21 @@
         getAllPosts(); 
       })
       .catch(error => {
-        console.error("Gick inte att ta bort inlägget :", error);
-        alert(`Det gick inte att radera inlägget : ${error.message}`);
+        showPopup("Gick inte att ta bort inlägget :", "error");
+        showPopup(`Det gick inte att radera inlägget :,"error" ${error.message}`);
       });
     }
-    window.showPopup = function(message) {
-    const popup = document.getElementById('popup-posted');
-    popup.textContent = message;
-    popup.style.display = 'block';
+    window.showPopup = function(message, type = "success") {
+      const popup = document.getElementById('popup-posted');
+      popup.textContent = message;
+      popup.style.display = 'block';
 
-    setTimeout(() => {
-      popup.style.display = 'none';
-    }, 2000);
-  }
+      popup.style.backgroundColor = type === "error" ? "#d9363e" : "#10B781";
+
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 2000);
+    }
   </script>
 <div id="popup-posted"></div>
 </body>

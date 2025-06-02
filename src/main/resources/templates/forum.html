@@ -484,7 +484,7 @@
                     showPopup('Inlägget har publicerats');
                     setTimeout(() => window.location.reload(), 1500);
                   } else {
-                    alert('Något gick fel!');
+                    showPopup('Något gick fel!',"error");
                   }
                 })
                 .catch(err => {
@@ -605,7 +605,7 @@
                 <p style="font-weight:bold">${initial}</p>
             </div>
             <div class="information">
-                <h2 class="title"><span style="display: flex; gap:10px;">${role === "ADMIN,USER" ? '<i class="fa-solid fa-thumbtack fa-sm" style="color: #10b781; margin-top:13px;"></i>' : ""}${post.postTitle}</span>
+                <h2 class="title"><span style="display: flex; gap:10px;">${role === "ADMIN,USER" ? '<i class="fa-solid fa-thumbtack fa-sm" style="color: #10b781; margin-top:13px;"></i>' : ""}${escapeHtml(post.postTitle)}</span>
                     <span style="display: flex; gap: 15px;">
                         ${isUserPost === true ? 
                             `<span class="tooltip"><i class="fa-regular fa-pen-to-square fa-xs edit-btn" onclick="editPost(${post.postId})"
@@ -622,10 +622,10 @@
                              </span>
                       </span>
                 </h2>
-                <p class="name-date">${username} • ${formattedDate}</p>
+                <p class="name-date">${escapeHtml(username)} • ${formattedDate}</p>
             </div>
         </div>
-        <div class="content" id="content-${post.postId}">${post.postContent}</div>
+        <div class="content" id="content-${post.postId}">${escapeHtml(post.postContent)}</div>
 
         <div class="edit-post-form" id="edit-form-${post.postId}">
           <textarea id="edit-content-${post.postId}">${post.postContent}</textarea>
@@ -686,7 +686,7 @@
           <div class="name-date">
             <span class="name-date" style="font-size:14px; color:black;">${comment.commentAuthorName} • ${formattedDate}</span>
           </div>
-          <p>${comment.commentContent}</p>
+          <p>${escapeHtml(comment.commentContent)}</p>
         </div>
       `;
 
@@ -694,16 +694,17 @@
     });
   }
 
-  window.showPopup = function(message) {
-    const popup = document.getElementById('popup-posted');
-    popup.textContent = message;
-    popup.style.display = 'block';
+    window.showPopup = function(message, type = "success") {
+      const popup = document.getElementById('popup-posted');
+      popup.textContent = message;
+      popup.style.display = 'block';
 
-    setTimeout(() => {
-      popup.style.display = 'none';
-    }, 3000);
-  }
+      popup.style.backgroundColor = type === "error" ? "#d9363e" : "#10B781";
 
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 2000);
+    }
 window.reportPost = function(postId){
   const reportedPosts = JSON.parse(localStorage.getItem('reportedPosts') || '[]');
 
@@ -733,7 +734,7 @@ window.reportPost = function(postId){
     }
   })
   .catch(err => {
-    showPopup("Något gick fel, prova igen senare");
+    showPopup("Något gick fel, prova igen senare","error");
     console.log(err);
   })
 }
@@ -757,12 +758,12 @@ window.reportPost = function(postId){
         showPopup('Inlägget har tagits bort');
         setTimeout(() => window.location.reload(), 1500);
       } else {
-        showPopup('Något gick fel, prova igen senare')
+        showPopup('Något gick fel, prova igen senare', "error")
       }
     })
     .catch(err => {
       console.log(err);
-      showPopup('Något gick fel, prova igen senare')
+      showPopup('Något gick fel, prova igen senare',"error")
     })
   }
 
@@ -798,11 +799,11 @@ window.reportPost = function(postId){
         showPopup('Kommentaren har publicerats');
         setTimeout(() => window.location.reload(), 1500);
       } else {
-        showPopup('Något gick fel, prova igen senare')
+        showPopup('Något gick fel, prova igen senare',"error")
       }
     })
     .catch(err => {
-      showPopup('Något gick fel, prova igen senare')
+      showPopup('Något gick fel, prova igen senare',"error")
       console.log(err);
     })
     .finally(() => {
@@ -860,7 +861,7 @@ window.reportPost = function(postId){
         editForm.style.display = 'none';
         showPopup('Inlägget har uppdaterats');
       } else {
-        showPopup('Något gick fel, prova igen senare');
+        showPopup('Något gick fel, prova igen senare', "error");
       }
     })
     .catch(err => {
@@ -876,6 +877,14 @@ window.reportPost = function(postId){
   function toggleDarkMode() {
     document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
   }
+  function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 </script>
 <div id="popup-posted"></div>
 </body>
