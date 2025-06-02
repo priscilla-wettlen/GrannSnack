@@ -875,8 +875,17 @@ window.reportPost = function(postId){
   };
 
   function toggleDarkMode() {
-    document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
+    const isDarkMode = document.documentElement.style.filter ? '' : 'invert(1)';
+    document.documentElement.style.filter = isDarkMode;
+
+    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
   }
+  document.addEventListener('DOMContentLoaded', function() {
+      const darkMode = localStorage.getItem('darkMode');
+
+      if (darkMode == 'enabled') {
+        document.documentElement.style.filter = 'invert(1)';
+      }})
   function escapeHtml(text) {
   return text
     .replace(/&/g, "&amp;")
