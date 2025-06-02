@@ -356,6 +356,7 @@
                     timeSlot.appendChild(controlDiv);
 
                     submit.addEventListener("click", () => {
+                      submit.disabled = true;
                       const notes = input.value;
                       createBooking(slot.id, notes);
                     });
@@ -388,10 +389,11 @@
           body: params
         })
         .then(res => {
-          if (!res.ok) throw new showPopup("Booking failed","error");
-          return res.json();
-        })
-        .then(data => {
+
+          if(res.status === 400) showPopup("För många bokningar!", true)
+          if(res.ok) showPopup("Bokningen har skapats!", false)
+          if(!res.ok && res.status !== 400) throw new Error("Kunde inte skapa bokningen");
+
           loadMyBookings();
           checkAvailability();
         })
@@ -448,20 +450,19 @@
         method: "DELETE",
         credentials: "include"
       })
-              .then(res => {
-                if (!res.ok) throw new showPopup("Kunde inte ta bort bokningen","error");
+      .then(res => {
+        if (!res.ok) throw new showPopup("Kunde inte ta bort bokningen","error");
 
-                const contentType = res.headers.get("content-type") || "";
+        const contentType = res.headers.get("content-type") || "";
 
-                if (contentType.includes("application/json")) {
-                  return res.json();
-                }
-
-                return Promise.resolve(); // No JSON to parse
-              })
-              .then(() => loadMyBookings())
-              .then(() => checkAvailability())
-              .catch(err => showPopup("Fel vid borttagning: " ,"error" + err.message));
+        if (contentType.includes("application/json")) {
+          return res.json();
+        }
+        return Promise.resolve(); // No JSON to parse
+      })
+      .then(() => loadMyBookings())
+      .then(() => checkAvailability())
+      .catch(err => showPopup("Fel vid borttagning: " ,"error" + err.message));
     }
 
     window.showPopup = function(message, type = "success") {
