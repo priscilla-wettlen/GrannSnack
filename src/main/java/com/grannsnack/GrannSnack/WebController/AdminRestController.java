@@ -45,7 +45,7 @@ public class AdminRestController {
     @GetMapping("/users/{id}")
     public MyUser getUserById(@PathVariable Integer id) {
         if (id != null) {
-            MyUser user = dbUserService.getUserById(id);
+            return null;
 
         }
         return dbUserService.getUserById(id);
