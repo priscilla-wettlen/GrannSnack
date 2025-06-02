@@ -101,18 +101,32 @@ public class HomeController {
     @PostMapping("/u/profile/edit")
     public ResponseEntity<String> editProfile(@RequestParam String name, @RequestParam String email, @AuthenticationPrincipal UserDetails userDetails) {
         String oldemail = userDetails.getUsername();
-        MyUser user = userDB.getUserByEmail(oldemail);
-        if(userDB.userIsPresent(userDB.getUserByEmail(email)) || userDB.userIsPresent(userDB.getUserByName(name))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User name or email already exists");
+        MyUser currentuser = userDB.getUserByEmail(oldemail);
+        if (currentuser == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nuvarande användare hittades inte");
         }
-        user.setUserName(name);
-        user.setUserEmail(email);
-        MyUser editedUser = userDB.saveUser(user);
-        System.out.println(name + " " + email);
-        if (userDB.userIsPresent(editedUser)) {
-            return ResponseEntity.status(HttpStatus.OK).body("User profile successfully edited");
-        }else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User name or email not found");
+
+        if (!email.equals(oldemail)) {
+            MyUser existingEmail = userDB.getUserByEmail(email);
+            if (existingEmail != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Den email:en används redan!");
+            }
+        }
+
+        if (!name.equals(currentuser.getUserName())) {
+            MyUser existingName = userDB.getUserByName(name);
+            if (existingName != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Det namnet används redan!");
+            }
+        }
+
+        currentuser.setUserName(name);
+        currentuser.setUserEmail(email);
+        MyUser editedUser = userDB.saveUser(currentuser);
+        if(userDB.userIsPresent(editedUser)) {
+            return ResponseEntity.status(HttpStatus.OK).body("Profil uppdaterad!");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Profil uppdatering misslyckades!");
         }
     }
 

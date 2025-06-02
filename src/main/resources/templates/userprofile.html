@@ -132,6 +132,18 @@
       opacity: 1;
       font-weight:normal;
     }
+    #popup-posted{
+      display: none;
+      position: fixed;
+      top: 32px;
+      right: 32px;
+      background: #10B781;
+      color: #fff;
+      padding: 18px 32px;
+      border-radius: 10px;
+      font-size: 18px;
+      box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.15);
+    }
   </style>
 </head>
 <body>
@@ -185,10 +197,14 @@
       
     </form>
   </div>
+  <div id="popup-posted"></div>
 
   <script>
     function enableEdit() {
-      document.querySelectorAll('.editable').forEach(input => input.removeAttribute('disabled'));
+      const name = document.getElementById("name");
+      const email = document.getElementById("email");
+      name.removeAttribute("disabled");
+      email.removeAttribute("disabled");
       document.getElementById('saveBtn').style.display = 'inline-block';
     }
 
@@ -196,7 +212,6 @@
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       const params = new URLSearchParams;
-      console.log(name, email);
       params.append('name', name);
       params.append('email', email);
 
@@ -207,15 +222,31 @@
       body: params
     })
     .then(response => {
-      if (response.ok) {
-        document.getElementById("successMessage").style.display = "block";
-        document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
-        document.getElementById('saveBtn').style.display = 'none';
+      if(response.ok) {
+        return response.text().then(text => {
+          showPopup(text, "success");
+        });
       } else {
-        alert("Något gick fel vid uppdatering.");
+        return response.text().then(errMsg => {
+          showPopup(errMsg || "Ett fel uppstod vid uppdatering, försök igen", "error");
+        })
       }
+    })
+    .catch(error => {
+      showPopup("Ett fel uppstod vid uppdatering av profilen", "error")
     });
-  
+
+    window.showPopup = function(message, type = "success") {
+      const popup = document.getElementById('popup-posted');
+      popup.textContent = message;
+      popup.style.display = 'block';
+
+      popup.style.backgroundColor = type === "error" ? "#d9363e" : "#10B781";
+
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 2000);
+    }
 }
    
    
