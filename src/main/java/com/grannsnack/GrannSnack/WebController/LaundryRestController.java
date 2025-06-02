@@ -42,28 +42,27 @@ public class LaundryRestController {
      * */
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> createBooking(
+    public ResponseEntity<String> createBooking(
         @RequestParam("date") LocalDate date,
         @RequestParam("time_slot") int timeSlot,
         @RequestParam(value = "notes", required = false) String notes,
         @AuthenticationPrincipal UserDetails userDetails) {
 
-        Map<String, String> response = new HashMap<>();
+        LocalDate today = LocalDate.now();
+
+        if(date.isBefore(today)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kan inte boka datum som varit");
+        }
 
         String userEmail = userDetails.getUsername();
         int userId = dbLaundryService.getUserIdByEmail(userEmail);
         MyUser user = dbUserService.getUserById(userId);
         if(dbLaundryService.getAllBookingsByUserId(user.getId()).size() >= 3) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "You have already made 3 bookings."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Max antal tider bokade");
         }
-        System.out.println(dbLaundryService.getAllBookingsByUserId(user.getId()).size());
         dbLaundryService.createBooking(date, timeSlot, notes, userId);
 
-
-        response.put("message", "Booking successful");
-        response.put("url", "/u/laundry-booking");
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok("Bokning av tvättid genomförd");
     }
 
     /*

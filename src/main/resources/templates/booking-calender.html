@@ -392,13 +392,17 @@
           body: params
         })
         .then(res => {
-
-          if(res.status === 400) showPopup("För många bokningar!", true)
-          if(res.ok) showPopup("Bokningen har skapats!", false)
-          if(!res.ok && res.status !== 400) throw new Error("Kunde inte skapa bokningen");
-
-          loadMyBookings();
-          checkAvailability();
+          if(res.ok) {
+            return res.text().then(text => {
+              showPopup(text);
+              loadMyBookings();
+              checkAvailability();
+            });
+          } else {
+            return res.text().then(text => {
+              showPopup(text, "error");
+            });
+          }
         })
         .catch(err => showPopup(err.message,"error"));
       }
