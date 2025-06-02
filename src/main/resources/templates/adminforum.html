@@ -283,8 +283,8 @@
         getAllPosts(); 
       })
       .catch(error => {
-        console.error("Failed to delete post:", error);
-        alert(`Error deleting post: ${error.message}`);
+        console.error("Gick inte att ta bort inlägget :", error);
+        alert(`Det gick inte att radera inlägget : ${error.message}`);
       });
     }
     window.showPopup = function(message) {

@@ -407,6 +407,10 @@
       opacity: 1;
       font-weight:normal;
     }
+    .post.admin-post{
+      border: 2px solid #69c4a7;
+      background: #f0fdf9;
+    }
 
     @media (max-width: 600px) {
       .container {
@@ -591,7 +595,7 @@
                 postDate.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
 
         const postElement = document.createElement('div');
-        postElement.className = 'post';
+        postElement.className = role === "ADMIN,USER" ? 'post admin-post' : 'post';        
         postElement.dataset.postId = post.postId;
         const reportedPosts = JSON.parse(localStorage.getItem('reportedPosts') || '[]');
         const isReported = reportedPosts.includes(post.postId);
@@ -601,7 +605,7 @@
                 <p style="font-weight:bold">${initial}</p>
             </div>
             <div class="information">
-                <h2 class="title">${role === "ADMIN,USER" ? "✩" : ""}${post.postTitle}
+                <h2 class="title"><span style="display: flex; gap:10px;">${role === "ADMIN,USER" ? '<i class="fa-solid fa-thumbtack fa-sm" style="color: #10b781; margin-top:13px;"></i>' : ""}${post.postTitle}</span>
                     <span style="display: flex; gap: 15px;">
                         ${isUserPost === true ? 
                             `<span class="tooltip"><i class="fa-regular fa-pen-to-square fa-xs edit-btn" onclick="editPost(${post.postId})"
