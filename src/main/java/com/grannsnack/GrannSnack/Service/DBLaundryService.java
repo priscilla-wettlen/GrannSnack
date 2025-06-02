@@ -77,6 +77,11 @@ public class DBLaundryService {
     }
 
     public List<Booking> getAllBookingsByUserId(Integer userId) {
-        return laundryInterface.findByUserId(userId);
+        LocalDate today = LocalDate.now();
+        List<Booking> bookings = laundryInterface.findByUserId(userId);
+
+        bookings.removeIf(booking -> booking.getDate().isBefore(today));
+
+        return bookings;
     }
 }
