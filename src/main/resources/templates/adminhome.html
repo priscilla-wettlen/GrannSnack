@@ -330,7 +330,7 @@
       .catch(error => {
         console.error("Gick inte att ta bort användare:", error);
         if (error.message !== "Prevented deletion of admin user.") {
-          showErrorPopup("Ett fel uppstod vid borttagning av användaren");
+          showErrorPopup("Ett fel uppstod vid borttagning av användaren", "error");
         }
       });
     }
@@ -364,7 +364,7 @@
             setTimeout(() => window.location.reload(), 2000);
         }
         else{
-          showPopup("Något gick fel, testa igen")
+          showPopup("Något gick fel, testa igen", "error")
         }
       });
     }
