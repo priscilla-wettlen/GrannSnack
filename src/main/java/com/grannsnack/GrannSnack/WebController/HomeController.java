@@ -102,6 +102,9 @@ public class HomeController {
     public ResponseEntity<String> editProfile(@RequestParam String name, @RequestParam String email, @AuthenticationPrincipal UserDetails userDetails) {
         String oldemail = userDetails.getUsername();
         MyUser user = userDB.getUserByEmail(oldemail);
+        if(userDB.userIsPresent(userDB.getUserByEmail(email)) || userDB.userIsPresent(userDB.getUserByName(name))) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User name or email already exists");
+        }
         user.setUserName(name);
         user.setUserEmail(email);
         MyUser editedUser = userDB.saveUser(user);
