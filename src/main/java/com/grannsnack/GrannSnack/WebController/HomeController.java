@@ -101,17 +101,31 @@ public class HomeController {
     @PostMapping("/u/profile/edit")
     public ResponseEntity<String> editProfile(@RequestParam String name, @RequestParam String email, @AuthenticationPrincipal UserDetails userDetails) {
         String oldemail = userDetails.getUsername();
-        MyUser user = userDB.getUserByEmail(oldemail);
-        user.setUserName(name);
-        user.setUserEmail(email);
-        MyUser editedUser = userDB.saveUser(user);
-        System.out.println(name + " " + email);
-        if (userDB.userIsPresent(editedUser)) {
-            return ResponseEntity.status(HttpStatus.OK).body("User profile successfully edited");
-        }else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User name or email not found");
+        MyUser currentUser = userDB.getUserByEmail(oldemail);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Current user not found");
         }
+
+        if (!email.equals(currentUser.getUserEmail())) {
+            MyUser existingEmail = userDB.getUserByEmail(email);
+            if (existingEmail != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User email already exists");
+            }
+        }
+
+        if (!name.equals(currentUser.getUserName())) {
+            MyUser existingName = userDB.getUserByName(name);
+            if (existingName != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User name already exists");
+            }
+        }
+
+        currentUser.setUserName(name);
+        currentUser.setUserEmail(email);
+        MyUser editedUser = userDB.saveUser(currentUser);
+        return ResponseEntity.status(HttpStatus.OK).body("User profile successfully edited");
     }
+
 
     /**
      * This method handles redirect and fetching of the laundry booking html
