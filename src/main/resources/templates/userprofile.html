@@ -278,6 +278,7 @@
           return response.text().then(stringData => {
             console.log(stringData);
             showPopup(stringData);
+            window.location.reload();
           });
         } else {
           return response.text().then(errorData => {
@@ -318,19 +319,18 @@
       popup.style.display = 'none';
     }, 2000);
   }
-      function toggleDarkMode() {
-      document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
+  function toggleDarkMode() {
+  document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
   }
    
-    function removeImage() {
-      const img = document.getElementById('profileImg');
-      const placeholder = document.getElementById('placeholder');
-      img.src = '';
-      img.style.display = 'none';
-      placeholder.style.display = 'block';
-    }
-  
-}
+  function removeImage() {
+    const img = document.getElementById('profileImg');
+    const placeholder = document.getElementById('placeholder');
+    img.src = '';
+    img.style.display = 'none';
+    placeholder.style.display = 'block';
+  }
+
   function toggleDarkMode() {
     const isDarkMode = document.documentElement.style.filter ? '' : 'invert(1)';
     document.documentElement.style.filter = isDarkMode;
@@ -340,9 +340,10 @@
   document.addEventListener('DOMContentLoaded', function() {
       const darkMode = localStorage.getItem('darkMode');
 
-      if (darkMode == 'enabled') {
+      if (darkMode === 'enabled') {
         document.documentElement.style.filter = 'invert(1)';
-      }})
+      }
+  })
   </script>
     <div id="popup-posted"></div>
 </body>

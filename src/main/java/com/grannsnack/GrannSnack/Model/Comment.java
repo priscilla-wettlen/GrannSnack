@@ -1,5 +1,9 @@
 package com.grannsnack.GrannSnack.Model;
 
+import jakarta.persistence.*;
+
+import java.sql.Timestamp;
+
 /**
  * This class represents a comment in the system. It does this by using the Entity annotation. This makes the class
  * work automatically with our database. Creating a table but also getting the comment from the database as objects without
@@ -16,9 +20,6 @@ package com.grannsnack.GrannSnack.Model;
  *
  * @Author Joel Seger
  */
-import jakarta.persistence.*;
-
-import java.sql.Timestamp;
 @Entity
 @Table(name="COMMENT")
 public class Comment {
