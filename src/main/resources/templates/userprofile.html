@@ -70,7 +70,21 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       margin-top: 100px;
     }
-    h1 {
+    .back{
+      margin: 30px auto;
+    }
+    .back h1, .back a{
+      padding: 0 24px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .back a{
+      text-decoration: none;
+      color: black;
+      font-size: 16px;
+      padding-right: 0px;
+    }
+    h2 {
       text-align: center;
       margin-bottom: 20px;
     }
@@ -207,8 +221,11 @@
           </span>
         </nav>
     </header>
+  <div class="back"> <a th:href="@{/default}"><i class="fa-solid fa-arrow-left" style="color: #000000;"></i> Tillbaka</a>
+  <h1>Profil</h1></div>
+ 
   <div class="container">
-    <h1>Min Profil</h1>
+    <h2>Min Profil</h2>
 
     <div class="profile-image" onclick="document.getElementById('fileInput').click()"></div>
       <img id="profileImg" style="display: none;" />

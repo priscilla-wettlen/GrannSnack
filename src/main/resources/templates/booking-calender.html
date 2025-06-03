@@ -62,7 +62,7 @@
       justify-content: space-between;
       align-items: flex-start;
       gap: 40px;
-      max-width: 1200px;
+      max-width: 1600px;
       margin: 40px auto;
       padding: 0 20px;
     }
@@ -222,7 +222,21 @@
     h3{
       padding-bottom:10px;
     }
-
+    .everything{
+      margin: 30px auto;
+      max-width: 1600px;
+    }
+    .everything h1, .everything a{
+      padding: 0 24px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .everything a{
+      text-decoration: none;
+      color:black;
+      font-size: 16px;
+      padding-right: 0px;
+    }
     @media (max-width: 768px) {
       .main-section {
         flex-direction: column;
@@ -260,7 +274,9 @@
           </span>
         </nav>
     </header>
-
+<div class="everything">
+<a th:href="@{/default}"><i class="fa-solid fa-arrow-left"></i> Tillbaka</a>
+<h1>Tvättbokning</h1>
   <div class="main-section">
     <div class="booking-left">
       <h1 class="section-title"><i class="fa-solid fa-calendar-check"></i> Välja tvättid</h1>
@@ -275,7 +291,7 @@
       <div id="myBookings" style="max-width: 700px; width: 100%; margin-top: 20px;"></div>
     </div>
   </div>
-
+</div>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("selectDate").innerText = "Välj datum";

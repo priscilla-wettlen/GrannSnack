@@ -333,6 +333,21 @@
       background: #f0f0f0;
       color: #666;
     }
+    .everything{
+      margin: 30px auto;
+      max-width: 1600px;
+    }
+    .everything h1, .everything a{
+      padding: 0 24px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .everything a{
+      text-decoration: none;
+      color:black;
+      font-size: 16px;
+      padding-right: 0px;
+    }
     @media (max-width: 1200px) {
       .container {
         gap: 24px;
@@ -449,6 +464,9 @@
           </span>
         </nav>
     </header>
+<div class="everything">
+  <a th:href="@{/default}"><i class="fa-solid fa-arrow-left" style="color: #000000;"></i> Tillbaka</a>
+  <h1>Forum</h1>
   <div class="container">
     <div class="aside-row">
       <aside>
@@ -524,7 +542,6 @@
       </div>
     </div>
   </div>
-
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -605,7 +622,7 @@
                 <p style="font-weight:bold">${initial}</p>
             </div>
             <div class="information">
-                <h2 class="title"><span style="display: flex; gap:10px;">${role === "ADMIN,USER" ? '<i class="fa-solid fa-thumbtack fa-sm" style="color: #10b781; margin-top:13px;"></i>' : ""}${escapeHtml(post.postTitle)}</span>
+                <h2 class="title"><span style="display: flex; gap:10px;">${role === "ADMIN,USER" ? '<i class="fa-solid fa-thumbtack fa-sm" style="color: #10b781; margin-top:13px;transform: rotate(45deg);"></i>' : ""}${escapeHtml(post.postTitle)}</span>
                     <span style="display: flex; gap: 15px;">
                         ${isUserPost === true ? 
                             `<span class="tooltip"><i class="fa-regular fa-pen-to-square fa-xs edit-btn" onclick="editPost(${post.postId})"
