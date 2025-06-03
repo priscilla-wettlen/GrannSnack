@@ -86,7 +86,7 @@ public class HomeController {
     @GetMapping("/u/profile")
     public String handleUserProfile(HttpServletRequest request, Model model) {
         String name = request.getUserPrincipal().getName();
-        MyUser user = userDB.getUserByEmail(name); //because it's using the email as the name, for some weird reason
+        MyUser user = userDB.getUserByEmail(name);
         model.addAttribute("user", user);
         return "userprofile";
     }
@@ -95,8 +95,8 @@ public class HomeController {
      * This method handles saving edited information on the user profile. It takes the credentials from the frontend and saves it to the database.
      * @param name the username of the user
      * @param email the users email
-     * @param userDetails the current logged in user from the system
-     * @return a ResponeEntity containing a string. Either HttpsStatus OK if successful or BAD_REQUEST if unsuccessful.
+     * @param userDetails the current logged-in user from the system
+     * @return a ResponseEntity containing a string. Either HttpsStatus OK if successful or BAD_REQUEST if unsuccessful.
      */
     @PostMapping("/u/profile/edit")
     public ResponseEntity<String> editProfile(@RequestParam String name, @RequestParam String email, @AuthenticationPrincipal UserDetails userDetails) {
@@ -119,9 +119,10 @@ public class HomeController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Det namnet används redan.");
             }
         }
-
+        System.out.println(name + " " + email);
         currentUser.setUserName(name);
         currentUser.setUserEmail(email);
+        userDB.saveUser(currentUser);
         return ResponseEntity.status(HttpStatus.OK).body("Användarprofil uppdaterad");
     }
 

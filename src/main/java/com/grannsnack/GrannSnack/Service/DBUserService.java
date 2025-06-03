@@ -21,8 +21,6 @@ public class DBUserService implements UserDetailsService {
     @Autowired
     private DBUserInterface dbUserInterface;
 
-    private MyUser myUser;
-
     /**
      * This method is used to get all the current users in the system.
      * @return an Iterable of all the users currently in the system.
@@ -70,16 +68,15 @@ public class DBUserService implements UserDetailsService {
      * @return the user of the provided id.
      */
     public MyUser removeUser(Integer id) {
-        myUser = dbUserInterface.findById(id).get();
-        if(myUser.getId().equals(id) && myUser.getRole().equals("ADMIN")) {
+        MyUser user = dbUserInterface.findById(id).get();
+        if(user.getId().equals(id) && user.getRole().equals("ADMIN")) {
             System.out.println("Error: Admin cannot be removed");
-            return myUser;
+            return user;
         }
 
         if(!dbUserInterface.existsById(id)) {
             return null;
         }
-        MyUser user = dbUserInterface.findById(id).get();
         dbUserInterface.deleteById(id);
         return user;
     }
@@ -136,19 +133,12 @@ public class DBUserService implements UserDetailsService {
     }
 
     /**
-     * This method is responsible for checking if a user exists in the database or not.
-     * @param user the user to be checked
-     * @return a boolean true or false depending on whether the user is present in the database or not.
+     * This method loads a user by the user email. In spring security username is the field you use to log in. Since we want our
+     * users to log in with email, we need to call email username and the other way around when using spring security methods which this is.
+     * @param email the email of the user one wants to load.
+     * @return the user details of the user with the corresponding email.
+     * @throws UsernameNotFoundException if there is no user with that email, this error gets thrown.
      */
-    public boolean userIsPresent(MyUser user) {
-        Optional<MyUser> olduser = dbUserInterface.findByUserName(user.getUserName());
-        if(olduser.isPresent()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-  
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<MyUser> user = dbUserInterface.findByEmail(email);
@@ -164,6 +154,12 @@ public class DBUserService implements UserDetailsService {
         }
     }
 
+    /**
+     * This method gets the roles of the user. It's used to confirm which sites a user is allowed to reach. For example, a user can't reach admin pages.
+     * It does this by splitting the string with a comma to create two different roles. If a user has both roles they are considered admin. If not they are not admin.
+     * @param user the user to check roles on.
+     * @return a string array containing either one role or two roles.
+     */
     private String[] getRoles(MyUser user) {
         String role = user.getRole();
         if(role.isBlank()) {
@@ -173,6 +169,11 @@ public class DBUserService implements UserDetailsService {
         return role.split(",");
     }
 
+    /**
+     * This method gets a user id by searching the database with an id.
+     * @param email the email of the user one wants to find.
+     * @return an integer representing the id of the user.
+     */
     public Integer getUserIdByEmail(String email) {
         Optional<MyUser> user = dbUserInterface.findByEmail(email);
         if(user.isPresent()) {

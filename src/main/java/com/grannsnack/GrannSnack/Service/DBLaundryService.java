@@ -15,6 +15,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * This class is responsible for being a bridge between the application and the database. It handles and changes the data from
+ * the database to make sure that other methods get the data in the right format.
+ */
 @Service
 public class DBLaundryService {
 
@@ -26,8 +30,7 @@ public class DBLaundryService {
 
     @Autowired
     private DBUserService dbUserService;
-
-
+    
     public List<TimeSlots> getAvailableTimeSlots(LocalDate date) {
         List<TimeSlots> allTimeSlots = timeSlotsInterface.findAll();
         List<Booking> bookedTimeSlots = laundryInterface.findByDate(date);
