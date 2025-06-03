@@ -175,6 +175,18 @@
       background-color: #0d9688;
     }
 
+    #popup-posted{
+      display: none;
+      position: fixed;
+      top: 32px;
+      right: 32px;
+      color: #fff;
+      padding: 18px 32px;
+      border-radius: 10px;
+      font-size: 18px;
+      box-shadow: 0 4px 24px 0 rgba(60, 72, 88, 0.15);
+    }
+
     input[type="file"] {
       display: none;
     }
@@ -241,11 +253,10 @@
       </div>
       
     </form>
-  </div>
-
   <script>
     function enableEdit() {
-      document.querySelectorAll('.editable').forEach(input => input.removeAttribute('disabled'));
+      document.getElementById('name').removeAttribute('disabled');
+      document.getElementById('email').removeAttribute('disabled');
       document.getElementById('saveBtn').style.display = 'inline-block';
     }
 
@@ -253,25 +264,34 @@
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       const params = new URLSearchParams;
-      console.log(name, email);
       params.append('name', name);
       params.append('email', email);
 
 
-    fetch("/u/profile/edit", {
-      method: "POST",
-      headers: {"Content-Type": "application/x-www-form-urlencoded"},
-      body: params
-    })
-    .then(response => {
-      if (response.ok) {
-        document.getElementById("successMessage").style.display = "block";
-        document.querySelectorAll('.editable').forEach(input => input.setAttribute('disabled', true));
-        document.getElementById('saveBtn').style.display = 'none';
-      } else {
-        alert("Något gick fel vid uppdatering.");
-      }
-    });
+      fetch("/u/profile/edit", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: params.toString()
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.text().then(stringData => {
+            console.log(stringData);
+            showPopup(stringData);
+            window.location.reload();
+          });
+        } else {
+          return response.text().then(errorData => {
+            console.log(errorData);
+            showPopup(errorData, "error");
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showPopup("Network error occurred", "error");
+      });
+    }
 
     function loadImage(event) {
       const file = event.target.files[0];
@@ -295,10 +315,34 @@
       img.style.display = 'none';
       placeholder.style.display = 'block';
     }
-  
-}
-   
-   
+
+    window.showPopup = function(message, type = "success") {
+      const popup = document.getElementById('popup-posted');
+      popup.textContent = message;
+      popup.style.display = 'block';
+
+      popup.style.backgroundColor = type === "error" ? "#d9363e" : "#10B781";
+
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 2000);
+    }
+
+    function toggleDarkMode() {
+      const isDarkMode = document.documentElement.style.filter ? '' : 'invert(1)';
+      document.documentElement.style.filter = isDarkMode;
+
+      localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const darkMode = localStorage.getItem('darkMode');
+
+        if (darkMode === 'enabled') {
+          document.documentElement.style.filter = 'invert(1)';
+        }
+    })
   </script>
+    <div id="popup-posted"></div>
 </body>
 </html>

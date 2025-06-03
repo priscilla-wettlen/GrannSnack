@@ -4,7 +4,6 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.Post;
 import com.grannsnack.GrannSnack.Service.DBForumService;
 import com.grannsnack.GrannSnack.Service.DBUserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -46,7 +45,7 @@ public class AdminRestController {
     @GetMapping("/users/{id}")
     public MyUser getUserById(@PathVariable Integer id) {
         if (id != null) {
-            MyUser user = dbUserService.getUserById(id);
+            return null;
 
         }
         return dbUserService.getUserById(id);
@@ -58,11 +57,11 @@ public class AdminRestController {
         MyUser userIdToDelete = dbUserService.removeUser(id);
         List<Post> userPosts = dbForumService.findPostByPostAuthorID(userIdToDelete.getId());
 
-        for(Post post : userPosts) {
-            dbForumService.deletePostById(post.getPostId());
-        }
         if (userIdToDelete == null) {
             return ResponseEntity.notFound().build();
+        }
+        for(Post post : userPosts) {
+            dbForumService.deletePostById(post.getPostId());
         }
         return ResponseEntity.ok("User with id " + id + " deleted successfully.");
     }
@@ -102,4 +101,3 @@ public class AdminRestController {
         return ResponseEntity.ok("Post with id " + postId + " deleted successfully.");
     }
 }
-

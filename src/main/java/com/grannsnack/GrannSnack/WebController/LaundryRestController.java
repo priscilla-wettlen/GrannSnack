@@ -5,7 +5,6 @@ import com.grannsnack.GrannSnack.Model.MyUser;
 import com.grannsnack.GrannSnack.Model.TimeSlots;
 import com.grannsnack.GrannSnack.Service.DBLaundryService;
 import com.grannsnack.GrannSnack.Service.DBUserService;
-import com.grannsnack.GrannSnack.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,9 +26,6 @@ public class LaundryRestController {
     private  DBLaundryService dbLaundryService;
 
     @Autowired
-    private MyUserDetailsService myUserDetailsService;
-
-    @Autowired
     private DBUserService dbUserService;
 
     /*
@@ -46,24 +42,27 @@ public class LaundryRestController {
      * */
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> createBooking(
+    public ResponseEntity<String> createBooking(
         @RequestParam("date") LocalDate date,
         @RequestParam("time_slot") int timeSlot,
         @RequestParam(value = "notes", required = false) String notes,
         @AuthenticationPrincipal UserDetails userDetails) {
 
-        Map<String, String> response = new HashMap<>();
+        LocalDate today = LocalDate.now();
+
+        if(date.isBefore(today)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kan inte boka datum som varit");
+        }
 
         String userEmail = userDetails.getUsername();
         int userId = dbLaundryService.getUserIdByEmail(userEmail);
         MyUser user = dbUserService.getUserById(userId);
+        if(dbLaundryService.getAllBookingsByUserId(user.getId()).size() >= 3) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Max antal tider bokade");
+        }
         dbLaundryService.createBooking(date, timeSlot, notes, userId);
-        //user.setBookedTimes(user.getBookedTimes() + 1);
 
-        response.put("message", "Booking successful");
-        response.put("url", "/u/laundry-booking");
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok("Bokning av tvättid genomförd");
     }
 
     /*
@@ -73,14 +72,13 @@ public class LaundryRestController {
     @GetMapping("/bookings")
     public List<Booking> getBookings(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
-        Integer userId = myUserDetailsService.getUserIdByEmail(email);
+        Integer userId = dbUserService.getUserIdByEmail(email);
         return dbLaundryService.getAllBookingsByUserId(userId);
     }
 
     @DeleteMapping("/bookings/delete/{id}")
     public ResponseEntity<?> deleteBooking(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        int userId = myUserDetailsService.getUserIdByEmail(userDetails.getUsername());
-        MyUser user = dbUserService.getUserById(userId);
+        int userId = dbUserService.getUserIdByEmail(userDetails.getUsername());
         try {
             Booking bookingIdToDelete = dbLaundryService.deleteBooking(id, userId);
             if (bookingIdToDelete == null) {
@@ -90,7 +88,6 @@ public class LaundryRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", e.getMessage()));
         }
-        //user.setBookedTimes(user.getBookedTimes() - 1);
         return ResponseEntity.ok().build();
     }
 

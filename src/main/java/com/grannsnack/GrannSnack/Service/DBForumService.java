@@ -7,11 +7,7 @@ import com.grannsnack.GrannSnack.Model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -53,6 +49,7 @@ public class DBForumService {
 
         List<Post> posts = dbForumInterface.findPostsByOrderByPostDateDesc(limit);
         posts.sort((p1, p2) -> p2.getPostDate().compareTo(p1.getPostDate()));
+        posts.sort((p1, p2) -> dbUserService.getUserById(p1.getPostAuthorID()).getRole().compareTo(dbUserService.getUserById(p2.getPostAuthorID()).getRole()));
 
         for(Post post : posts) {
             List<Comment> comments = dbCommentInterface.findCommentsByPostID(post.getPostId());

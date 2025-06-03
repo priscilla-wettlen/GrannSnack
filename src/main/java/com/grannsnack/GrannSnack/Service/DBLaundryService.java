@@ -25,7 +25,7 @@ public class DBLaundryService {
     private DBTimeSlotsInterface timeSlotsInterface;
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private DBUserService dbUserService;
 
 
     public List<TimeSlots> getAvailableTimeSlots(LocalDate date) {
@@ -69,7 +69,7 @@ public class DBLaundryService {
     }
 
     public int getUserIdByEmail(String userEmail) {
-        Integer userId = userDetailsService.getUserIdByEmail(userEmail);
+        Integer userId = dbUserService.getUserIdByEmail(userEmail);
         if (userId == null) {
             throw new IllegalArgumentException("User not found with email: " + userEmail);
         }
@@ -77,14 +77,11 @@ public class DBLaundryService {
     }
 
     public List<Booking> getAllBookingsByUserId(Integer userId) {
-        return laundryInterface.findByUserId(userId);
-    }
+        LocalDate today = LocalDate.now();
+        List<Booking> bookings = laundryInterface.findByUserId(userId);
 
-//    public List<Booking> getAllBookedTimeSlotsByDateExceptUser(LocalDate date, int currentUserId) {
-//        List<Booking> bookedTimeSlots = laundryInterface.findByDate(date);
-//
-//        return bookedTimeSlots.stream()
-//                .filter(booking -> booking.getUserId() != currentUserId)
-//                .collect(Collectors.toList());
-//    }
+        bookings.removeIf(booking -> booking.getDate().isBefore(today));
+
+        return bookings;
+    }
 }
