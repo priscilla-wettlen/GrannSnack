@@ -259,8 +259,8 @@
             <td>${post.postId}</td>
             <td>${user.userName}</td>
             <td>${post.postDate}</td>
-            <td>${post.postTitle}</td>
-            <td>${post.postContent}</td>
+            <td>${escapeHtml(post.postTitle)}</td>
+            <td>${escapeHtml(post.postContent)}</td>
             <td><i class="fa-regular fa-trash-can" style="color:#ff4d4f; cursor:pointer;" onclick="deletePost(${post.postId})"></i></td>
           `;
           postTableBody.appendChild(row);
@@ -311,6 +311,14 @@
       if (darkMode == 'enabled') {
         document.documentElement.style.filter = 'invert(1)';
       }})
+        function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
   </script>
 <div id="popup-posted"></div>
 </body>
