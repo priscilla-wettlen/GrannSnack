@@ -104,18 +104,28 @@ public class DBForumService {
     }
 
     /**
-     * This method is 
-     * @param reported
-     * @return
+     * This method is used to get all the reported posts.
+     * @param reported a boolean representing if a post if repoted or not.
+     * @return A list of reported Posts
      */
     public List<Post> findPostsByReported(boolean reported) {
         return dbForumInterface.findPostsByReported(reported);
     }
 
+    /**
+     * This method is used to find a post based on the id of the author.
+     * @param postAuthotID the aurhot id of the post one wants to find.
+     * @return a list of all the post a specific author has made
+     */
     public List<Post> findPostByPostAuthorID(int postAuthotID) {
         return dbForumInterface.findPostsByPostAuthorID(postAuthotID);
     }
 
+    /**
+     * This method is used to report a post. It takes the post id and then changes the boolean isReported of that post to true.
+     * @param postId the id of the post to report
+     * @return a boolean indicating if the operation was a succress or not.
+     */
     public boolean reportPost(int postId) {
         Optional<Post> optionalPost = dbForumInterface.findById(postId);
         if(optionalPost.isPresent()) {
@@ -128,6 +138,13 @@ public class DBForumService {
         }
     }
 
+    /**
+     * This method is used to create a comment. It takes the comment content, the name of the author, and the post id of the post the comment is added to.
+     * @param commentContent the contet of the comment, usually a long string.
+     * @param commentAuthorName the name of the user creating the comment
+     * @param postID the id of the post where the comment is created
+     * @return a boolean representing if the operation was a success or not.
+     */
     public boolean createComment(String commentContent, String commentAuthorName, int postID) {
         Comment comment = new Comment();
         comment.setCommentContent(commentContent);
