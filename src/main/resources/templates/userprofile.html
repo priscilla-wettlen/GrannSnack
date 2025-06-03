@@ -173,6 +173,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      border-radius: 50%;
+      display: block;
     }
 
     .btn {
@@ -226,12 +228,15 @@
   <div class="container">
     <h2>Min Profil</h2>
 
-    <div class="profile-image" onclick="document.getElementById('fileInput').click()"></div>
-      <img id="profileImg" style="display: none;" />
-      <span id="placeholder"></span>
+    <div class="profile-image" onclick="document.getElementById('fileInput').click()">
+      <img id="profileImg" src="" alt="Profilbild" />
+    </div>
+    <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)" />
+    <div style="text-align:center;">
       <button class="btn" onclick="document.getElementById('fileInput').click()">Välj bild</button>
       <button class="btn" onclick="removeImage()">Ta bort</button>
     </div>
+    
 
     <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)" />
 
