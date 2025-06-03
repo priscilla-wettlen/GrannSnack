@@ -174,7 +174,7 @@
     .btn:hover {
       background-color: #0d9688;
     }
-    
+
     #popup-posted{
       display: none;
       position: fixed;
@@ -308,42 +308,40 @@
       }
     }
 
-  window.showPopup = function(message, type = "success") {
-    const popup = document.getElementById('popup-posted');
-    popup.textContent = message;
-    popup.style.display = 'block';
+    function removeImage() {
+      const img = document.getElementById('profileImg');
+      const placeholder = document.getElementById('placeholder');
+      img.src = '';
+      img.style.display = 'none';
+      placeholder.style.display = 'block';
+    }
 
-    popup.style.backgroundColor = type === "error" ? "#d9363e" : "#10B781";
+    window.showPopup = function(message, type = "success") {
+      const popup = document.getElementById('popup-posted');
+      popup.textContent = message;
+      popup.style.display = 'block';
 
-    setTimeout(() => {
-      popup.style.display = 'none';
-    }, 2000);
-  }
-  function toggleDarkMode() {
-  document.documentElement.style.filter = document.documentElement.style.filter ? '' : 'invert(1)';
-  }
-   
-  function removeImage() {
-    const img = document.getElementById('profileImg');
-    const placeholder = document.getElementById('placeholder');
-    img.src = '';
-    img.style.display = 'none';
-    placeholder.style.display = 'block';
-  }
+      popup.style.backgroundColor = type === "error" ? "#d9363e" : "#10B781";
 
-  function toggleDarkMode() {
-    const isDarkMode = document.documentElement.style.filter ? '' : 'invert(1)';
-    document.documentElement.style.filter = isDarkMode;
-    
-    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
-  }
-  document.addEventListener('DOMContentLoaded', function() {
-      const darkMode = localStorage.getItem('darkMode');
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 2000);
+    }
 
-      if (darkMode === 'enabled') {
-        document.documentElement.style.filter = 'invert(1)';
-      }
-  })
+    function toggleDarkMode() {
+      const isDarkMode = document.documentElement.style.filter ? '' : 'invert(1)';
+      document.documentElement.style.filter = isDarkMode;
+
+      localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const darkMode = localStorage.getItem('darkMode');
+
+        if (darkMode === 'enabled') {
+          document.documentElement.style.filter = 'invert(1)';
+        }
+    })
   </script>
     <div id="popup-posted"></div>
 </body>
