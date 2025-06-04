@@ -314,7 +314,7 @@
       .catch(error => {
         console.error("Gick inte att ta bort användare:", error);
         if (error.message !== "Prevented deletion of admin user.") {
-          showErrorPopup("Ett fel uppstod vid borttagning av användaren", "error");
+          showPopup("Ett fel uppstod vid borttagning av användaren", "error");
         }
       });
     }
@@ -344,7 +344,7 @@
       })
       .then(res =>{
         if(res.ok){
-          showPopup("Användaren har tilldelats ADMIN rollen")
+          showPopup("Användarens ADMIN roll har uppdateras")
             setTimeout(() => window.location.reload(), 2000);
         }
         else{
