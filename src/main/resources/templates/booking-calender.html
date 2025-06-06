@@ -302,6 +302,10 @@
       loadMyBookings()
     });
 
+    /*
+    * This function ensures that the user cannot select a date
+    * that already has passed on the calendar
+    * */
     function disablePastDates() {
       let today = new Date();
       let dd = String(today.getDate()).padStart(2, '0');
@@ -311,9 +315,16 @@
       document.getElementById("datePicker").setAttribute("min", today);
     }
 
+    /*
+    * This function allows the user to check for available time slots
+    * on a specific date. Because the time slots are hard-coded as
+    * Time objects into the database, a method needs to be
+    * used to parse them into strings so that we can later filter through
+    * them and only display the ones from the requested date
+     */
     function checkAvailability() {
       const selectedDate = document.getElementById("datePicker").value;
-      if (!selectedDate) return showPopup("Vänligen välj ett dartum");
+      if (!selectedDate) return showPopup("Vänligen välj ett datum");
 
       fetch(`/u/laundry-booking/availability?date=${selectedDate}`)
               .then(res => {
@@ -393,7 +404,10 @@
               .catch(err => console.error("Error checking availability:", err));
     }
 
-
+/*
+* In this function we send a request to the server with the parameters
+* of the selected date, time slot and notes from our booking
+* */
     function createBooking(slotId, notes) {
         const date = document.getElementById("datePicker").value;
 
