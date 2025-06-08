@@ -1,7 +1,7 @@
 # GrannSnack
 Grupp 10  
 
-Hej och välkommna till GrannSnacks demo!  
+Hej och välkommna till GrannSnack!  
 I gruppen har vi primärt kört programmet på två IDE:er Intellij och VS Code. Om ni inte använder några av dessa måste ni söka online för att få programmet att köra.
 Intellij är lite lättare för den läser av och rekomenderar baserat på vad som saknas på din maskin vilket VS Code inte gör. 
 
@@ -65,15 +65,16 @@ Om meddelandet säger följande är du redo att prova programmet:
 -dagensdatumochtid-  INFO 8008 --- [GrannSnack] [           main] c.g.GrannSnack.GrannSnackApplication     : Started GrannSnackApplication in 4.152 seconds (process running for 6.502)
 
 ## Inlogg
-För att sedan komma kunna logga in används:  
+För att sedan komma kunna logga in som användare:
 Användarnamn - user@test.com  
 Lösenord - 1234
 
-## Lämna feedback
-Vi ser fram emot att få feedback från er. Fokusera gärna på design. Hur den känns och upplevs. Men även hur funktionaliteten fungerar på de implementerade sakerna.  
-Behövs något mer? Saknas någon funktionalitet?
+Admin:
+Användarnamn - admin@test.com
+Lösenord - password
 
 
 ### Tack så mycket för att du orkade läsa igenom hela och förhoppningsvis fick programmet att köra! 
 För mer information eller kontakt:
+joel.allarp@gmail.com
 [https://github.com/priscilla-wettlen/GrannSnack.git](#link-till-github)
