@@ -10,7 +10,7 @@ VS Code tror jag man måste gå till Oracles hemsida och ladda ner den.
 Efter det kan Intellij och VS Code ladda ner MAVEN genom Plugins repsektive Extensions.
 
 När man gjort det kan vi börja.  
-Hämta hem kodfilerna från github <a name="länk-till-github">här</a>.
+Hämta hem kodfilerna från github <a name="https://github.com/priscilla-wettlen/GrannSnack.git">här</a>.
 
 Hämta hem .env filen som heter DBlogin från canvas. 
 
